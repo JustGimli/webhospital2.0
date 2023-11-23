@@ -3,59 +3,68 @@ import {
   FormControl,
   IconButton,
   InputAdornment,
+  InputLabel,
   OutlinedInput,
   useMediaQuery,
 } from "@mui/material";
 import { useState } from "react";
 
-export const AuthFields = ({ name,setEmail,setPassword }: any) => {
+export const AuthFields = ({ name }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
+
   const [showPassword, setShowPassword] = useState<any>(false);
+
+  const handleClickShowPassword = () =>
+    setShowPassword((showPassword: any) => !showPassword);
+
   return (
     <>
       <span className="AuthTitle  my-20">Вход {name}а</span>
-
       <FormControl
         style={{
           marginBottom: isMobile ? "20px" : "40px",
         }}
-        fullWidth={true}
+        variant="outlined"
+        fullWidth
+        required
       >
+        <InputLabel>Логин</InputLabel>
         <OutlinedInput
-          notched={false}
-          placeholder="Email"
+          style={{
+            borderRadius: "15px",
+            background: "#F8FAFC",
+            width: isMobile ? "100%" : "",
+          }}
           type="email"
-          onChange={(e: any) => setEmail(e.target.value)}
+          //   onChange={(e: any) => handleEmail(e.target.value)}
           //   value={email}
-          className="AuthInput"
         />
       </FormControl>
-
       <FormControl
-        fullWidth={true}
+        variant="outlined"
+        fullWidth
         style={{
-          marginBottom: isMobile ? "10px" : "20px",
-          color: "white",
+          marginBottom: isMobile ? "20px" : "40px",
         }}
       >
+        <InputLabel>Пароль</InputLabel>
         <OutlinedInput
-          label="Пароль"
-          placeholder="fd"
-          className="AuthInput"
-          //   value={password}
-          onChange={(e: any) => setPassword(e.target.value)}
+          style={{
+            borderRadius: "15px",
+            background: "#F8FAFC",
+            width: isMobile ? "100%" : "",
+          }}
+          // value={password}
+          // onChange={(e: any) => setPass(e.target.value)}
           type={showPassword ? "text" : "password"}
           endAdornment={
             <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={() => setShowPassword((show: any) => !show)}
-                edge="end"
-              >
+              <IconButton onClick={handleClickShowPassword} edge="end">
                 {showPassword ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             </InputAdornment>
           }
+          label="Password"
         />
       </FormControl>
     </>
