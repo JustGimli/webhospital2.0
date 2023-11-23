@@ -1,46 +1,48 @@
-import axios from "axios"
-import {makeAutoObservable} from "mobx"
-
-
-
+import axios from "axios";
+import { makeAutoObservable } from "mobx";
 
 export default class Client {
-    email: string = ""
-    
+  email: string = "";
+  doctor: any = {};
+  constructor() {
+    makeAutoObservable(this);
+  }
 
+  async createPatient(form: FormData) {
+    try {
+      // $api_doctor.post("/patient", form)
+    } catch (err) {}
+  }
 
-    constructor() {
-        makeAutoObservable(this)
+  async login(username: string, password: string) {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL_CLIENT}login/`,
+        { username, password }
+      );
+      localStorage.setItem("mptok", response.data.access_token);
+      let date = new Date();
+      document.cookie = `mptok=${
+        response.data.access_token
+      }; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24)}`;
+
+      if (response.status === 201) {
+        // this.errorMessage = "Ваш аккаунт успешно зарегистрирован, проверьте почту для подверждения регистрации"
+        return true;
+      }
+    } catch (err) {
+      return false;
     }
+  }
 
-    async createPatient(form: FormData) {
-        try {
-            // $api_doctor.post("/patient", form)
-        }catch(err) {
-        }
+  async getDoctors() {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL_CLIENT}doctors/`
+      );
+      return response.data;
+    } catch (err) {
+      return [];
     }
-
-    async login(username: string, password: string) {
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_CLIENT}login/`, {username, password})
-            localStorage.setItem('mptok', response.data.access_token)
-            let date = new Date()
-            document.cookie = `mptok=${response.data.access_token}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
-
-            if (response.status === 201) {
-                // this.errorMessage = "Ваш аккаунт успешно зарегистрирован, проверьте почту для подверждения регистрации"
-                return true
-            }
-        }catch(err) {return false}}
-    
-     async getDoctors()  {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_CLIENT}doctors/`)
-            return response.data
-        }catch(err) {
-            return []
-        }
-    }
-        
+  }
 }
-

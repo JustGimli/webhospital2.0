@@ -13,20 +13,23 @@ import {
   Stepper,
 } from "@mui/material";
 import { useState } from "react";
-
 import { AudioRecorder } from "react-audio-voice-recorder";
+import { client } from "../../..";
 
-export const PatientCardPage = () => {
+const data = [
+  { name: "ФИО", value: "" },
+  { name: "Специализация", value: "" },
+];
+
+export const DoctorCardPage = () => {
   const [isOpen, setIsOpen] = useState<any>(false);
-
   const handleClose = () => setIsOpen(!isOpen);
-
   return (
     <>
       {isOpen && <PatientDialog open={isOpen} handleClose={handleClose} />}
       <div className="px-5">
         <span style={{ fontSize: "24px" }}>Информация о враче</span>
-        <ProfileCard />
+        <ProfileCard doctor={client.doctor} />
         <div className="flex justify-between w-full">
           <span>Сеансы оценки качества речи</span>
           <Button variant="contained" onClick={handleClose}>
@@ -38,7 +41,9 @@ export const PatientCardPage = () => {
   );
 };
 
-const ProfileCard = () => {
+const ProfileCard = (doctor: any) => {
+  data[0].value = doctor.doctor_login;
+  data[1].value = doctor.hospital;
   return (
     <div
       className="p-10"
@@ -48,21 +53,22 @@ const ProfileCard = () => {
         borderRadius: "8px",
       }}
     >
-      {data.map((item) => (
-        <>
-          <span>{item.name}: </span>
-          <span>{item.value}</span>
-          <br />
-        </>
-      ))}
+      {doctor.hospital ? (
+        data.map((item: any) => (
+          <>
+            <span>{item.name}: </span>
+            <span>{item.value}</span>
+            <br />
+          </>
+        ))
+      ) : (
+        <div>
+          Произошла серверная ошибка! Невозвожно получить карточку врача!
+        </div>
+      )}
     </div>
   );
 };
-
-const data = [
-  { name: "ФИО", value: "" },
-  { name: "Специализация", value: "" },
-];
 
 const PatientDialog = ({ open, handleClose }: any) => {
   const [step, setStep] = useState<any>(0);
