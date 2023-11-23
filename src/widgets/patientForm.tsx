@@ -19,64 +19,92 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export const AddPatient = ({ open, handleClose }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
-
   const [showPassword, setShowPassword] = useState<any>(false);
+
+  const [name, setName] = useState();
+  const [pass, setPass] = useState();
+  const [gender, setGender] = useState();
+
+  const handleClickShowPassword = () =>
+    setShowPassword((showPassword: any) => !showPassword);
 
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Subscribe</DialogTitle>
       <DialogContent>
-        <FormControl variant="outlined" className="mb-4" fullWidth={true}>
-          <InputLabel>Email</InputLabel>
-          <OutlinedInput
-            // error={status}
-            // value={email}
+        <div className="mt-4">
+          <FormControl
+            variant="outlined"
+            className="mb-4"
+            fullWidth
+            required
+            margin="normal"
+          >
+            <InputLabel>ФИО</InputLabel>
+            <OutlinedInput
+              value={name}
+              style={{
+                borderRadius: "15px",
+                background: "#F8FAFC",
+                width: isMobile ? "100%" : "",
+              }}
+              onChange={(e: any) => setName(e.target.value)}
+              label="ФИО"
+            />
+          </FormControl>
+
+          <div
             style={{
-              borderRadius: "15px",
-              background: "#F8FAFC",
+              margin: isMobile ? "10px 0" : "20px 0",
             }}
-            // onChange={(e: any) => setEmail(e.target.value)}
-            label="Email"
-          />
-        </FormControl>
-        <DatePicker label="Basic date picker" />
+          >
+            <DatePicker label="Дата рождения" />
+          </div>
 
-        <FormControl variant="outlined" fullWidth={true}>
-          <InputLabel>Пароль</InputLabel>
-          <OutlinedInput
-            style={{
-              borderRadius: "15px",
-              background: "#F8FAFC",
-              width: isMobile ? "100%" : "",
-            }}
-            // value={password}
-            // onChange={(e: any) => setPass(e.target.value)}
-            type={showPassword ? "text" : "password"}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  //   onClick={handleClickShowPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl>
+          <FormControl variant="outlined" fullWidth margin="normal" required>
+            <InputLabel>Пол</InputLabel>
+            <Select
+              onChange={() => {}}
+              label="Пол"
+              style={{
+                borderRadius: "15px",
+                background: "#F8FAFC",
+                width: isMobile ? "100%" : "",
+              }}
+            >
+              <MenuItem value="Мужской">Мужской</MenuItem>
 
-        <FormControl variant="outlined" fullWidth margin="normal">
-          <InputLabel>Пол</InputLabel>
-          <Select onChange={() => {}} label="Пол">
-            <MenuItem value="Мужской">Мужской</MenuItem>
+              <MenuItem value="Женский">Женский</MenuItem>
+            </Select>
+          </FormControl>
 
-            <MenuItem value="Женский">Женский</MenuItem>
-          </Select>
-        </FormControl>
+          <FormControl variant="outlined" fullWidth margin="normal" required>
+            <InputLabel>Пароль</InputLabel>
+            <OutlinedInput
+              style={{
+                borderRadius: "15px",
+                background: "#F8FAFC",
+                width: isMobile ? "100%" : "",
+              }}
+              value={pass}
+              onChange={(e: any) => setPass(e.target.value)}
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+          </FormControl>
+        </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Добавить</Button>
+        <Button onClick={handleClose} variant="contained">
+          Добавить
+        </Button>
       </DialogActions>
     </Dialog>
   );

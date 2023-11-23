@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";
+import { useNavigate } from "react-router";
 
 export const DoctorMainPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -24,8 +25,13 @@ export const DoctorMainPage = () => {
     <>
       {isOpen && <AddPatient open={isOpen} handleClose={handleClose} />}
 
-      <div className="flex w-full justify-end">
-        <Button variant="contained" onClick={handleClose}>
+      <div className="flex w-full justify-end my-10 pe-5">
+        <Button
+          variant="contained"
+          onClick={handleClose}
+          size="large"
+          sx={{ px: 3, py: 1, borderRadius: "10px" }}
+        >
           Добавить пациента
         </Button>
       </div>
@@ -34,40 +40,51 @@ export const DoctorMainPage = () => {
   );
 };
 
-const DockerTable = () => (
-  <>
-    {" "}
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.name}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+const DockerTable = () => {
+  const navigate = useNavigate();
+
+  const handleClick = (number: any) => {
+    navigate("/doctor/card/" + number);
+  };
+
+  return (
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Полное имя</TableCell>
+              <TableCell align="right">Полное имя</TableCell>
+              <TableCell align="right">Возраст</TableCell>
+              <TableCell align="right">Пол</TableCell>
+              <TableCell align="right">Номер личной карты</TableCell>
+              <TableCell align="right">Информация</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </>
-);
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.name}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleClick(1)}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="right" onClick={handleClick}>
+                  {row.calories}
+                </TableCell>
+                <TableCell align="right">{row.fat}</TableCell>
+                <TableCell align="right">{row.carbs}</TableCell>
+                <TableCell align="right">{row.protein}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
+  );
+};
 
 function createData(
   name: string,

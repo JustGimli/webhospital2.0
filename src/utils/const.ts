@@ -4,5 +4,5 @@ export const PATIENT = "/patient";
 
 
 // doctor page
-export const PATIENTCARD = 'card/'
+export const PATIENTCARD = 'card/:number'
 export const DOCTORBASE = ''

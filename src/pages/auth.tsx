@@ -16,7 +16,7 @@ export const AuthPage = () => {
 
       <AuthFields name={nav} />
 
-      <Button>Войти</Button>
+      <Button variant="contained">Войти</Button>
     </div>
   );
 };
