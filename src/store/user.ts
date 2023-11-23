@@ -1,5 +1,6 @@
 import axios from "axios"
 import {makeAutoObservable} from "mobx"
+import { $api } from "../utils/api"
 
 
 
@@ -12,7 +13,13 @@ class User {
         makeAutoObservable(this)
     }
 
-    
+    async createPatient(data: any) {
+        try {
+            $api.post("")
+        }catch(err) {
+        }
+    }
+
 
     // getMe() {
     //     (async () => {

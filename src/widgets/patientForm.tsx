@@ -21,12 +21,30 @@ export const AddPatient = ({ open, handleClose }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const [showPassword, setShowPassword] = useState<any>(false);
 
-  const [name, setName] = useState();
+  const [name, setName] = useState<string>("");
+  const [date, setDate] = useState<string>();
   const [pass, setPass] = useState();
-  const [gender, setGender] = useState();
+  const [gender, setGender] = useState(null);
 
   const handleClickShowPassword = () =>
     setShowPassword((showPassword: any) => !showPassword);
+
+  const handleClick = () => {
+    const form = new FormData();
+    form.append("full_name", name);
+    // form.append("date_of_birth", date);
+    handleClose();
+  };
+
+  const handleDateChange = (selectedDate: any) => {
+    if (selectedDate !== null) {
+      const formattedDate = selectedDate.toISOString().split("T")[0];
+      setDate(formattedDate);
+    } else {
+      // Если дата была очищена, устанавливаем пустую строку
+      setDate("");
+    }
+  };
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
@@ -58,19 +76,28 @@ export const AddPatient = ({ open, handleClose }: any) => {
               margin: isMobile ? "10px 0" : "20px 0",
             }}
           >
-            <DatePicker label="Дата рождения" sx={{ width: "100%" }} />
+            <DatePicker
+              label="Дата рождения"
+              sx={{ width: "100%" }}
+              value={date}
+              format="YYYY-MM-DD"
+              onChange={handleDateChange}
+            />
           </div>
 
           <FormControl variant="outlined" fullWidth margin="normal" required>
             <InputLabel>Пол</InputLabel>
             <Select
-              onChange={() => {}}
+              onChange={(e: any) => {
+                setGender(e.target.value);
+              }}
               label="Пол"
               style={{
                 borderRadius: "15px",
                 background: "#F8FAFC",
                 width: isMobile ? "100%" : "",
               }}
+              value={gender}
             >
               <MenuItem value="Мужской">Мужской</MenuItem>
 
@@ -102,7 +129,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} variant="contained">
+        <Button onClick={handleClick} variant="contained">
           Добавить
         </Button>
       </DialogActions>
