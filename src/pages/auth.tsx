@@ -17,12 +17,14 @@ export const AuthPage = () => {
   const handleClick = async () => {
     setDisabled(true);
     if (username.length !== 0 && password.length !== 0) {
-      const flag = await doctor.login(username, password);
-
-      console.log(flag);
-      if (flag === true) {
-        navigate(DOCTORROOT);
+      if (nav === "Врач") {
+        const flag = await doctor.login(username, password);
       }
+
+      //   console.log(flag);
+      //   if (flag === true) {
+      //     navigate(DOCTORROOT);
+      //   }
     }
     setDisabled(false);
   };

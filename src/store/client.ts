@@ -22,7 +22,7 @@ export default class Client {
 
     async login(username: string, password: string) {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}login/`, {username, password})
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_CLIENT}login/`, {username, password})
             localStorage.setItem('mptok', response.data.access_token)
             let date = new Date()
             document.cookie = `mptok=${response.data.access_token}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
@@ -35,7 +35,7 @@ export default class Client {
     
      async getPatients()  {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/`)
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_CLIENT}patients/`)
             return response.data
         }catch(err) {
             return []

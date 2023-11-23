@@ -28,6 +28,8 @@ export const PatientCardPage = () => {
     (async () => {
       const res = await doctor.getPatient(Number(number));
       if (res) {
+        setPatient(res.get_patient_info);
+        setSessions(res.sessions);
       }
     })();
   }, []);
@@ -53,7 +55,7 @@ export const PatientCardPage = () => {
   );
 };
 
-const ProfileCard = () => {
+const ProfileCard = ({ patient }: any) => {
   return (
     <div
       className="p-10"
@@ -63,13 +65,15 @@ const ProfileCard = () => {
         borderRadius: "8px",
       }}
     >
-      {data.map((item) => (
-        <>
-          <span>{item.name}: </span>
-          <span>{item.value}</span>
-          <br />
-        </>
-      ))}
+      {
+        patient && <></>
+        // patient.map((item) => (
+        //   <>
+        //     <span>{item.name}: </span>
+        //     <span>{item.value}</span>
+        //     <br />
+        //   </>
+      }
     </div>
   );
 };

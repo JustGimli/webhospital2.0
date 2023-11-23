@@ -15,7 +15,7 @@ export default class  Doctor {
 
     async createPatient(form: FormData) {
         try {
-            $api_doctor.post("/patients/", form)
+            $api_doctor.post("/patients/", form, {headers: {"Content-Type": "application/json"}})
         }catch(err) {
         }
     }
@@ -23,9 +23,9 @@ export default class  Doctor {
     async login(username: string, password: string) {
         try {
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}login/`, {username, password})
-            localStorage.setItem('mptok', response.data.access)
+            localStorage.setItem('mptok', response.data.access_token)
             let date = new Date()
-            document.cookie = `mptok=${response.data.refresh}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
+            document.cookie = `mptok=${response.data.refresh_token}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
 
                 // this.errorMessage = "Ваш аккаунт успешно зарегистрирован, проверьте почту для подверждения регистрации"
             return true
