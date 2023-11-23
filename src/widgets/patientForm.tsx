@@ -29,8 +29,8 @@ export const AddPatient = ({ open, handleClose }: any) => {
     setShowPassword((showPassword: any) => !showPassword);
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Subscribe</DialogTitle>
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+      <DialogTitle>Добавить нового пациента</DialogTitle>
       <DialogContent>
         <div className="mt-4">
           <FormControl
@@ -58,7 +58,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
               margin: isMobile ? "10px 0" : "20px 0",
             }}
           >
-            <DatePicker label="Дата рождения" />
+            <DatePicker label="Дата рождения" sx={{ width: "100%" }} />
           </div>
 
           <FormControl variant="outlined" fullWidth margin="normal" required>
