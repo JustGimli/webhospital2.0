@@ -21,7 +21,7 @@ export const AuthPage = () => {
   const handleChange = (event: any, newVal: any) => setNav(newVal);
 
   return (
-    <div className="flex flex-col justify-center w-80 mx-auto">
+    <div className="flex flex-col justify-center w-80 mx-auto my-10">
       <Tabs onChange={handleChange} value={nav} centered>
         <Tab label="Пациент" value="Пациент" />
         <Tab label="Врач" value="Врач" />

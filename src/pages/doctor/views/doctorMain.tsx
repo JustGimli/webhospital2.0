@@ -9,7 +9,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Toolbar,
 } from "@mui/material";
 import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";

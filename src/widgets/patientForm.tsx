@@ -16,34 +16,31 @@ import {
 import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import dayjs from "dayjs";
+import { user } from "..";
 
 export const AddPatient = ({ open, handleClose }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const [showPassword, setShowPassword] = useState<any>(false);
 
   const [name, setName] = useState<string>("");
-  const [date, setDate] = useState<string>();
-  const [pass, setPass] = useState();
-  const [gender, setGender] = useState(null);
+  const [date, setDate] = useState<dayjs.Dayjs | null>(null);
+  const [pass, setPass] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
 
   const handleClickShowPassword = () =>
     setShowPassword((showPassword: any) => !showPassword);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const form = new FormData();
     form.append("full_name", name);
-    // form.append("date_of_birth", date);
-    handleClose();
-  };
+    form.append("password", pass);
+    form.append("gender", gender);
 
-  const handleDateChange = (selectedDate: any) => {
-    if (selectedDate !== null) {
-      const formattedDate = selectedDate.toISOString().split("T")[0];
-      setDate(formattedDate);
-    } else {
-      // Если дата была очищена, устанавливаем пустую строку
-      setDate("");
-    }
+    if (date) form.append("date_of_birth", date.format("YYYY-MM-DD"));
+
+    user.createPatient(form);
+    handleClose();
   };
 
   return (
@@ -81,7 +78,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
               sx={{ width: "100%" }}
               value={date}
               format="YYYY-MM-DD"
-              onChange={handleDateChange}
+              onChange={(d: any) => setDate(d)}
             />
           </div>
 

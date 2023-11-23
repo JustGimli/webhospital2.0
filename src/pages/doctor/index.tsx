@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { DoctorURL } from "../../utils/path";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { AppBar, IconButton, Toolbar } from "@mui/material";
+import { user } from "../..";
 
 export const DoctorRoot = () => {
   const renderRoutes = () => {
@@ -27,9 +28,12 @@ const DoctorAppBar = () => (
     <AppBar position="static">
       <Toolbar>
         <span style={{ flexGrow: 1 }}>Доктор</span>
-        <IconButton color="inherit">
-          <LogoutIcon />
-        </IconButton>
+        <div className="flex justify-between">
+          <span>{"name"}</span>
+          <IconButton color="inherit">
+            <LogoutIcon />
+          </IconButton>
+        </div>
       </Toolbar>
     </AppBar>
   </>

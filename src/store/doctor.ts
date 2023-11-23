@@ -1,7 +1,6 @@
 import axios from "axios"
 import {makeAutoObservable} from "mobx"
 import { $api_doctor } from "../utils/api_doctor"
-import { async } from "q"
 
 
 
@@ -14,9 +13,9 @@ class User {
         makeAutoObservable(this)
     }
 
-    async createPatient(data: any) {
+    async createPatient(form: FormData) {
         try {
-            // $api_doctor.post("/login", )
+            $api_doctor.post("/patient", form)
         }catch(err) {
         }
     }
