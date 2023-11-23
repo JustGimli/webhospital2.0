@@ -11,16 +11,10 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppBarComp } from "../components/appBar";
-import { client } from "..";
+import { client } from "../../..";
 
-export const ClientPage = () => {
-  return (
-    <>
-      <AppBarComp name="Пациент" />
-      <DoctorsTable />
-    </>
-  );
+export const ClientMain = () => {
+  return <DoctorsTable />;
 };
 
 const DoctorsTable = () => {
@@ -49,8 +43,9 @@ const DoctorsTable = () => {
 };
 
 const TableItem = (data: any) => {
-  const handleClick = (number: any) => {
-    navigate("/doctors/card/" + number);
+  const handleClick = (row: any) => {
+    client.doctor = row;
+    navigate("/doctor/card/" + row.doctor_login);
   };
 
   const navigate = useNavigate();
@@ -70,7 +65,7 @@ const TableItem = (data: any) => {
             <TableRow
               key={row.doctor_login}
               style={{ cursor: "pointer" }}
-              onClick={() => handleClick(row.id)} //необходимо обозначить номер врача чтобы переходить к его карточке
+              onClick={() => handleClick(row)}
             >
               <TableCell component="th" scope="row">
                 {row.doctor_login}
