@@ -26,6 +26,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
   const [name, setName] = useState<string>("");
   const [date, setDate] = useState<dayjs.Dayjs | null>(null);
   const [pass, setPass] = useState<string>("");
+  const [card, setCard] = useState<string>("");
   const [gender, setGender] = useState<string>("");
 
   const handleClickShowPassword = () =>
@@ -36,11 +37,12 @@ export const AddPatient = ({ open, handleClose }: any) => {
     form.append("full_name", name);
     form.append("password", pass);
     form.append("gender", gender);
+    form.append("card_number", card);
 
     if (date) form.append("date_of_birth", date.format("YYYY-MM-DD"));
 
     user.createPatient(form);
-    handleClose();
+    // handleClose();
   };
 
   return (
@@ -65,6 +67,26 @@ export const AddPatient = ({ open, handleClose }: any) => {
               }}
               onChange={(e: any) => setName(e.target.value)}
               label="ФИО"
+            />
+          </FormControl>
+
+          <FormControl
+            variant="outlined"
+            className="mb-4"
+            fullWidth
+            required
+            margin="normal"
+          >
+            <InputLabel>Номер Карты</InputLabel>
+            <OutlinedInput
+              value={card}
+              style={{
+                borderRadius: "15px",
+                background: "#F8FAFC",
+                width: isMobile ? "100%" : "",
+              }}
+              onChange={(e: any) => setCard(e.target.value)}
+              label="Номер Карты"
             />
           </FormControl>
 

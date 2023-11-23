@@ -12,11 +12,26 @@ import {
   StepLabel,
   Stepper,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AudioRecorder } from "react-audio-voice-recorder";
+import { useParams } from "react-router-dom";
+import { user } from "../../..";
 
 export const PatientCardPage = () => {
+  const [patient, setPatient] = useState<any>();
+  const [sessions, setSessions] = useState<any>();
+
+  const { number } = useParams();
+
+  useEffect(() => {
+    (async () => {
+      const res = await user.getPatient(Number(number));
+      if (res) {
+      }
+    })();
+  }, []);
+
   const [isOpen, setIsOpen] = useState<any>(false);
 
   const handleClose = () => setIsOpen(!isOpen);

@@ -3,8 +3,12 @@ import { useState } from "react";
 import { AuthFields } from "../widgets/authForm";
 import { user } from "..";
 import { async } from "q";
+import { useNavigate } from "react-router-dom";
+import { DOCTORROOT } from "../utils/const";
 
 export const AuthPage = () => {
+  const navigate = useNavigate();
+
   const [nav, setNav] = useState<string>("Пациент");
   const [username, setUserName] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -13,7 +17,12 @@ export const AuthPage = () => {
   const handleClick = async () => {
     setDisabled(true);
     if (username.length !== 0 && password.length !== 0) {
-      await user.login(username, password);
+      const flag = await user.login(username, password);
+
+      console.log(flag);
+      if (flag === true) {
+        navigate(DOCTORROOT);
+      }
     }
     setDisabled(false);
   };
