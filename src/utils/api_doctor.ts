@@ -2,7 +2,7 @@
 import axios from "axios"
 
 const domain_doctor = 'http://127.0.0.1:48080'
-const domain_patient = 'http://127.0.0.1:50080'
+
 
 type AuthTokens = {
     access_token: string;
@@ -24,34 +24,22 @@ export async function login_doctor(login:string, passwd:string){
         }
     });
 }
-export async function login_patient(login:string, passwd:string){
-    const response = fetch(`${domain_patient}/login`,
-        {method:'POST',
-            body:JSON.stringify({
-                username: login,
-                password: passwd
-            })
-    }).then((r)=>{
-        if(r.ok){
-            console.log(r.json())
-        }
-    });
-}
 
 
-export const $api = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL,
+
+export const $api_doctor = axios.create({
+    baseURL: domain_doctor,
     withCredentials: true,
 })
 
-$api.interceptors.request.use(config => {
+$api_doctor.interceptors.request.use(config => {
     config.headers.Authorization = `Bearer ${localStorage.getItem('mptok')}`
     return config
 })
 
 
 
-$api.interceptors.response.use(config => {
+$api_doctor.interceptors.response.use(config => {
     return config
 }, (async(error) => {
     const originalRequest = error.config
@@ -60,9 +48,9 @@ $api.interceptors.response.use(config => {
     {
         originalRequest._isRetry = true
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}auth/jwt/refresh/`, {refresh: getCookie('mptok')})
+            const response = await axios.post(`${domain_doctor}/update_tokens`, {refresh: getCookie('mptok')})
             localStorage.setItem('mptok', response.data.access)
-            return $api.request(originalRequest)
+            return $api_doctor.request(originalRequest)
         }catch(error: any) {
             if (error.response.status === 401) {}
                 // window.location.href = '/login'
@@ -83,4 +71,14 @@ export default function getCookie(name: string) {
     "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
   ));
   return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+export async function get_patients(limit:number){
+   await $api_doctor.get(`${domain_doctor}/patients?limit=${limit}`).then((r) =>{
+       if(r.status==200){
+            return r.data
+       }else{
+           console.log('Невозможно получить пациентов')
+       }
+   })
 }
