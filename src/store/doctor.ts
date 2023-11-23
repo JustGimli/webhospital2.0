@@ -15,7 +15,7 @@ class User {
 
     async createPatient(form: FormData) {
         try {
-            $api_doctor.post("/patient", form)
+            $api_doctor.post("/patients/", form)
         }catch(err) {
         }
     }
@@ -27,11 +27,11 @@ class User {
             let date = new Date()
             document.cookie = `mptok=${response.data.refresh}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
 
-            if (response.status === 201) {
                 // this.errorMessage = "Ваш аккаунт успешно зарегистрирован, проверьте почту для подверждения регистрации"
-                return 
-            }
-        }catch(err) {}}
+            return true
+        }catch(err) {
+            return false
+        }}
     
      async getPatients()  {
         try {
@@ -39,6 +39,16 @@ class User {
             return response.data
         }catch(err) {
             return []
+        }
+    }
+
+    async getPatient(number: number) {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/`)
+
+            return response.data
+        }catch(err) {
+            return {}
         }
     }
         
