@@ -1,28 +1,6 @@
 
 import axios from "axios"
 
-type AuthTokens = {
-    access_token: string;
-    refresh_token: string;
-}
-type GetAuthResponse = {
-  data: AuthTokens[];
-};
-export async function login_doctor(login:string, passwd:string){
-    const response = fetch(`${process.env.REACT_APP_BASE_URL_DOCTOR}/login`,
-        {method:'POST',
-            body:JSON.stringify({
-                username: login,
-                password: passwd
-            })
-    }).then((r)=>{
-        if(r.ok){
-            console.log(r.json())
-        }
-    });
-}
-
-
 
 export const $api_doctor = axios.create({
     baseURL: process.env.REACT_APP_BASE_URL_DOCTOR,
@@ -30,7 +8,7 @@ export const $api_doctor = axios.create({
 })
 
 $api_doctor.interceptors.request.use(config => {
-    config.headers.Authorization = `Bearer ${localStorage.getItem('mptok')}`
+    config.headers.Authorization = `Bearer ${localStorage.getItem('tok')}`
     return config
 })
 
@@ -45,8 +23,8 @@ $api_doctor.interceptors.response.use(config => {
     {
         originalRequest._isRetry = true
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}/update_tokens`, {refresh: getCookie('mptok')})
-            localStorage.setItem('mptok', response.data.access)
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}/update_tokens`, {refresh: getCookie('tok')})
+            localStorage.setItem('tok', response.data.access)
             return $api_doctor.request(originalRequest)
         }catch(error: any) {
             if (error.response.status === 401) {}

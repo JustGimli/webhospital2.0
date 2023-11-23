@@ -21,6 +21,8 @@ import { doctor } from "..";
 
 export const AddPatient = ({ open, handleClose }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
+
+  const [numberError, setNumberError] = useState<boolean>(true);
   const [showPassword, setShowPassword] = useState<any>(false);
 
   const [name, setName] = useState<string>("");
@@ -29,20 +31,25 @@ export const AddPatient = ({ open, handleClose }: any) => {
   const [card, setCard] = useState<string>("");
   const [gender, setGender] = useState<string>("");
 
-  const handleClickShowPassword = () =>
+  const handleClickShowPassword = () => {
     setShowPassword((showPassword: any) => !showPassword);
-
+  };
   const handleClick = async () => {
-    const form = new FormData();
-    form.append("full_name", name);
-    form.append("password", pass);
-    form.append("gender", gender);
-    form.append("card_number", card);
+    console.log(card);
+    const data = {
+      full_name: name,
+      date_of_birth: date && date.format("YYYY-MM-DD"),
+      doctor_info: ["user1", "user2"],
+      hospital: "Tomsk NII",
+      gender: gender,
+      card_number: card,
+      constant_password: null,
+      temporary_password: pass,
+      is_password_changed: false,
+    };
 
-    if (date) form.append("date_of_birth", date.format("YYYY-MM-DD"));
-
-    doctor.createPatient(form);
-    // handleClose();
+    await doctor.createPatient(data);
+    handleClose();
   };
 
   return (
@@ -75,6 +82,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
             className="mb-4"
             fullWidth
             required
+            error={numberError}
             margin="normal"
           >
             <InputLabel>Номер Карты</InputLabel>
@@ -85,7 +93,14 @@ export const AddPatient = ({ open, handleClose }: any) => {
                 background: "#F8FAFC",
                 width: isMobile ? "100%" : "",
               }}
-              onChange={(e: any) => setCard(e.target.value)}
+              onChange={(e: any) => {
+                if (card.length == 11) {
+                  setNumberError(false);
+                } else {
+                  setNumberError(true);
+                }
+                setCard(e.target.value);
+              }}
               label="Номер Карты"
             />
           </FormControl>
@@ -118,9 +133,9 @@ export const AddPatient = ({ open, handleClose }: any) => {
               }}
               value={gender}
             >
-              <MenuItem value="Мужской">Мужской</MenuItem>
+              <MenuItem value="m">Мужской</MenuItem>
 
-              <MenuItem value="Женский">Женский</MenuItem>
+              <MenuItem value="w">Женский</MenuItem>
             </Select>
           </FormControl>
 
@@ -148,7 +163,11 @@ export const AddPatient = ({ open, handleClose }: any) => {
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClick} variant="contained">
+        <Button
+          onClick={handleClick}
+          variant="contained"
+          disabled={numberError}
+        >
           Добавить
         </Button>
       </DialogActions>
