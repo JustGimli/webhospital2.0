@@ -12,7 +12,7 @@ import {
   StepLabel,
   Stepper,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 import { AudioRecorder } from "react-audio-voice-recorder";
 import { useParams } from "react-router-dom";
@@ -98,6 +98,15 @@ const PatientDialog = ({ open, handleClose }: any) => {
     }
   };
 
+  const Upload = () => {
+    const id = useId();
+    return (
+      <label htmlFor={id}>
+        <input type="file" id={id} />
+      </label>
+    );
+  };
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} fullWidth>
@@ -118,6 +127,8 @@ const PatientDialog = ({ open, handleClose }: any) => {
           ) : (
             <>
               <RecorderVoice />
+              <p style={{ textAlign: "center", fontSize: "14" }}>или</p>
+              <Upload />
             </>
           )}
         </DialogContent>
