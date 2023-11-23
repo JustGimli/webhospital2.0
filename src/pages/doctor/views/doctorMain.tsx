@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Button,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -13,6 +14,7 @@ import {
 import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router";
+import { user } from "../../..";
 
 export const DoctorMainPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -41,65 +43,84 @@ export const DoctorMainPage = () => {
 };
 
 const DockerTable = () => {
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState([]);
 
+  useEffect(() => {
+    (async () => {
+      setIsLoading(true);
+      setData(await user.getPatients());
+      setIsLoading(false);
+    })();
+  }, []);
+
+  return isLoading ? (
+    <div className="flex justify-center w-full">
+      <CircularProgress />
+    </div>
+  ) : data.length === 0 ? (
+    <div className="flex justify-center w-full">Пациенты отсутсвуют</div>
+  ) : (
+    <TableItem data={data} />
+  );
+};
+
+const TableItem = (data: any) => {
   const handleClick = (number: any) => {
     navigate("/doctor/card/" + number);
   };
 
+  const navigate = useNavigate();
+
   return (
-    <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Полное имя</TableCell>
-              <TableCell align="right">Полное имя</TableCell>
-              <TableCell align="right">Возраст</TableCell>
-              <TableCell align="right">Пол</TableCell>
-              <TableCell align="right">Номер личной карты</TableCell>
-              <TableCell align="right">Информация</TableCell>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <TableHead>
+          <TableRow>
+            <TableCell>Полное имя</TableCell>
+            <TableCell align="right">Полное имя</TableCell>
+            <TableCell align="right">Возраст</TableCell>
+            <TableCell align="right">Пол</TableCell>
+            <TableCell align="right">Номер личной карты</TableCell>
+            <TableCell align="right">Информация</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {data.map((row: any) => (
+            <TableRow
+              key={row.full_name}
+              style={{ cursor: "pointer" }}
+              onClick={() => handleClick(1)}
+            >
+              <TableCell component="th" scope="row">
+                {row.full_name}
+              </TableCell>
+              <TableCell align="right">{row.date_of_birth}</TableCell>
+              <TableCell align="right">{row.gender}</TableCell>
+              <TableCell align="right">{row.card_number}</TableCell>
+              <TableCell align="right">{row.doctor_info}</TableCell>
             </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleClick(1)}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right" onClick={handleClick}>
-                  {row.calories}
-                </TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 };
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
+// function createData(
+//   name: string,
+//   calories: number,
+//   fat: number,
+//   carbs: number,
+//   protein: number
+// ) {
+//   return { name, calories, fat, carbs, protein };
+// }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
+// const rows = [
+//   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
+//   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
+//   createData("Eclair", 262, 16.0, 24, 6.0),
+//   createData("Cupcake", 305, 3.7, 67, 4.3),
+//   createData("Gingerbread", 356, 16.0, 49, 3.9),
+// ];

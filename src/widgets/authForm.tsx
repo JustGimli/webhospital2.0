@@ -9,7 +9,13 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-export const AuthFields = ({ name, setEmail, setPassword }: any) => {
+export const AuthFields = ({
+  name,
+  username,
+  password,
+  setUserName,
+  setPassword,
+}: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
 
   const [showPassword, setShowPassword] = useState<any>(false);
@@ -36,11 +42,13 @@ export const AuthFields = ({ name, setEmail, setPassword }: any) => {
             width: isMobile ? "100%" : "",
           }}
           type="email"
-          onChange={(e: any) => setEmail(e.target.value)}
-          //   value={email}
+          onChange={(e: any) => setUserName(e.target.value)}
+          value={username}
+          label="Логин"
         />
       </FormControl>
       <FormControl
+        required
         variant="outlined"
         fullWidth
         style={{
@@ -54,7 +62,7 @@ export const AuthFields = ({ name, setEmail, setPassword }: any) => {
             background: "#F8FAFC",
             width: isMobile ? "100%" : "",
           }}
-          // value={password}
+          value={password}
           onChange={(e: any) => setPassword(e.target.value)}
           type={showPassword ? "text" : "password"}
           endAdornment={
@@ -64,7 +72,7 @@ export const AuthFields = ({ name, setEmail, setPassword }: any) => {
               </IconButton>
             </InputAdornment>
           }
-          label="Password"
+          label="Пароль"
         />
       </FormControl>
     </>

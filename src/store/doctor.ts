@@ -1,6 +1,7 @@
 import axios from "axios"
 import {makeAutoObservable} from "mobx"
-import { $api } from "../utils/api"
+import { $api_doctor } from "../utils/api_doctor"
+import { async } from "q"
 
 
 
@@ -15,11 +16,37 @@ class User {
 
     async createPatient(data: any) {
         try {
-            $api.post("")
+            // $api_doctor.post("/login", )
         }catch(err) {
         }
     }
 
+    async login(username: string, password: string) {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}login/`, {username, password})
+            localStorage.setItem('mptok', response.data.access)
+            let date = new Date()
+            document.cookie = `mptok=${response.data.refresh}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
+
+            if (response.status === 201) {
+                // this.errorMessage = "Ваш аккаунт успешно зарегистрирован, проверьте почту для подверждения регистрации"
+                return 
+            }
+        }catch(err) {}}
+    
+     async getPatients()  {
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/`)
+            return response.data
+        }catch(err) {
+            return []
+        }
+    }
+        
+}
+
+
+   
 
     // getMe() {
     //     (async () => {
@@ -35,14 +62,6 @@ class User {
 
 
 
-    // async login(email: string, password: string) {
-    //     try {
-    //         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}auth/users/`, {email, password})
-            
-    //         if (response.status === 201) {
-    //             this.errorMessage = "Ваш аккаунт успешно зарегистрирован, проверьте почту для подверждения регистрации"
-    //             return 
-    //         }
 
            
     //     }catch(error: any){
@@ -101,7 +120,7 @@ class User {
     //         }
     //     }
     // }
-    }
+    
 
 
 
