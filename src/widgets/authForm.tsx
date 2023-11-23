@@ -8,11 +8,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-export const AuthFields = ({ name }: any) => {
+export const AuthFields = ({ name,setEmail,setPassword }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
-
   const [showPassword, setShowPassword] = useState<any>(false);
-
   return (
     <>
       <span className="AuthTitle  my-20">Вход {name}а</span>
@@ -27,7 +25,7 @@ export const AuthFields = ({ name }: any) => {
           notched={false}
           placeholder="Email"
           type="email"
-          //   onChange={(e: any) => handleEmail(e.target.value)}
+          onChange={(e: any) => setEmail(e.target.value)}
           //   value={email}
           className="AuthInput"
         />
@@ -45,7 +43,7 @@ export const AuthFields = ({ name }: any) => {
           placeholder="fd"
           className="AuthInput"
           //   value={password}
-          //   onChange={(e: any) => handlePass(e.target.value)}
+          onChange={(e: any) => setPassword(e.target.value)}
           type={showPassword ? "text" : "password"}
           endAdornment={
             <InputAdornment position="end">
