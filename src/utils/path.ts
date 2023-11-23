@@ -1,8 +1,9 @@
 import { AuthPage } from "../pages/auth";
+import { ClientPage } from "../pages/client";
 import {  DoctorRoot } from "../pages/doctor";
 import { DoctorMainPage } from "../pages/doctor/views/doctorMain";
 import { PatientCardPage } from "../pages/doctor/views/patientCard";
-import { AUTH, DOCTOR, DOCTORBASE,  PATIENTCARD } from "./const";
+import { AUTH, DOCTOR, DOCTORBASE,  PATIENT,  PATIENTCARD } from "./const";
 
 
 export const MainURL = [
@@ -13,11 +14,11 @@ export const MainURL = [
     {
       Component: DoctorRoot,
       path: DOCTOR,
-    }
-  //   {
-  //     Component: PolicyPage,
-  //     path: PATIENT,
-  //   },
+    },
+    {
+      Component: ClientPage,
+      path: PATIENT,
+    },
 ];
 
 

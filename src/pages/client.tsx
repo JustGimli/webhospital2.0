@@ -1,3 +1,3 @@
 import { user } from "..";
 
-export const clientPage = () => <>{user.email}</>;
+export const ClientPage = () => <>{user.email}</>;

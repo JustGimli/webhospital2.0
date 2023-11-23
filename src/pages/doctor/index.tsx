@@ -1,8 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { DoctorURL } from "../../utils/path";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { AppBar, IconButton, Toolbar } from "@mui/material";
-import { user } from "../..";
+import { AppBarComp } from "../../components/appBar";
 
 export const DoctorRoot = () => {
   const renderRoutes = () => {
@@ -13,7 +11,7 @@ export const DoctorRoot = () => {
 
   return (
     <>
-      <DoctorAppBar />
+      <AppBarComp name="Доктор" />
       <Routes>
         {renderRoutes()}
         <Route path="/error" element={<></>} />
@@ -22,19 +20,3 @@ export const DoctorRoot = () => {
     </>
   );
 };
-
-const DoctorAppBar = () => (
-  <>
-    <AppBar position="static">
-      <Toolbar>
-        <span style={{ flexGrow: 1 }}>Доктор</span>
-        <div className="flex justify-between">
-          <span>{"name"}</span>
-          <IconButton color="inherit">
-            <LogoutIcon />
-          </IconButton>
-        </div>
-      </Toolbar>
-    </AppBar>
-  </>
-);
