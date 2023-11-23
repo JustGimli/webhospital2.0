@@ -1,7 +1,6 @@
 
 import axios from "axios"
 
-
 const domain_doctor = 'http://127.0.0.1:48080'
 const domain_patient = 'http://127.0.0.1:50080'
 
