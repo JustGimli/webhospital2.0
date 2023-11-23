@@ -1,25 +1,19 @@
+import { useState } from "react";
+
 import {
-  AppBar,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Toolbar,
 } from "@mui/material";
-import LogoutIcon from "@mui/icons-material/Logout";
+import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";
-import { useState } from "react";
 
-export const DoctorPage = () => {
+export const DoctorMainPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleClose = () => {
@@ -29,7 +23,7 @@ export const DoctorPage = () => {
   return (
     <>
       {isOpen && <AddPatient open={isOpen} handleClose={handleClose} />}
-      <DoctorAppBar />
+
       <div className="flex w-full justify-end">
         <Button variant="contained" onClick={handleClose}>
           Добавить пациента
@@ -39,20 +33,6 @@ export const DoctorPage = () => {
     </>
   );
 };
-
-const DoctorAppBar = () => (
-  <>
-    {" "}
-    <AppBar position="static">
-      <Toolbar>
-        <span style={{ flexGrow: 1 }}>Доктор</span>
-        <IconButton color="inherit">
-          <LogoutIcon />
-        </IconButton>
-      </Toolbar>
-    </AppBar>
-  </>
-);
 
 const DockerTable = () => (
   <>
@@ -106,26 +86,3 @@ const rows = [
   createData("Cupcake", 305, 3.7, 67, 4.3),
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
-
-const AddPatient = ({ open, handleClose }: any) => {
-  return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogTitle>Subscribe</DialogTitle>
-      <DialogContent>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="name"
-          label="Email Address"
-          type="email"
-          fullWidth
-          variant="standard"
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleClose}>Subscribe</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
