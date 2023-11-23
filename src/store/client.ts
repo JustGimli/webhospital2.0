@@ -33,9 +33,9 @@ export default class Client {
             }
         }catch(err) {return false}}
     
-     async getPatients()  {
+     async getDoctors()  {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_CLIENT}patients/`)
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_CLIENT}doctors/`)
             return response.data
         }catch(err) {
             return []
