@@ -1,7 +1,7 @@
 import { Button, Tab, Tabs } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AuthFields } from "../widgets/authForm";
-import { doctor } from "..";
+import { client, doctor } from "..";
 import { async } from "q";
 import { useNavigate } from "react-router-dom";
 import { DOCTORROOT } from "../utils/const";
@@ -17,14 +17,17 @@ export const AuthPage = () => {
   const handleClick = async () => {
     setDisabled(true);
     if (username.length !== 0 && password.length !== 0) {
+      let flag = false;
+
       if (nav === "Врач") {
-        const flag = await doctor.login(username, password);
+        flag = await doctor.login(username, password);
+      } else {
+        flag = await client.login(username, password);
       }
 
-      //   console.log(flag);
-      //   if (flag === true) {
-      //     navigate(DOCTORROOT);
-      //   }
+      if (flag === true) {
+        navigate(DOCTORROOT);
+      }
     }
     setDisabled(false);
   };

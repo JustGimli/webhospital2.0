@@ -13,7 +13,7 @@ export default class  Doctor {
         makeAutoObservable(this)
     }
 
-    async createPatient(form: FormData) {
+    async createPatient(form: any) {
         try {
             $api_doctor.post("/patients/", form, {headers: {"Content-Type": "application/json"}})
         }catch(err) {
@@ -22,10 +22,15 @@ export default class  Doctor {
 
     async login(username: string, password: string) {
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}login/`, {username, password})
-            localStorage.setItem('mptok', response.data.access_token)
-            let date = new Date()
-            document.cookie = `mptok=${response.data.refresh_token}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}login/`, {username, password}, {withCredentials: true})
+            localStorage.setItem('tok', response.data.access_token)
+    
+            let date = new Date();
+            date.setTime(date.getTime() + 24 * 60 * 60 * 1000); 
+            
+            document.cookie = `tok=${
+                response.data.refresh_token
+            }; path=/;expires=${date.toUTCString()}`;
 
                 // this.errorMessage = "Ваш аккаунт успешно зарегистрирован, проверьте почту для подверждения регистрации"
             return true
