@@ -4,7 +4,7 @@ import { $api_doctor } from "../utils/api_doctor"
 
 
 
-class User {
+export default class  Doctor {
     email: string = ""
     
 
@@ -130,8 +130,3 @@ class User {
     //     }
     // }
     
-
-
-
-// eslint-disable-next-line import/no-anonymous-default-export
-export default User

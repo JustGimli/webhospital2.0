@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 
 import { AudioRecorder } from "react-audio-voice-recorder";
 import { useParams } from "react-router-dom";
-import { user } from "../../..";
+import { doctor } from "../../..";
 
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
@@ -26,7 +26,7 @@ export const PatientCardPage = () => {
 
   useEffect(() => {
     (async () => {
-      const res = await user.getPatient(Number(number));
+      const res = await doctor.getPatient(Number(number));
       if (res) {
       }
     })();

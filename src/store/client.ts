@@ -4,7 +4,7 @@ import {makeAutoObservable} from "mobx"
 
 
 
-class User {
+export default class Client {
     email: string = ""
     
 

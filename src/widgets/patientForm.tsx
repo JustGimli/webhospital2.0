@@ -17,7 +17,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import dayjs from "dayjs";
-import { user } from "..";
+import { doctor } from "..";
 
 export const AddPatient = ({ open, handleClose }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
@@ -41,7 +41,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
 
     if (date) form.append("date_of_birth", date.format("YYYY-MM-DD"));
 
-    user.createPatient(form);
+    doctor.createPatient(form);
     // handleClose();
   };
 

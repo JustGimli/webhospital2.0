@@ -5,16 +5,25 @@ import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import User from "./store/doctor";
+import Doctor from "./store/doctor";
+import Client from "./store/client";
 
-interface State {
-  user: User;
+interface StateDoctor {
+  doctor: Doctor;
 }
 
-export const user = new User();
+interface StateClient {}
 
-export const Context = createContext<State>({
-  user,
+export const doctor = new Doctor();
+
+export const client = new Client();
+
+export const Context = createContext<StateDoctor>({
+  doctor,
+});
+
+export const ContextClient = createContext<StateClient>({
+  client,
 });
 
 const root = ReactDOM.createRoot(
@@ -23,10 +32,12 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Context.Provider value={{ user }}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <App />
-        </LocalizationProvider>
+      <Context.Provider value={{ doctor }}>
+        <ContextClient.Provider value={{ client }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <App />
+          </LocalizationProvider>
+        </ContextClient.Provider>
       </Context.Provider>
     </BrowserRouter>
   </React.StrictMode>

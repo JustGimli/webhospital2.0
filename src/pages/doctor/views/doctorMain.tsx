@@ -13,7 +13,7 @@ import {
 import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router";
-import { user } from "../../..";
+import { doctor } from "../../..";
 
 export const DoctorMainPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -48,7 +48,7 @@ const DockerTable = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      setData(await user.getPatients());
+      setData(await doctor.getPatients());
       setIsLoading(false);
     })();
   }, []);
