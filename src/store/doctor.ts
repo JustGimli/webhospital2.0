@@ -61,7 +61,13 @@ export default class  Doctor {
         
 
     async createScenario(is_reference_session: any, session_type: any) {
-            
+        try {
+// /            const response = await $api_doctor.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${number}`)
+
+            // return response.data
+        }catch(err) {
+            return {}
+        }
 
     }
 }
