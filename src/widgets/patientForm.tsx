@@ -19,6 +19,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import dayjs from "dayjs";
 import generatePassword from "omgopass";
 import { doctor } from "..";
+import { ShowInfoToastMessage } from "../utils/toasts";
 
 export const AddPatient = ({ open, handleClose }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
@@ -48,8 +49,8 @@ export const AddPatient = ({ open, handleClose }: any) => {
       temporary_password: pass,
       is_password_changed: false,
     };
-
     await doctor.createPatient(data);
+    ShowInfoToastMessage("Пациент успешно добавлен!");
     handleClose();
   };
 
