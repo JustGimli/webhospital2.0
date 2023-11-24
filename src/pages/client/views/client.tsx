@@ -44,7 +44,7 @@ const DoctorsTable = () => {
 
 const TableItem = (data: any) => {
   const handleClick = (row: any) => {
-    client.doctor = row;
+    // client.doctor = row;
     navigate("/doctor/card/" + row.doctor_login);
   };
 

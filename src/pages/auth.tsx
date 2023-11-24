@@ -1,12 +1,12 @@
 import { Button, Tab, Tabs } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AuthFields } from "../widgets/authForm";
 import { client, doctor } from "..";
-import { async } from "q";
 import { useNavigate } from "react-router-dom";
-import { DOCTORROOT } from "../utils/const";
+import { CHANGEPASS, DOCTORROOT, PATIENTROOT } from "../utils/const";
+import { observer } from "mobx-react-lite";
 
-export const AuthPage = () => {
+export const AuthPage = observer(() => {
   const navigate = useNavigate();
 
   const [nav, setNav] = useState<string>("Пациент");
@@ -21,12 +21,19 @@ export const AuthPage = () => {
 
       if (nav === "Врач") {
         flag = await doctor.login(username, password);
+        if (flag) {
+          navigate(DOCTORROOT);
+        }
       } else {
-        flag = await client.login(username, password);
-      }
+        client.card = username;
+        client.lastPass = password;
+        flag = await client.checkStatusPass();
 
-      if (flag === true) {
-        navigate(DOCTORROOT);
+        if (!flag) {
+          navigate(PATIENTROOT + CHANGEPASS);
+        } else {
+          await client.login(username, password);
+        }
       }
     }
     setDisabled(false);
@@ -54,4 +61,4 @@ export const AuthPage = () => {
       </Button>
     </div>
   );
-};
+});

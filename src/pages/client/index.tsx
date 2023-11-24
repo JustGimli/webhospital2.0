@@ -11,7 +11,7 @@ export const PatientRoot = () => {
 
   return (
     <>
-      <AppBarComp name="Пациент" />
+      {/* <AppBarComp name="Пациент" /> */}
       <Routes>
         {renderRoutes()}
         <Route path="/error" element={<></>} />

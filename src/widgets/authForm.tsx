@@ -1,5 +1,6 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
+  Button,
   FormControl,
   IconButton,
   InputAdornment,
@@ -16,9 +17,8 @@ export const AuthFields = ({
   setUserName,
   setPassword,
 }: any) => {
-  const isMobile = useMediaQuery("(max-width:767px)");
-
   const [showPassword, setShowPassword] = useState<any>(false);
+  const isMobile = useMediaQuery("(max-width:767px)");
 
   const handleClickShowPassword = () =>
     setShowPassword((showPassword: any) => !showPassword);
@@ -26,27 +26,17 @@ export const AuthFields = ({
   return (
     <>
       <span className="AuthTitle  my-20">Вход {name}а</span>
-      <FormControl
-        style={{
-          marginBottom: isMobile ? "20px" : "40px",
-        }}
-        variant="outlined"
-        fullWidth
-        required
-      >
-        <InputLabel>Логин</InputLabel>
-        <OutlinedInput
-          style={{
-            borderRadius: "15px",
-            background: "#F8FAFC",
-            width: isMobile ? "100%" : "",
-          }}
-          type="email"
-          onChange={(e: any) => setUserName(e.target.value)}
-          value={username}
-          label="Логин"
+      {name === "Врач" ? (
+        <DoctorForm
+          username={username}
+          password={password}
+          setUserName={setUserName}
+          setPassword={setPassword}
         />
-      </FormControl>
+      ) : (
+        <ClientForm username={username} setUserName={setUserName} />
+      )}
+
       <FormControl
         required
         variant="outlined"
@@ -73,6 +63,65 @@ export const AuthFields = ({
             </InputAdornment>
           }
           label="Пароль"
+        />
+      </FormControl>
+    </>
+  );
+};
+
+const DoctorForm = ({ username, password, setUserName, setPassword }: any) => {
+  const isMobile = useMediaQuery("(max-width:767px)");
+
+  return (
+    <>
+      <FormControl
+        style={{
+          marginBottom: isMobile ? "20px" : "40px",
+        }}
+        variant="outlined"
+        fullWidth
+        required
+      >
+        <InputLabel>Логин</InputLabel>
+        <OutlinedInput
+          style={{
+            borderRadius: "15px",
+            background: "#F8FAFC",
+            width: isMobile ? "100%" : "",
+          }}
+          type="email"
+          onChange={(e: any) => setUserName(e.target.value)}
+          value={username}
+          label="Логин"
+        />
+      </FormControl>
+    </>
+  );
+};
+
+const ClientForm = ({ username, setUserName }: any) => {
+  const isMobile = useMediaQuery("(max-width:767px)");
+  return (
+    <>
+      <FormControl
+        style={{
+          marginBottom: isMobile ? "20px" : "40px",
+        }}
+        variant="outlined"
+        fullWidth
+        required
+      >
+        <InputLabel>Номер Карты</InputLabel>
+        <OutlinedInput
+          style={{
+            borderRadius: "15px",
+            background: "#F8FAFC",
+            width: isMobile ? "100%" : "",
+          }}
+          type="email"
+          onChange={(e: any) => setUserName(e.target.value)}
+          value={username}
+          label="Номер Карты"
         />
       </FormControl>
     </>
