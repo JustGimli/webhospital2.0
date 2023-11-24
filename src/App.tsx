@@ -1,6 +1,8 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import { MainURL } from "./utils/path";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const renderRoutes = () => {
@@ -16,6 +18,7 @@ function App() {
         <Route path="/error" element={<></>} />
         <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>
+      <ToastContainer />
     </div>
   );
 }

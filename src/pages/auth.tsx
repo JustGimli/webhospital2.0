@@ -5,6 +5,7 @@ import { client, doctor } from "..";
 import { useNavigate } from "react-router-dom";
 import { CHANGEPASS, DOCTORROOT, PATIENTROOT } from "../utils/const";
 import { observer } from "mobx-react-lite";
+import { ShowSuccessToastMessage } from "../utils/toasts";
 
 export const AuthPage = observer(() => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ export const AuthPage = observer(() => {
       if (nav === "Врач") {
         flag = await doctor.login(username, password);
         if (flag) {
+          ShowSuccessToastMessage("Выполнено успешно!");
           navigate(DOCTORROOT);
         }
       } else {
