@@ -2,7 +2,7 @@ import { AuthPage } from "../pages/auth";
 import { DoctorRoot } from "../pages/doctor";
 import { DoctorMainPage } from "../pages/doctor/views/doctorMain";
 import { PatientCardPage } from "../pages/doctor/views/patientCard";
-import { ClientMain } from "../pages/client/views/client";
+import { ClientMain } from "../pages/client/views/clientMain";
 import { DoctorCardPage } from "../pages/client/views/doctorCard";
 import {
   AUTH,
@@ -49,10 +49,10 @@ export const DoctorURL = [
 ];
 
 export const PatientURL = [
-//   {
-//     Component: ClientMain,
-//     path: PATIENTBASE,
-//   },
+  {
+    Component: ClientMain,
+    path: PATIENTBASE,
+  },
 //   {
 //     Component: DoctorCardPage,
 //     path: DOCTORCARD,

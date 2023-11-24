@@ -11,15 +11,22 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { client } from "../../..";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router-dom";
+import { PATIENTBASE } from "../../../utils/const";
 
 export const ChangePassPage = observer(() => {
   const isMobile = useMediaQuery("(max-width:767px)");
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<any>(false);
 
   const [newPass, setNewPass] = useState<any>();
 
   const handleClick = async () => {
-    await client.changeTempPass(newPass);
+    const flag = await client.changeTempPass(newPass);
+
+    if (flag) {
+      navigate(PATIENTBASE);
+    }
   };
 
   const handleClickShowPassword = () =>

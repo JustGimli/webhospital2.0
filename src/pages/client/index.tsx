@@ -1,6 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { PatientURL } from "../../utils/path";
-import { AppBarComp } from "../../components/appBar";
 
 export const PatientRoot = () => {
   const renderRoutes = () => {
@@ -11,7 +10,6 @@ export const PatientRoot = () => {
 
   return (
     <>
-      {/* <AppBarComp name="Пациент" /> */}
       <Routes>
         {renderRoutes()}
         <Route path="/error" element={<></>} />

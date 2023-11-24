@@ -1,5 +1,4 @@
 import {
-  Button,
   CircularProgress,
   Paper,
   Table,
@@ -12,9 +11,15 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { client } from "../../..";
+import { AppBarComp } from "../../../components/appBar";
 
 export const ClientMain = () => {
-  return <DoctorsTable />;
+  return (
+    <>
+      <AppBarComp name="Пациент" />
+      <DoctorsTable />
+    </>
+  );
 };
 
 const DoctorsTable = () => {
