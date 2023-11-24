@@ -31,16 +31,13 @@ export const PatientCardPage = () => {
       const res = await doctor.getPatient(Number(number));
       if (res) {
         setPatient(res.get_patient_info);
+        console.log(res.sessions);
         setSessions(res.sessions);
       }
-      setSessionsInfo(async () => {
-        return sessions.map(async (s: any) => {
-          return await doctor.getPatientSessionInfo(
-            patient.card_number,
-            s.session_id
-          );
-        });
-      });
+      // const response = sessions.map(async (s: any)=>{
+      //   return await doctor.getPatientSessionInfo(patient.card_number,s.session_id);
+      // })
+      // setSessionsInfo(response);
     })();
   }, []);
 

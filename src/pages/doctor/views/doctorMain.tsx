@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import SearchBar from "material-ui-search-bar";
 import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router";
@@ -44,17 +45,30 @@ export const DoctorMainPage = () => {
 const DockerTable = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState([]);
+  const [rows, setRows] = useState([]);
+  const [searched, setSearched] = useState<string>("");
+
+  const requestSearch = (searchedVal: string) => {
+    const filteredRows = data.filter((row: any) => {
+      return row.full_name.toLowerCase().includes(searchedVal.toLowerCase());
+    });
+    setRows(filteredRows);
+  };
+
+  const cancelSearch = () => {
+    setSearched("");
+    requestSearch(searched);
+  };
 
   useEffect(() => {
     (async () => {
       setIsLoading(true);
       const d1 = await doctor.getPatients();
       setData(d1);
-
+      setRows(d1);
       setIsLoading(false);
     })();
   }, []);
-
   return isLoading ? (
     <div className="flex justify-center w-full">
       <CircularProgress />
@@ -62,18 +76,34 @@ const DockerTable = () => {
   ) : data.length === 0 ? (
     <div className="flex justify-center w-full">Пациенты отсутсвуют</div>
   ) : (
-    <TableItem data={data} />
+    <>
+      <Paper />
+      <SearchBar
+        value={searched}
+        onChange={(searchVal) => requestSearch(searchVal)}
+        onCancelSearch={() => cancelSearch()}
+        style={{
+          maxWidth: "400px",
+          border: "1px solid grey",
+          borderRadius: "5px",
+          backgroundColor: "#f5f5f5",
+          margin: "5px",
+        }}
+      />
+      <TableItem data={rows} />
+    </>
   );
 };
 
-const TableItem = (data: any) => {
+const TableItem = (tabledata: any) => {
   const handleClick = (number: any) => {
     navigate("/doctor/card/" + number);
   };
 
   const navigate = useNavigate();
-
-  return (
+  return tabledata.length === 0 ? (
+    <div className="flex justify-center w-full">Пациенты отсутсвуют</div>
+  ) : (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
         <TableHead>
@@ -87,9 +117,9 @@ const TableItem = (data: any) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.data.map((row: any) => (
+          {tabledata.data.map((row: any) => (
             <TableRow
-              key={row.full_name}
+              key={row.card_number}
               style={{ cursor: "pointer" }}
               onClick={() => handleClick(row.card_number)}
             >
@@ -101,7 +131,7 @@ const TableItem = (data: any) => {
               <TableCell align="right">{row.card_number}</TableCell>
               <TableCell align="right">
                 {row.doctor_info.map((item: any) => (
-                  <span>{item} </span>
+                  <span key={item}>{item} </span>
                 ))}
               </TableCell>
             </TableRow>

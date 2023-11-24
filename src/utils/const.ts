@@ -3,10 +3,10 @@ export const DOCTOR = "/doctor/*";
 export const PATIENT = "/patient/*";
 
 //patient page
-export const PATIENTROOT = "/patient"
+export const PATIENTROOT = "/patient";
 
 export const PATIENTBASE = "";
-export const CHANGEPASS = '/change';
+export const CHANGEPASS = "/change";
 export const DOCTORCARD = "/cars/:string";
 
 // doctor page
