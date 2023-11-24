@@ -58,13 +58,21 @@ export default class  Doctor {
             return {}
         }
     }
-        
+    async getPatientSessionInfo(number:number,session_id:number){
+        try {
+            const response = await $api_doctor.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${number}/session/${session_id}`)
+
+            return response.data
+        }catch(err) {
+            return {}
+        }
+    }
 
     async createScenario(card: any, is_reference_session: any, session_type: any) {
         try {
             const response = await $api_doctor.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${card}`, {is_reference_session, session_type})
             return response.data
-        return response.data
+       
         }catch(err) {
             return {}
         }
