@@ -4,10 +4,10 @@ export const PhraseChart = ({sessionsData}: any) => {
     let not_reference_speech: any[] = [];
     const reference_speech = sessionsData.speech_array.map((s: any)=>{
        if(s.is_reference_speech){
-           return s
+           return s.speech_score
        }
        else {
-           not_reference_speech.push(s)
+           not_reference_speech.push(s.speech_score)
        }
     })
 
