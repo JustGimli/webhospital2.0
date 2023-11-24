@@ -33,6 +33,7 @@ export const AuthPage = observer(() => {
           navigate(PATIENTROOT + CHANGEPASS);
         } else {
           await client.login(username, password);
+          navigate(PATIENTROOT);
         }
       }
     }
