@@ -14,7 +14,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import dayjs from "dayjs";
 import generatePassword from "omgopass";
@@ -107,7 +107,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
                 width: isMobile ? "100%" : "",
               }}
               onChange={(e: any) => {
-                if (card.length == 11) {
+                if (card.length === 11) {
                   setNumberError(false);
                 } else {
                   setNumberError(true);
@@ -177,6 +177,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
       </DialogContent>
       <DialogActions>
         <Button
+          variant="contained"
           onClick={handleGeneratePassword}
           disabled={pass != ""}
           style={{ marginRight: "40%" }}

@@ -15,6 +15,7 @@ import {
 import { useState } from "react";
 import { AudioRecorder } from "react-audio-voice-recorder";
 import { client } from "../../..";
+import { RecorderVoiceItem } from "../../../widgets/record";
 
 const data = [
   { name: "ФИО", value: "" },
@@ -101,7 +102,7 @@ const PatientDialog = ({ open, handleClose }: any) => {
             </>
           ) : (
             <>
-              <RecorderVoice />
+              <RecorderVoiceItem />
             </>
           )}
         </DialogContent>

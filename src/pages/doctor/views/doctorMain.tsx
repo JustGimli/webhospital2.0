@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import SearchBar from "material-ui-search-bar";
+// import SearchBar from "material-ui-search-bar";
 import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router";
@@ -78,7 +78,7 @@ const DockerTable = () => {
   ) : (
     <>
       <Paper />
-      <SearchBar
+      {/* <SearchBar
         value={searched}
         onChange={(searchVal) => requestSearch(searchVal)}
         onCancelSearch={() => cancelSearch()}
@@ -89,7 +89,7 @@ const DockerTable = () => {
           backgroundColor: "#f5f5f5",
           margin: "5px",
         }}
-      />
+      /> */}
       <TableItem data={rows} />
     </>
   );
@@ -109,7 +109,6 @@ const TableItem = (tabledata: any) => {
         <TableHead>
           <TableRow>
             <TableCell>Полное имя</TableCell>
-            <TableCell align="right">Полное имя</TableCell>
             <TableCell align="right">Возраст</TableCell>
             <TableCell align="right">Пол</TableCell>
             <TableCell align="right">Номер личной карты</TableCell>
@@ -127,7 +126,9 @@ const TableItem = (tabledata: any) => {
                 {row.full_name}
               </TableCell>
               <TableCell align="right">{row.date_of_birth}</TableCell>
-              <TableCell align="right">{row.gender}</TableCell>
+              <TableCell align="right">
+                {row.gender === "m" ? "Мужской" : "Женский"}
+              </TableCell>
               <TableCell align="right">{row.card_number}</TableCell>
               <TableCell align="right">
                 {row.doctor_info.map((item: any) => (

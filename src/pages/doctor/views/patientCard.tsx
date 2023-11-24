@@ -18,7 +18,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doctor } from "../../..";
 import { SessionList } from "../../../widgets/sessionList";
-import { BarChart } from "@mui/x-charts";
+import { RecorderVoiceItem } from "../../../widgets/record";
 
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
@@ -143,21 +143,23 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
             </>
           ) : (
             <>
-              {/* <RecorderVoice
-                sessionType={session_type}npm i --save material-ui-search-bar
-                speech={speech}
-                card={card}
-              />  */}
-              {/* <p style={{ textAlign: "center", fontSize: "14" }}>или</p>
-              <Upload /> */}
+              <RecorderVoiceItem
+              // sessionType={session_type}
+              // speech={speech}
+              // card={card}
+              />
             </>
           )}
         </DialogContent>
         <DialogActions>
           {step === 0 ? (
-            <Button onClick={handleButtonNext}>Вперед</Button>
+            <Button onClick={handleButtonNext} variant="contained">
+              Вперед
+            </Button>
           ) : (
-            <Button onClick={handleButtonNext}>Завершить</Button>
+            <Button onClick={handleButtonNext} variant="contained">
+              Завершить
+            </Button>
           )}
         </DialogActions>
       </Dialog>
@@ -198,11 +200,3 @@ const IputType = ({ setIsRef, setSessionType }: any) => {
 };
 
 const steps = ["Добавление сеанса", "Загрузка аудио", "Завершение"];
-
-const data = [
-  { name: "Имя", value: "" },
-  { name: "Возраст", value: "" },
-  { name: "Персональный номер карты", value: "" },
-  { name: "Пол", value: "" },
-  { name: "Дополнительная информация", value: "" },
-];
