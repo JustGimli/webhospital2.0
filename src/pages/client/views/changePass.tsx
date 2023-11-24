@@ -19,9 +19,8 @@ export const ChangePassPage = observer(() => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<any>(false);
 
-  const [newPass, setNewPass] = useState<any>();
+  const [newPass, setNewPass] = useState<any>("");
 
-  console.log(client.card, client.lastPass);
   const handleClick = async () => {
     const flag = await client.changeTempPass(newPass);
 

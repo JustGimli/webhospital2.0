@@ -11,7 +11,14 @@ import {
   Step,
   StepLabel,
   Stepper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
 } from "@mui/material";
+import Paper from "@mui/material/Paper";
 import { useEffect, useId, useState } from "react";
 
 import { AudioRecorder } from "react-audio-voice-recorder";
@@ -45,14 +52,56 @@ export const PatientCardPage = () => {
         <span style={{ fontSize: "24px" }} className="my-5">
           Профиль пациента
         </span>
-        <ProfileCard />
+        <ProfileCard patient={patient} />
         <div className="flex justify-between w-full">
           <span>Сеансы оценки качества речи</span>
           <Button variant="contained" onClick={handleClose}>
             Добавить сеанс
           </Button>
         </div>
+        {sessions ? <SessionList /> : <span>Сеансы отсутсвуют</span>}
       </div>
+    </>
+  );
+};
+
+const SessionList = () => {
+  const handleClick = () => {};
+
+  return (
+    <>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Индондефикатор сессии</TableCell>
+              <TableCell>Тип сигнала</TableCell>
+              <TableCell>Тип сеанса</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {/* {data.data.map((row: any) => (
+              <TableRow
+                key={row.full_name}
+                style={{ cursor: "pointer" }}
+                onClick={() => handleClick()}
+              >
+                <TableCell component="th" scope="row">
+                  {row.full_name}
+                </TableCell>
+                <TableCell align="right">{row.date_of_birth}</TableCell>
+                <TableCell align="right">{row.gender}</TableCell>
+                <TableCell align="right">{row.card_number}</TableCell>
+                <TableCell align="right">
+                  {row.doctor_info.map((item: any) => (
+                    <span>{item} </span>
+                  ))}
+                </TableCell>
+              </TableRow>
+            ))} */}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </>
   );
 };
@@ -67,15 +116,14 @@ const ProfileCard = ({ patient }: any) => {
         borderRadius: "8px",
       }}
     >
-      {
-        patient && <></>
-        // patient.map((item) => (
-        //   <>
-        //     <span>{item.name}: </span>
-        //     <span>{item.value}</span>
-        //     <br />
-        //   </>
-      }
+      {patient &&
+        Object.entries(patient).map(([key, val]: any) => (
+          <div>
+            <span>{key}: </span>
+            <span>{val}</span>
+            <br />
+          </div>
+        ))}
     </div>
   );
 };

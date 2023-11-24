@@ -75,7 +75,7 @@ const TableItem = (data: any) => {
 
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
             <TableCell>Полное имя</TableCell>
@@ -91,7 +91,7 @@ const TableItem = (data: any) => {
             <TableRow
               key={row.full_name}
               style={{ cursor: "pointer" }}
-              onClick={() => handleClick(1)}
+              onClick={() => handleClick(row.card_number)}
             >
               <TableCell component="th" scope="row">
                 {row.full_name}

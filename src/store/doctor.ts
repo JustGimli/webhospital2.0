@@ -5,7 +5,7 @@ import { $api_doctor } from "../utils/api_doctor"
 
 
 export default class  Doctor {
-    email: string = ""
+    name: any = ""
     
 
 
@@ -21,6 +21,7 @@ export default class  Doctor {
     }
 
     async login(username: string, password: string) {
+        this.name = username
         try {
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}login/`, {username, password}, {withCredentials: true})
             localStorage.setItem('tok', response.data.access_token)
