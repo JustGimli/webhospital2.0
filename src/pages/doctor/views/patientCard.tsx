@@ -11,19 +11,14 @@ import {
   Step,
   StepLabel,
   Stepper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
 } from "@mui/material";
-import Paper from "@mui/material/Paper";
+
 import { useEffect, useId, useState } from "react";
 
 import { AudioRecorder } from "react-audio-voice-recorder";
 import { useParams } from "react-router-dom";
 import { doctor } from "../../..";
+import { SessionList } from "../../../widgets/sessionList";
 
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
@@ -65,47 +60,6 @@ export const PatientCardPage = () => {
   );
 };
 
-const SessionList = () => {
-  const handleClick = () => {};
-
-  return (
-    <>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>Индондефикатор сессии</TableCell>
-              <TableCell>Тип сигнала</TableCell>
-              <TableCell>Тип сеанса</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {/* {data.data.map((row: any) => (
-              <TableRow
-                key={row.full_name}
-                style={{ cursor: "pointer" }}
-                onClick={() => handleClick()}
-              >
-                <TableCell component="th" scope="row">
-                  {row.full_name}
-                </TableCell>
-                <TableCell align="right">{row.date_of_birth}</TableCell>
-                <TableCell align="right">{row.gender}</TableCell>
-                <TableCell align="right">{row.card_number}</TableCell>
-                <TableCell align="right">
-                  {row.doctor_info.map((item: any) => (
-                    <span>{item} </span>
-                  ))}
-                </TableCell>
-              </TableRow>
-            ))} */}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </>
-  );
-};
-
 const ProfileCard = ({ patient }: any) => {
   return (
     <div
@@ -128,20 +82,19 @@ const ProfileCard = ({ patient }: any) => {
   );
 };
 
-const data = [
-  { name: "Имя", value: "" },
-  { name: "Возраст", value: "" },
-  { name: "Персональный номер карты", value: "" },
-  { name: "Пол", value: "" },
-  { name: "Дополнительная информация", value: "" },
-];
-
 const PatientDialog = ({ open, handleClose }: any) => {
   const [step, setStep] = useState<any>(0);
 
+  const [is_reference_session, setIsRef] = useState();
+  const [session_type, setSessionType] = useState("");
+
   const handleButtonNext = () => {
+    if (step === 0) {
+      doctor.createScenario(is_reference_session, session_type);
+    }
+
     setStep(step + 1);
-    console.log(step);
+
     if (step === 2) {
       setStep(0);
       handleClose();
@@ -172,7 +125,7 @@ const PatientDialog = ({ open, handleClose }: any) => {
         <DialogContent>
           {step === 0 ? (
             <>
-              <IputType />
+              <IputType setIsRef={setIsRef} setSessionType={setSessionType} />
             </>
           ) : (
             <>
@@ -194,8 +147,6 @@ const PatientDialog = ({ open, handleClose }: any) => {
   );
 };
 
-const steps = ["Добавление сеанса", "Загрузка аудио", "Завершение"];
-
 const RecorderVoice = () => {
   const addAudioElement = (blob: Blob) => {
     const url = URL.createObjectURL(blob);
@@ -212,12 +163,7 @@ const RecorderVoice = () => {
         audioTrackConstraints={{
           noiseSuppression: true,
           echoCancellation: true,
-          // autoGainControl,
-          // channelCount,
-          // deviceId,
-          // groupId,
-          // sampleRate,
-          // sampleSize,
+          autoGainControl: true,
         }}
         onNotAllowedOrFound={(err) => console.table(err)}
         downloadFileExtension="webm"
@@ -225,29 +171,52 @@ const RecorderVoice = () => {
           audioBitsPerSecond: 128000,
         }}
         showVisualizer={true}
+        downloadOnSavePress
       />
     </>
   );
 };
 
-const IputType = () => {
+const IputType = ({ setIsRef, setSessionType }: any) => {
   return (
     <>
       <FormControl variant="outlined" fullWidth margin="normal" required>
         <InputLabel>Тип сеанса</InputLabel>
-        <Select onChange={() => {}} label="Тип сигнала">
-          <MenuItem value="Мужской">Эталонный</MenuItem>
+        <Select
+          onChange={(e: any) => {
+            console.log(e);
+            setIsRef(e.target.value);
+          }}
+          label="Тип сигнала"
+        >
+          <MenuItem value="true">Эталонный</MenuItem>
 
-          <MenuItem value="Женский">Не эталонный</MenuItem>
+          <MenuItem value="false">Не эталонный</MenuItem>
         </Select>
       </FormControl>
-      <FormControl variant="outlined" fullWidth margin="normal">
+      <FormControl variant="outlined" fullWidth margin="normal" required>
         <InputLabel>Тип сигнала</InputLabel>
-        <Select onChange={() => {}} label="Тип сигнала">
-          <MenuItem value="Мужской">Фразы</MenuItem>
-          <MenuItem value="Женский">Слоги</MenuItem>
+        <Select
+          onChange={(e: any) => {
+            console.log(e);
+            setSessionType(e.target.value);
+          }}
+          label="Тип сигнала"
+        >
+          <MenuItem value="слоги">Фразы</MenuItem>
+          <MenuItem value="фразы">Слоги</MenuItem>
         </Select>
       </FormControl>
     </>
   );
 };
+
+const steps = ["Добавление сеанса", "Загрузка аудио", "Завершение"];
+
+const data = [
+  { name: "Имя", value: "" },
+  { name: "Возраст", value: "" },
+  { name: "Персональный номер карты", value: "" },
+  { name: "Пол", value: "" },
+  { name: "Дополнительная информация", value: "" },
+];

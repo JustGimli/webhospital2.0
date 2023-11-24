@@ -59,6 +59,11 @@ export default class  Doctor {
         }
     }
         
+
+    async createScenario(is_reference_session: any, session_type: any) {
+            
+
+    }
 }
 
 
