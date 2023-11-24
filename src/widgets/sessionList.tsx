@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 
-export const SessionList = () => {
+export const SessionList = ({ sessions }: any) => {
   const handleClick = () => {};
 
   return (
@@ -23,25 +23,19 @@ export const SessionList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {data.data.map((row: any) => (
+            {sessions.map((row: any) => (
               <TableRow
                 key={row.full_name}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleClick()}
               >
-                <TableCell component="th" scope="row">
-                  {row.full_name}
+                <TableCell>{row.session_id}</TableCell>
+                <TableCell>
+                  {row.is_reference_session ? "Эталонная" : "Неэталлоная"}
                 </TableCell>
-                <TableCell align="right">{row.date_of_birth}</TableCell>
-                <TableCell align="right">{row.gender}</TableCell>
-                <TableCell align="right">{row.card_number}</TableCell>
-                <TableCell align="right">
-                  {row.doctor_info.map((item: any) => (
-                    <span>{item} </span>
-                  ))}
-                </TableCell>
+                <TableCell>{row.session_type}</TableCell>
               </TableRow>
-            ))} */}
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

@@ -12,7 +12,7 @@ import { useState } from "react";
 import { client } from "../../..";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
-import { PATIENTBASE } from "../../../utils/const";
+import { PATIENTROOT } from "../../../utils/const";
 
 export const ChangePassPage = observer(() => {
   const isMobile = useMediaQuery("(max-width:767px)");
@@ -25,7 +25,7 @@ export const ChangePassPage = observer(() => {
     const flag = await client.changeTempPass(newPass);
 
     if (flag) {
-      navigate(PATIENTBASE);
+      navigate(PATIENTROOT);
     }
   };
 

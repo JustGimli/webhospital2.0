@@ -24,11 +24,11 @@ export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
   const [sessions, setSessions] = useState<any>();
 
-  const { number } = useParams();
+  const { number: card } = useParams();
 
   useEffect(() => {
     (async () => {
-      const res = await doctor.getPatient(Number(number));
+      const res = await doctor.getPatient(Number(card));
       if (res) {
         setPatient(res.get_patient_info);
         setSessions(res.sessions);
@@ -42,19 +42,25 @@ export const PatientCardPage = () => {
 
   return (
     <>
-      {isOpen && <PatientDialog open={isOpen} handleClose={handleClose} />}
+      {isOpen && (
+        <PatientDialog card={card} open={isOpen} handleClose={handleClose} />
+      )}
       <div className="px-5">
         <span style={{ fontSize: "24px" }} className="my-5">
           Профиль пациента
         </span>
         <ProfileCard patient={patient} />
-        <div className="flex justify-between w-full">
+        <div className="flex justify-between w-full my-5">
           <span>Сеансы оценки качества речи</span>
           <Button variant="contained" onClick={handleClose}>
             Добавить сеанс
           </Button>
         </div>
-        {sessions ? <SessionList /> : <span>Сеансы отсутсвуют</span>}
+        {sessions ? (
+          <SessionList sessions={sessions} />
+        ) : (
+          <span>Сеансы отсутсвуют</span>
+        )}
       </div>
     </>
   );
@@ -82,15 +88,18 @@ const ProfileCard = ({ patient }: any) => {
   );
 };
 
-const PatientDialog = ({ open, handleClose }: any) => {
+const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
 
   const [is_reference_session, setIsRef] = useState();
   const [session_type, setSessionType] = useState("");
+  const [speech, setSpeech] = useState<any>(null);
 
   const handleButtonNext = () => {
     if (step === 0) {
-      doctor.createScenario(is_reference_session, session_type);
+      setSpeech(
+        doctor.createScenario(card, is_reference_session, session_type)
+      );
     }
 
     setStep(step + 1);
@@ -101,14 +110,14 @@ const PatientDialog = ({ open, handleClose }: any) => {
     }
   };
 
-  const Upload = () => {
-    const id = useId();
-    return (
-      <label htmlFor={id}>
-        <input type="file" id={id} />
-      </label>
-    );
-  };
+  //   const Upload = () => {
+  //     const id = useId();
+  //     return (
+  //       <label htmlFor={id}>
+  //         <input type="file" id={id} />
+  //       </label>
+  //     );
+  //   };
 
   return (
     <>
@@ -129,9 +138,13 @@ const PatientDialog = ({ open, handleClose }: any) => {
             </>
           ) : (
             <>
-              <RecorderVoice />
-              <p style={{ textAlign: "center", fontSize: "14" }}>или</p>
-              <Upload />
+              <RecorderVoice
+                sessionType={session_type}
+                speech={speech}
+                card={card}
+              />
+              {/* <p style={{ textAlign: "center", fontSize: "14" }}>или</p>
+              <Upload /> */}
             </>
           )}
         </DialogContent>
@@ -147,13 +160,17 @@ const PatientDialog = ({ open, handleClose }: any) => {
   );
 };
 
-const RecorderVoice = () => {
-  const addAudioElement = (blob: Blob) => {
-    const url = URL.createObjectURL(blob);
-    const audio = document.createElement("audio");
-    audio.src = url;
-    audio.controls = true;
-    document.body.appendChild(audio);
+const RecorderVoice = (sessionType: any, speech: any, card: any) => {
+  const addAudioElement = async (blob: Blob) => {
+    // const base64Value = await blobToBase64(blob);
+    // // Prepare the data to be sent to the server
+    // const data = {
+    //   speech_type: sessionType,
+    //   base64_value: base64Value,
+    //   base64_value_segment: "",
+    //   real_value: "кась",
+    // };
+    // await doctor.updateScenario(card, speech, data);
   };
 
   return (
@@ -171,7 +188,6 @@ const RecorderVoice = () => {
           audioBitsPerSecond: 128000,
         }}
         showVisualizer={true}
-        downloadOnSavePress
       />
     </>
   );
@@ -184,7 +200,6 @@ const IputType = ({ setIsRef, setSessionType }: any) => {
         <InputLabel>Тип сеанса</InputLabel>
         <Select
           onChange={(e: any) => {
-            console.log(e);
             setIsRef(e.target.value);
           }}
           label="Тип сигнала"
@@ -198,7 +213,6 @@ const IputType = ({ setIsRef, setSessionType }: any) => {
         <InputLabel>Тип сигнала</InputLabel>
         <Select
           onChange={(e: any) => {
-            console.log(e);
             setSessionType(e.target.value);
           }}
           label="Тип сигнала"
@@ -220,3 +234,15 @@ const data = [
   { name: "Пол", value: "" },
   { name: "Дополнительная информация", value: "" },
 ];
+
+const blobToBase64 = (blob: any) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = () => {
+      const base64data = (reader.result as string).split(",")[1];
+      resolve(base64data);
+    };
+    reader.onerror = (error) => reject(error);
+  });
+};

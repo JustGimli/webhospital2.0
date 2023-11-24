@@ -29,7 +29,8 @@ const DoctorsTable = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      setData(await client.getDoctors());
+      const d1 = await client.getDoctors();
+      setData(d1);
       setIsLoading(false);
     })();
   }, []);
@@ -54,29 +55,27 @@ const TableItem = (data: any) => {
   };
 
   const navigate = useNavigate();
-
+  console.log(data);
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
             <TableCell>ФИО</TableCell>
-            <TableCell align="right">ФИО</TableCell>
-            <TableCell align="right">Специализация</TableCell>
+            <TableCell>Специализация</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row: any) => (
+          {data.data.map((row: any) => (
             <TableRow
               key={row.doctor_login}
               style={{ cursor: "pointer" }}
               onClick={() => handleClick(row)}
             >
               <TableCell component="th" scope="row">
-                {row.doctor_login}
+                {row.doctor_name}
               </TableCell>
-              <TableCell align="right">{row.doctor_login}</TableCell>
-              <TableCell align="right">{row.hospital}</TableCell>
+              <TableCell>{row.doctor_specialization}</TableCell>
             </TableRow>
           ))}
         </TableBody>
