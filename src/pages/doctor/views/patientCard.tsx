@@ -146,11 +146,11 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
             </>
           ) : (
             <>
-              <RecorderVoice
+              {/* <RecorderVoice
                 sessionType={session_type}
                 speech={speech}
                 card={card}
-              />
+              /> */}
               {/* <p style={{ textAlign: "center", fontSize: "14" }}>или</p>
               <Upload /> */}
             </>
