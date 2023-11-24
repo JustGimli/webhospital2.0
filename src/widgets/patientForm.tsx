@@ -14,9 +14,10 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import dayjs from "dayjs";
+import generatePassword from "omgopass";
 import { doctor } from "..";
 
 export const AddPatient = ({ open, handleClose }: any) => {
@@ -50,6 +51,17 @@ export const AddPatient = ({ open, handleClose }: any) => {
 
     await doctor.createPatient(data);
     handleClose();
+  };
+
+  const handleGeneratePassword = () => {
+    const specchars = "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
+    setPass(
+      generatePassword({
+        syllablesCount: 1,
+        minSyllableLength: 7,
+        maxSyllableLength: 7,
+      }) + specchars[Math.floor(Math.random() * 30)]
+    );
   };
 
   return (
@@ -163,6 +175,13 @@ export const AddPatient = ({ open, handleClose }: any) => {
         </div>
       </DialogContent>
       <DialogActions>
+        <Button
+          onClick={handleGeneratePassword}
+          disabled={pass != ""}
+          style={{ marginRight: "40%" }}
+        >
+          Сгенерировать пароль
+        </Button>
         <Button
           onClick={handleClick}
           variant="contained"

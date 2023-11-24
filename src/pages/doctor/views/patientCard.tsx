@@ -147,10 +147,10 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
           ) : (
             <>
               {/* <RecorderVoice
-                sessionType={session_type}
+                sessionType={session_type}npm i --save material-ui-search-bar
                 speech={speech}
                 card={card}
-              /> */}
+              />  */}
               {/* <p style={{ textAlign: "center", fontSize: "14" }}>или</p>
               <Upload /> */}
             </>
