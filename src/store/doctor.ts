@@ -40,7 +40,8 @@ export default class  Doctor {
     
      async getPatients()  {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/`)
+            const response = await $api_doctor.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients`, {params: {limit: 100}})
+
             return response.data
         }catch(err) {
             return []
@@ -49,7 +50,7 @@ export default class  Doctor {
 
     async getPatient(number: number) {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/`)
+            const response = await $api_doctor.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${number}`)
 
             return response.data
         }catch(err) {

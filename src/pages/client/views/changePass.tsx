@@ -21,6 +21,7 @@ export const ChangePassPage = observer(() => {
 
   const [newPass, setNewPass] = useState<any>();
 
+  console.log(client.card, client.lastPass);
   const handleClick = async () => {
     const flag = await client.changeTempPass(newPass);
 
@@ -100,7 +101,7 @@ export const ChangePassPage = observer(() => {
           newPass.length === 0
         }
       >
-        Войти
+        Сменить пароль
       </Button>
     </div>
   );

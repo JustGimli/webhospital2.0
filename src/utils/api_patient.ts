@@ -19,7 +19,7 @@ $api_client.interceptors.response.use(config => {
 }, (async(error) => {
     const originalRequest = error.config
 
-    if (originalRequest && !originalRequest._isRetry && error.response.status === 401)
+    if (originalRequest && !originalRequest._isRetry && error.response.status === 500)
     {
         originalRequest._isRetry = true
         try {
@@ -27,7 +27,7 @@ $api_client.interceptors.response.use(config => {
             localStorage.setItem('ctok', response.data.access)
             return $api_client.request(originalRequest)
         }catch(error: any) {
-            if (error.response.status === 401) {}
+            if (error.response.status === 500) {}
                 // window.location.href = '/login'
         }
     } else {

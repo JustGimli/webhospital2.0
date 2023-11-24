@@ -48,7 +48,9 @@ const DockerTable = () => {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      setData(await doctor.getPatients());
+      const d1 = await doctor.getPatients();
+      setData(d1);
+
       setIsLoading(false);
     })();
   }, []);
@@ -85,7 +87,7 @@ const TableItem = (data: any) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.map((row: any) => (
+          {data.data.map((row: any) => (
             <TableRow
               key={row.full_name}
               style={{ cursor: "pointer" }}
@@ -97,7 +99,11 @@ const TableItem = (data: any) => {
               <TableCell align="right">{row.date_of_birth}</TableCell>
               <TableCell align="right">{row.gender}</TableCell>
               <TableCell align="right">{row.card_number}</TableCell>
-              <TableCell align="right">{row.doctor_info}</TableCell>
+              <TableCell align="right">
+                {row.doctor_info.map((item: any) => (
+                  <span>{item} </span>
+                ))}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

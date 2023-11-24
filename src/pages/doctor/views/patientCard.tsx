@@ -42,7 +42,9 @@ export const PatientCardPage = () => {
     <>
       {isOpen && <PatientDialog open={isOpen} handleClose={handleClose} />}
       <div className="px-5">
-        <span style={{ fontSize: "24px" }}>Профиль пациента</span>
+        <span style={{ fontSize: "24px" }} className="my-5">
+          Профиль пациента
+        </span>
         <ProfileCard />
         <div className="flex justify-between w-full">
           <span>Сеансы оценки качества речи</span>

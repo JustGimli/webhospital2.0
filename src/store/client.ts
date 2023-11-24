@@ -38,7 +38,7 @@ export default class Client {
     
     async checkStatusPass() {
         try {
-         const response = await axios.get(`${process.env.REACT_APP_BASE_URL_CLIENT}login/`, {params: {card_number: this.card}})
+         const response = await axios.get(`${process.env.REACT_APP_BASE_URL_CLIENT}login`, {params: {card_number: this.card}})
 
          return response.data.is_password_changed
         } catch (err) {
