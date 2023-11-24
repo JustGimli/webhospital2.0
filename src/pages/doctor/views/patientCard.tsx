@@ -19,11 +19,12 @@ import { AudioRecorder } from "react-audio-voice-recorder";
 import { useParams } from "react-router-dom";
 import { doctor } from "../../..";
 import { SessionList } from "../../../widgets/sessionList";
+import {BarChart} from "@mui/x-charts";
 
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
   const [sessions, setSessions] = useState<any>();
-
+  const [sessionsInfo,setSessionsInfo] = useState<any>();
   const { number } = useParams();
 
   useEffect(() => {
@@ -33,6 +34,12 @@ export const PatientCardPage = () => {
         setPatient(res.get_patient_info);
         setSessions(res.sessions);
       }
+      setSessionsInfo(async ()=>{
+        return sessions.map(async (s:any)=>{
+          return await doctor.getPatientSessionInfo(patient.card_number,s.session_id)
+        })
+      })
+
     })();
   }, []);
 
@@ -60,6 +67,33 @@ export const PatientCardPage = () => {
   );
 };
 
+const Chart = ({patientSessionsInfo}: any) => {
+  const scores = patientSessionsInfo.speech_array.map((e: any)=>{
+    return e.speech_score
+  })
+  const labels = patientSessionsInfo.speech_array.map((e: any)=>{
+    return e.speech_id
+  })
+  return(
+      <BarChart
+        xAxis={[
+          {
+            id: 'chart_scores',
+            data: labels,
+            scaleType: 'band',
+          },
+        ]}
+        series={[
+          {
+            data: scores,
+            label: patientSessionsInfo.session_type
+          },
+        ]}
+        width={500}
+        height={300}
+/>
+  )
+}
 const ProfileCard = ({ patient }: any) => {
   return (
     <div
