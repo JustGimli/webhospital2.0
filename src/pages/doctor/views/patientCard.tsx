@@ -138,10 +138,12 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
                 session_type={session_type}
               />
             </>
-          ) : (
+          ) : speech === 1 ? (
             <>
               <RecorderVoiceItem session={speech} />
             </>
+          ) : (
+            <>Вы записали все речи</>
           )}
         </DialogContent>
         <DialogActions>

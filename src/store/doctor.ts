@@ -83,7 +83,7 @@ export default class  Doctor {
     async updateSessionSpeech (session: any,  data: any) {
         try {
             console.log(session,  data)
-            const response = await $api_doctor.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${session.session_id}/speech/${session.session_id}`, data)
+            const response = await $api_doctor.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${session.sessionPatient}/speech/${session.session_id}`, data)
         return response.data
         }catch(err) {
             return {}
