@@ -55,7 +55,6 @@ const TableItem = (data: any) => {
   };
 
   const navigate = useNavigate();
-  console.log(data);
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
@@ -68,7 +67,7 @@ const TableItem = (data: any) => {
         <TableBody>
           {data.data.map((row: any) => (
             <TableRow
-              key={row.doctor_login}
+              key={row.doctor_name}
               style={{ cursor: "pointer" }}
               onClick={() => handleClick(row)}
             >

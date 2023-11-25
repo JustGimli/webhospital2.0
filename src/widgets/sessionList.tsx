@@ -25,7 +25,7 @@ export const SessionList = ({ sessions }: any) => {
           <TableBody>
             {sessions.map((row: any) => (
               <TableRow
-                key={row.full_name}
+                key={row.session_id}
                 style={{ cursor: "pointer" }}
                 onClick={() => handleClick()}
               >

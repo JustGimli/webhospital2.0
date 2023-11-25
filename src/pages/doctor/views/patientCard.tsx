@@ -23,7 +23,6 @@ import { RecorderVoiceItem } from "../../../widgets/record";
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
   const [sessions, setSessions] = useState<any>();
-  const [sessionsInfo, setSessionsInfo] = useState<any>();
   const { number } = useParams();
 
   useEffect(() => {
@@ -31,7 +30,6 @@ export const PatientCardPage = () => {
       const res = await doctor.getPatient(Number(number));
       if (res) {
         setPatient(res.get_patient_info);
-        console.log(res.sessions);
         setSessions(res.sessions);
       }
       // const response = sessions.map(async (s: any)=>{
@@ -83,7 +81,7 @@ const ProfileCard = ({ patient }: any) => {
     >
       {patient &&
         Object.entries(patient).map(([key, val]: any) => (
-          <div>
+          <div key={key}>
             <span>{key}: </span>
             <span>{val}</span>
             <br />
@@ -96,15 +94,18 @@ const ProfileCard = ({ patient }: any) => {
 const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
 
-  const [is_reference_session, setIsRef] = useState();
-  const [session_type, setSessionType] = useState("");
+  const [is_reference_session, setIsRef] = useState(1);
+  const [session_type, setSessionType] = useState("фразы");
   const [speech, setSpeech] = useState<any>(null);
 
-  const handleButtonNext = () => {
+  const handleButtonNext = async () => {
     if (step === 0) {
-      setSpeech(
-        doctor.createScenario(card, is_reference_session, session_type)
+      const sp = await doctor.createScenario(
+        card,
+        is_reference_session,
+        session_type
       );
+      setSpeech({ ...sp, session_type: session_type, sessionPatient: card });
     }
 
     setStep(step + 1);
@@ -114,15 +115,6 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
       handleClose();
     }
   };
-
-  //   const Upload = () => {
-  //     const id = useId();
-  //     return (
-  //       <label htmlFor={id}>
-  //         <input type="file" id={id} />
-  //       </label>
-  //     );
-  //   };
 
   return (
     <>
@@ -139,15 +131,16 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
         <DialogContent>
           {step === 0 ? (
             <>
-              <IputType setIsRef={setIsRef} setSessionType={setSessionType} />
+              <IputType
+                setIsRef={setIsRef}
+                setSessionType={setSessionType}
+                is_reference_session={is_reference_session}
+                session_type={session_type}
+              />
             </>
           ) : (
             <>
-              <RecorderVoiceItem
-              // sessionType={session_type}
-              // speech={speech}
-              // card={card}
-              />
+              <RecorderVoiceItem session={speech} />
             </>
           )}
         </DialogContent>
@@ -167,32 +160,39 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
   );
 };
 
-const IputType = ({ setIsRef, setSessionType }: any) => {
+const IputType = ({
+  setIsRef,
+  setSessionType,
+  is_reference_session,
+  session_type,
+}: any) => {
   return (
     <>
       <FormControl variant="outlined" fullWidth margin="normal" required>
         <InputLabel>Тип сеанса</InputLabel>
         <Select
+          value={is_reference_session}
           onChange={(e: any) => {
             setIsRef(e.target.value);
           }}
           label="Тип сигнала"
         >
-          <MenuItem value="true">Эталонный</MenuItem>
+          <MenuItem value={1}>Эталонный</MenuItem>
 
-          <MenuItem value="false">Не эталонный</MenuItem>
+          <MenuItem value={0}>Не эталонный</MenuItem>
         </Select>
       </FormControl>
       <FormControl variant="outlined" fullWidth margin="normal" required>
         <InputLabel>Тип сигнала</InputLabel>
         <Select
+          value={session_type}
           onChange={(e: any) => {
             setSessionType(e.target.value);
           }}
           label="Тип сигнала"
         >
-          <MenuItem value="слоги">Фразы</MenuItem>
-          <MenuItem value="фразы">Слоги</MenuItem>
+          <MenuItem value="фразы">Фразы</MenuItem>
+          <MenuItem value="слоги">Слоги</MenuItem>
         </Select>
       </FormControl>
     </>

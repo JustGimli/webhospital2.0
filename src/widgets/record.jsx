@@ -6,8 +6,9 @@ import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseIcon from "@mui/icons-material/Close";
+import { doctor } from "..";
 
-export const RecorderVoiceItem = () => {
+export const RecorderVoiceItem = (session) => {
   const [isMic, setisMic] = useState(false);
 
   const onFileChange = (event) => {
@@ -17,7 +18,7 @@ export const RecorderVoiceItem = () => {
 
   return isMic ? (
     <>
-      <RecordVoice />
+      <RecordVoice session={session} />
     </>
   ) : (
     <div className="flex flex-col items-center justify-center">
@@ -43,8 +44,8 @@ export const RecorderVoiceItem = () => {
   );
 };
 
-const RecordVoice = () => {
-  const [recordState, setRecordState] = useState(RecordState.STOP);
+const RecordVoice = (session) => {
+  const [recordState, setRecordState] = useState(RecordState.NONE);
 
   const start = () => {
     setRecordState(RecordState.START);
@@ -54,8 +55,24 @@ const RecordVoice = () => {
     setRecordState(RecordState.STOP);
   };
 
-  const onStop = (audioData) => {
-    console.log("audioData", audioData);
+  const onStop = async (audioData) => {
+    const reader = new FileReader();
+
+    reader.onloadend = async () => {
+      const base64Data = reader.result;
+
+      const data = {
+        speech_type: "слог",
+        base64_value:
+          "UklGRiwAAABXQVZFZm10IBAAAAABAAIAgLsAAADuAgAEABAAZGF0YQAAAAA=",
+        base64_value_segment: "",
+        real_value: "кась",
+      };
+
+      await doctor.updateSessionSpeech(session.session.session, data);
+    };
+
+    reader.readAsDataURL(audioData.blob);
   };
 
   return (
@@ -68,13 +85,13 @@ const RecordVoice = () => {
       />
 
       <div className="flex justify-center">
-        {recordState === RecordState.STOP ? (
-          <IconButton onClick={start}>
-            <FiberManualRecordIcon color="inherit" style={{ color: "red" }} />
-          </IconButton>
-        ) : (
+        {recordState === RecordState.START ? (
           <IconButton onClick={stop}>
             <CloseIcon />
+          </IconButton>
+        ) : (
+          <IconButton onClick={start}>
+            <FiberManualRecordIcon color="inherit" style={{ color: "red" }} />
           </IconButton>
         )}
       </div>
