@@ -54,8 +54,8 @@ const DoctorsTable = () => {
 };
 
 const TableItem = (data: any) => {
-  const handleClick = (row: any) => {
-    navigate(PATIENTROOT + "card/" + row.doctor_login);
+  const handleClick = (row: any, index: any) => {
+    navigate(PATIENTROOT + "card/" + index);
   };
 
   const navigate = useNavigate();
@@ -69,11 +69,11 @@ const TableItem = (data: any) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {data.data.map((row: any) => (
+          {data.data.map((row: any, index: any) => (
             <TableRow
               key={row.doctor_name}
               style={{ cursor: "pointer" }}
-              onClick={() => handleClick(row)}
+              onClick={() => handleClick(row, index)}
             >
               <TableCell component="th" scope="row">
                 {row.doctor_name}
