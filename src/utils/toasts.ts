@@ -6,17 +6,19 @@ export const ShowSuccessToastMessage = (str: string) => {
   });
 };
 
-export const ShowErrorToastMessage = () => {
-  toast.error("Произошла ошибка!", {
+export const ShowErrorToastMessage = (name="Произошла ошибка!") => {
+  toast.error(name, {
     position: toast.POSITION.TOP_RIGHT,
   });
 };
 
-export const ShowWarningToastMessage = () => {
-  toast.warning("Внимание! Возможна ошибка", {
+export const ShowWarningToastMessage = (name="Внимание! Возможна ошибка") => {
+  toast.warning(name , {
     position: toast.POSITION.TOP_RIGHT,
   });
 };
+
+
 
 export const ShowInfoToastMessage = (str: string) => {
   toast.info(str, {

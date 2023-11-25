@@ -13,9 +13,12 @@ import {
   PATIENTCARD,
   CHANGEPASS,
   DOCTORCARD,
+
+  SPEECHLIST,
 } from "./const";
 import { ChangePassPage } from "../pages/client/views/changePass";
 import { PatientRoot } from "../pages/client";
+import { SessionCard } from "../pages/doctor/views/sesionCard";
 
 export const MainURL = [
   {
@@ -29,7 +32,7 @@ export const MainURL = [
   {
     Component: PatientRoot,
     path: PATIENT,
-  },
+  }
 ];
 
 export const DoctorURL = [
@@ -42,6 +45,10 @@ export const DoctorURL = [
     path: PATIENTCARD,
   },
 
+  {
+     Component: SessionCard,
+    path: SPEECHLIST,
+  }
   //   {
   //     Component: PolicyPage,
   //     path: PATIENT,

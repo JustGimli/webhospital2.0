@@ -8,7 +8,8 @@ export const DOCTORROOT = "/doctor";
 
 export const PATIENTBASE = "";
 export const CHANGEPASS = "change/";
-export const DOCTORCARD = "/card/:string";
+export const DOCTORCARD = "/card/:patientID";
+export const SPEECHLIST = "/card/:patientID/:session";
 
 // doctor page
 

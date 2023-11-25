@@ -46,19 +46,6 @@ const DockerTable = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState([]);
   const [rows, setRows] = useState([]);
-  const [searched, setSearched] = useState<string>("");
-
-  const requestSearch = (searchedVal: string) => {
-    const filteredRows = data.filter((row: any) => {
-      return row.full_name.toLowerCase().includes(searchedVal.toLowerCase());
-    });
-    setRows(filteredRows);
-  };
-
-  const cancelSearch = () => {
-    setSearched("");
-    requestSearch(searched);
-  };
 
   useEffect(() => {
     (async () => {
@@ -77,7 +64,7 @@ const DockerTable = () => {
     <div className="flex justify-center w-full">Пациенты отсутсвуют</div>
   ) : (
     <>
-      <Paper />
+      {/* <Paper /> */}
       {/* <SearchBar
         value={searched}
         onChange={(searchVal) => requestSearch(searchVal)}

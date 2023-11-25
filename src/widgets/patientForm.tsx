@@ -48,6 +48,7 @@ export const AddPatient = ({ open, handleClose }: any) => {
       constant_password: null,
       temporary_password: pass,
       is_password_changed: false,
+      patient_info: "",
     };
     await doctor.createPatient(data);
     ShowInfoToastMessage("Пациент успешно добавлен!");

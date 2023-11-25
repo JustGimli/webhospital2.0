@@ -41,7 +41,7 @@ export default class  Doctor {
     
      async getPatients()  {
         try {
-            const response = await $api_doctor.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients`, {params: {limit: 100}})
+            const response = await $api_doctor.get(`patients`, {params: {limit: 100}})
 
             return response.data
         }catch(err) {
@@ -51,7 +51,7 @@ export default class  Doctor {
 
     async getPatient(number: number) {
         try {
-            const response = await $api_doctor.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${number}`)
+            const response = await $api_doctor.get(`patients/${number}`)
 
             return response.data
         }catch(err) {
@@ -60,7 +60,7 @@ export default class  Doctor {
     }
     async getPatientSessionInfo(number:number,session_id:number){
         try {
-            const response = await $api_doctor.get(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${number}/session/${session_id}`)
+            const response = await $api_doctor.get(`patients/${number}/session/${session_id}`)
 
             return response.data
         }catch(err) {
@@ -70,7 +70,7 @@ export default class  Doctor {
 
     async createScenario(card: any, is_reference_session: any, session_type: any) {
         try {
-            const response = await $api_doctor.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${card}`, {is_reference_session, session_type})
+            const response = await $api_doctor.post(`patients/${card}`, {is_reference_session, session_type})
             return response.data
        
         }catch(err) {
@@ -82,9 +82,19 @@ export default class  Doctor {
 
     async updateSessionSpeech (session: any,  data: any) {
         try {
-            console.log(session,  data)
-            const response = await $api_doctor.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}patients/${session.sessionPatient}/speech/${session.session_id}`, data)
+            const response = await $api_doctor.post(`patients/${session.sessionPatient}/speech/${session.session_id}`, data)
         return response.data
+        }catch(err) {
+            return {}
+        }
+    }
+
+    async getSpeech (session: any, speechId: any)  {
+         try {
+            // const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech`)
+            const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech/${1}`)
+            
+        // return response.data
         }catch(err) {
             return {}
         }

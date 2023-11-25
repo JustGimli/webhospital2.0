@@ -13,6 +13,10 @@ import { client } from "../../..";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router-dom";
 import { PATIENTROOT } from "../../../utils/const";
+import {
+  ShowErrorToastMessage,
+  ShowSuccessToastMessage,
+} from "../../../utils/toasts";
 
 export const ChangePassPage = observer(() => {
   const isMobile = useMediaQuery("(max-width:767px)");
@@ -23,6 +27,9 @@ export const ChangePassPage = observer(() => {
 
   const handleClick = async () => {
     const flag = await client.changeTempPass(newPass);
+
+    if (flag === false) ShowErrorToastMessage("Ошибка, неверный пароль.");
+    else ShowSuccessToastMessage("Успешно");
 
     if (flag) {
       navigate(PATIENTROOT);

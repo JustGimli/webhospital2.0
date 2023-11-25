@@ -22,7 +22,7 @@ import { RecorderVoiceItem } from "../../../widgets/record";
 
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
-  const [sessions, setSessions] = useState<any>();
+  const [speechList, setSpeechList] = useState<any>();
   const { number } = useParams();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export const PatientCardPage = () => {
       const res = await doctor.getPatient(Number(number));
       if (res) {
         setPatient(res.get_patient_info);
-        setSessions(res.sessions);
+        setSpeechList(res.sessions);
       }
       // const response = sessions.map(async (s: any)=>{
       //   return await doctor.getPatientSessionInfo(patient.card_number,s.session_id);
@@ -59,8 +59,8 @@ export const PatientCardPage = () => {
             Добавить сеанс
           </Button>
         </div>
-        {sessions ? (
-          <SessionList sessions={sessions} />
+        {speechList ? (
+          <SessionList speechList={speechList} />
         ) : (
           <span>Сеансы отсутсвуют</span>
         )}

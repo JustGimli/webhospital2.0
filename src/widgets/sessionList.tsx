@@ -7,9 +7,17 @@ import {
   TableRow,
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
+import { useNavigate, useParams } from "react-router-dom";
+import { PATIENTROOT } from "../utils/const";
 
-export const SessionList = ({ sessions }: any) => {
-  const handleClick = () => {};
+export const SessionList = ({ speechList }: any) => {
+  const { patientID } = useParams();
+  const navigate = useNavigate();
+
+  const handleClick = (sessionID: any) => {
+    console.log(PATIENTROOT + "card/" + patientID + "/" + sessionID);
+    navigate(PATIENTROOT + "/card" + patientID + "/" + sessionID);
+  };
 
   return (
     <>
@@ -23,11 +31,11 @@ export const SessionList = ({ sessions }: any) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sessions.map((row: any) => (
+            {speechList.map((row: any) => (
               <TableRow
                 key={row.session_id}
                 style={{ cursor: "pointer" }}
-                onClick={() => handleClick()}
+                onClick={() => handleClick(row.session_id)}
               >
                 <TableCell>{row.session_id}</TableCell>
                 <TableCell>

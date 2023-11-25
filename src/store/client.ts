@@ -1,8 +1,6 @@
 import axios from "axios"
 import {makeAutoObservable} from "mobx"
-import { $api_client } from "../utils/api_patient";
-
-
+import { $api_client } from "../utils/api_patient"
 
 
 export default class Client {
@@ -29,7 +27,6 @@ export default class Client {
             let date = new Date()
             document.cookie = `ctok=${response.data.access_token}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
 
-          
             return true
 
         }catch(err) {return false}
@@ -53,17 +50,13 @@ export default class Client {
         let date = new Date()
         document.cookie = `ctok=${response.data.access_token}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
 
-          
-         return true
+         return response.data
         } catch (err) {
             return false
         }
     }
 
-    async getJWT() {
-        
-    }
-    
+
 
     async getDoctors()  {
         try {
