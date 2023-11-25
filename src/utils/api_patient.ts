@@ -3,7 +3,7 @@ import axios from "axios"
 
 
 export const $api_client = axios.create({
-    baseURL: process.env.REACT_APP_BASE_URL_DOCTOR,
+    baseURL: process.env.REACT_APP_BASE_URL_CLIENT,
     withCredentials: true,
 })
 

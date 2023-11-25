@@ -6,7 +6,6 @@ import { $api_client } from "../utils/api_patient";
 
 
 export default class Client {
-    dockor: any = {};
     card: any= ""
     lastPass: any= ""
     
@@ -42,7 +41,7 @@ export default class Client {
 
          return response.data.is_password_changed
         } catch (err) {
-            return false
+            return null
         }
     }
 
@@ -61,15 +60,20 @@ export default class Client {
         }
     }
 
+    async getJWT() {
+        
+    }
     
 
     async getDoctors()  {
         try {
-            const response = await $api_client.get(`${process.env.REACT_APP_BASE_URL_CLIENT}info/`)
+            const response = await $api_client.get('info')
             return response.data.doctor_info
         }catch(err) {
             return []
         }
     }
+
+
         
 }

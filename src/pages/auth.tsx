@@ -31,9 +31,9 @@ export const AuthPage = observer(() => {
         client.lastPass = password;
         flag = await client.checkStatusPass();
 
-        if (!flag) {
+        if (flag === false) {
           navigate(PATIENTROOT + CHANGEPASS);
-        } else {
+        } else if (flag === true) {
           await client.login(username, password);
           navigate(PATIENTROOT);
         }

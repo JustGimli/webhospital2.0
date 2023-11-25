@@ -12,11 +12,16 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { client } from "../../..";
 import { AppBarComp } from "../../../components/appBar";
+import { PATIENTROOT } from "../../../utils/const";
 
 export const ClientMain = () => {
   return (
     <>
       <AppBarComp name="Пациент" />
+
+      <div className="font-bold my-5 mx-2" style={{ fontSize: "24px" }}>
+        Ваши врачи
+      </div>
       <DoctorsTable />
     </>
   );
@@ -50,8 +55,7 @@ const DoctorsTable = () => {
 
 const TableItem = (data: any) => {
   const handleClick = (row: any) => {
-    // client.doctor = row;
-    navigate("/doctor/card/" + row.doctor_login);
+    navigate(PATIENTROOT + "card/" + row.doctor_login);
   };
 
   const navigate = useNavigate();
