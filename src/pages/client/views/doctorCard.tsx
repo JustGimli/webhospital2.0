@@ -30,6 +30,7 @@ export const DoctorCardPage = observer(() => {
   const handleClose = () => setIsOpen(!isOpen);
 
   console.log(client.doctorId);
+  console.log(client.doctorId);
   return (
     <>
       <AppBarComp name="Пациент" />
