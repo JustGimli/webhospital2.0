@@ -57,10 +57,17 @@ export const DoctorCardPage = observer(() => {
   );
 });
 
-const ProfileCard = () => {
+const ProfileCard = observer(() => {
+
+  const [doctor, setDoctor] = useState({
+    doctor_name: '',
+    doctor_specialization: ''
+  })
   useEffect(() => {
     (async () => {
-      client.getDoctors();
+     const res:any =  await client.getDoctors();
+
+     setDoctor(res[client.doctorId]);
     })();
   }, []);
 
@@ -73,6 +80,14 @@ const ProfileCard = () => {
         borderRadius: "8px",
       }}
     >
+      <div>
+        <span><b>ФИО: </b></span>
+        <span>{doctor.doctor_name}</span>
+      </div>
+      <div>
+        <span><b>Специализация: </b></span>
+        <span>{doctor.doctor_specialization}</span>
+      </div>
       {/* {(
         data.map((item: any) => (
           <>
@@ -88,4 +103,4 @@ const ProfileCard = () => {
       )} */}
     </div>
   );
-};
+});
