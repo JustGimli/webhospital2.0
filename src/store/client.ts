@@ -67,6 +67,16 @@ export default class Client {
             return []
         }
     }
+    async createSession(session_type: string){
+        try {
+            const response = await $api_client.post('session',{
+                "session_type": session_type
+            });
+            return response.data.session_id
+        }catch(err) {
+            return []
+        }
+    }
 
 
         

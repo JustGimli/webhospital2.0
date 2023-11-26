@@ -152,7 +152,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
                 session_type={session_type}
               />
             </>
-          ) : step === 1 ? (
+          ) : speech === 1 ? (
             <>
               <RecorderVoiceItem
                 speechId={speech}
