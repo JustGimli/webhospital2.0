@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { client } from "../../..";
 import { AppBarComp } from "../../../components/appBar";
 import { PATIENTROOT } from "../../../utils/const";
+import { observer } from "mobx-react-lite";
 
 export const ClientMain = () => {
   return (
@@ -53,9 +54,10 @@ const DoctorsTable = () => {
   );
 };
 
-const TableItem = (data: any) => {
+const TableItem = observer((data: any) => {
   const handleClick = (row: any, index: any) => {
-    navigate(PATIENTROOT + "card/" + index);
+    navigate(PATIENTROOT + "/card/" + index);
+    client.doctorId = index;
   };
 
   const navigate = useNavigate();
@@ -85,4 +87,4 @@ const TableItem = (data: any) => {
       </Table>
     </TableContainer>
   );
-};
+});

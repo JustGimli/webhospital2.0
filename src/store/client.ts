@@ -6,6 +6,7 @@ import { $api_client } from "../utils/api_patient"
 export default class Client {
     card: any= ""
     lastPass: any= ""
+    doctorId = 0
     
 
 
@@ -27,7 +28,7 @@ export default class Client {
             let date = new Date()
             document.cookie = `ctok=${response.data.access_token}; path=/;expires=${date.setTime(date.getTime() + 60 * 60 * 24 )}`
 
-            return true
+            return response.data
 
         }catch(err) {return false}
     }

@@ -18,15 +18,18 @@ import { client } from "../../..";
 import { RecorderVoiceItem } from "../../../widgets/record";
 import { AppBarComp } from "../../../components/appBar";
 import { observer } from "mobx-react-lite";
+import { useParams } from "react-router-dom";
 
 const data = [
   { name: "ФИО", value: "" },
   { name: "Специализация", value: "" },
 ];
 
-export const DoctorCardPage = () => {
+export const DoctorCardPage = observer(() => {
   const [isOpen, setIsOpen] = useState<any>(false);
   const handleClose = () => setIsOpen(!isOpen);
+
+  console.log(client.doctorId);
   return (
     <>
       <AppBarComp name="Пациент" />
@@ -51,7 +54,7 @@ export const DoctorCardPage = () => {
       </div>
     </>
   );
-};
+});
 
 const ProfileCard = () => {
   useEffect(() => {

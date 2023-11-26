@@ -1136,7 +1136,7 @@
           "settings"
         ],
         "summary": "Изменить текущий пароль пользователя",
-        "operationId": "changePassword",
+        "operationId": "PATIENTCHANGEPASSword",
         "security": [
           {
             "bearerAuth": []

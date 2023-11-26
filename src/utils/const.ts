@@ -2,17 +2,18 @@ export const AUTH = "";
 export const DOCTOR = "/doctor/*";
 export const PATIENT = "/patient/*";
 
-//patient page
+//page for doctor
+
 export const DOCTORROOT = "/doctor";
 
-
 export const PATIENTBASE = "";
-export const CHANGEPASS = "change/";
-export const DOCTORCARD = "/card/:patientID";
-export const SPEECHLIST = "/card/:patientID/:session";
+export const PATIENTCHANGEPASS = "change/";
+export const PATIENTCARD = "/card/:patientID";
+export const PATIENTSPEECHLIST = "/card/:patientID/:session";
 
-// doctor page
+// page for patient
 
-export const PATIENTROOT = "/patient/";
-export const PATIENTCARD = "card/:number";
+
+export const PATIENTROOT = "/patient";
+export const DOCTORCARDFORPATIENT = "/card";
 export const DOCTORBASE = "";

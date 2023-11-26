@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   IconButton,
   Table,
   TableBody,
@@ -7,7 +8,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { doctor } from "../../..";
 import { useParams } from "react-router-dom";
@@ -16,12 +17,6 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 
 export const SessionCard = () => {
   const { patientID, session } = useParams();
-
-  useEffect(() => {
-    (async () => {
-      await doctor.getSpeech(patientID, session);
-    })();
-  }, []);
 
   return (
     <div>
@@ -34,11 +29,33 @@ export const SessionCard = () => {
 };
 
 const SessionTable = () => {
+  const [data, setData] = useState({});
+  const [isLoading, setisLoading] = useState(false);
+  const { patientID, session } = useParams();
+
+  useEffect(() => {
+    (async () => {
+      setisLoading(true);
+      const d1 = await doctor.getPatientSessionInfo(patientID, session);
+      setData(d1);
+      //   await doctor.getSpeech(patientID, session);
+      setisLoading(false);
+    })();
+  }, []);
+
   const handleDowload = () => {};
 
   const handlePlay = () => {};
 
-  return (
+  return isLoading ? (
+    <div className="flex justify-center w-full">
+      <CircularProgress />
+    </div>
+  ) : Object.keys(data).length === 0 ? (
+    <div className="flex justify-center w-full">
+      Врачи отсутсвуют! Обратитесь в больницу для записи к врачу.
+    </div>
+  ) : (
     <>
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }}>

@@ -58,9 +58,9 @@ export default class  Doctor {
             return {}
         }
     }
-    async getPatientSessionInfo(number:number,session_id:number){
+    async getPatientSessionInfo(patientID:any,session:any){
         try {
-            const response = await $api_doctor.get(`patients/${number}/session/${session_id}`)
+            const response = await $api_doctor.get(`patients/${patientID}/session/${session}`)
 
             return response.data
         }catch(err) {
@@ -70,7 +70,7 @@ export default class  Doctor {
 
     async createScenario(card: any, is_reference_session: any, session_type: any) {
         try {
-            const response = await $api_doctor.post(`patients/${card}`, {is_reference_session, session_type})
+            const response = await $api_doctor.post(`patients/${card}`, {is_reference_session, session_type, session_info: ""})
             return response.data
        
         }catch(err) {

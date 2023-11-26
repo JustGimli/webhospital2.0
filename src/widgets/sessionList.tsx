@@ -8,15 +8,14 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { useNavigate, useParams } from "react-router-dom";
-import { PATIENTROOT } from "../utils/const";
+import { DOCTORROOT } from "../utils/const";
 
 export const SessionList = ({ speechList }: any) => {
   const { patientID } = useParams();
   const navigate = useNavigate();
 
   const handleClick = (sessionID: any) => {
-    console.log(PATIENTROOT + "card/" + patientID + "/" + sessionID);
-    navigate(PATIENTROOT + "/card" + patientID + "/" + sessionID);
+    navigate(DOCTORROOT + "/card/" + patientID + "/" + sessionID);
   };
 
   return (

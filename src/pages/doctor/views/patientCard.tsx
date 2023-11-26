@@ -23,11 +23,11 @@ import { RecorderVoiceItem } from "../../../widgets/record";
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
   const [speechList, setSpeechList] = useState<any>();
-  const { number } = useParams();
+  const { patientID } = useParams();
 
   useEffect(() => {
     (async () => {
-      const res = await doctor.getPatient(Number(number));
+      const res = await doctor.getPatient(Number(patientID));
       if (res) {
         setPatient(res.get_patient_info);
         setSpeechList(res.sessions);
@@ -46,7 +46,11 @@ export const PatientCardPage = () => {
   return (
     <>
       {isOpen && (
-        <PatientDialog card={number} open={isOpen} handleClose={handleClose} />
+        <PatientDialog
+          card={patientID}
+          open={isOpen}
+          handleClose={handleClose}
+        />
       )}
       <div className="px-5">
         <span style={{ fontSize: "24px" }} className="my-5">

@@ -3,9 +3,12 @@ import { useState } from "react";
 import { AuthFields } from "../widgets/authForm";
 import { client, doctor } from "..";
 import { useNavigate } from "react-router-dom";
-import { CHANGEPASS, DOCTORROOT, PATIENTROOT } from "../utils/const";
+import { PATIENTCHANGEPASS, DOCTORROOT, PATIENTROOT } from "../utils/const";
 import { observer } from "mobx-react-lite";
-import { ShowSuccessToastMessage } from "../utils/toasts";
+import {
+  ShowErrorToastMessage,
+  ShowSuccessToastMessage,
+} from "../utils/toasts";
 
 export const AuthPage = observer(() => {
   const navigate = useNavigate();
@@ -32,10 +35,12 @@ export const AuthPage = observer(() => {
         flag = await client.checkStatusPass();
 
         if (flag === false) {
-          navigate(PATIENTROOT + CHANGEPASS);
+          navigate(PATIENTROOT + PATIENTCHANGEPASS);
         } else if (flag === true) {
-          await client.login(username, password);
-          navigate(PATIENTROOT);
+          const flag = await client.login(username, password);
+          if (flag === false) {
+            ShowErrorToastMessage();
+          } else navigate(PATIENTROOT);
         }
       }
     }

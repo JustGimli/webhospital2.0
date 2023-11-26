@@ -4,6 +4,7 @@ import { DoctorMainPage } from "../pages/doctor/views/doctorMain";
 import { PatientCardPage } from "../pages/doctor/views/patientCard";
 import { ClientMain } from "../pages/client/views/clientMain";
 import { DoctorCardPage } from "../pages/client/views/doctorCard";
+import { ChangePassPage } from "../pages/client/views/changePass";
 import {
   AUTH,
   DOCTOR,
@@ -11,12 +12,10 @@ import {
   PATIENT,
   PATIENTBASE,
   PATIENTCARD,
-  CHANGEPASS,
-  DOCTORCARD,
-
-  SPEECHLIST,
+  PATIENTCHANGEPASS,
+  PATIENTSPEECHLIST,
 } from "./const";
-import { ChangePassPage } from "../pages/client/views/changePass";
+
 import { PatientRoot } from "../pages/client";
 import { SessionCard } from "../pages/doctor/views/sesionCard";
 
@@ -47,7 +46,7 @@ export const DoctorURL = [
 
   {
      Component: SessionCard,
-    path: SPEECHLIST,
+    path: PATIENTSPEECHLIST,
   }
   //   {
   //     Component: PolicyPage,
@@ -62,13 +61,12 @@ export const PatientURL = [
   },
   {
     Component: DoctorCardPage,
-    path: DOCTORCARD,
+    path: PATIENTCARD,
   },
 {
     Component: ChangePassPage,
-     path: CHANGEPASS,
+     path: PATIENTCHANGEPASS,
 },
-
 
 
 ];
