@@ -2,49 +2,82 @@ import { IconButton, Button } from "@mui/material";
 import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import MicIcon from "@mui/icons-material/Mic";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseIcon from "@mui/icons-material/Close";
 import { doctor } from "..";
 
-export const RecorderVoiceItem = (session) => {
+export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
+  const { patientID } = useParams();
+  const [phrases, setPhrases] = useState([]);
+  const [index, setIndex] = useState(1);
+
   const [isMic, setisMic] = useState(false);
+
+  console.log(speechId);
 
   const onFileChange = (event) => {
     const file = event.target.files[0];
     // setSelectedFile(file);
   };
 
-  return isMic ? (
+  useEffect(() => {
+    (async () => {
+      const res = await doctor.getExampleSpeech(patientID, speechId);
+
+      if (res.phrases) setPhrases(res.phrases);
+    })();
+  }, []);
+
+  const handleIndex = () => {
+    if (index + 1 > phrases.length) {
+      handleButtonNext();
+    }
+    setIndex(index + 1);
+  };
+
+  return (
     <>
-      <RecordVoice session={session} />
-    </>
-  ) : (
-    <div className="flex flex-col items-center justify-center">
       <div>
-        <IconButton onClick={() => setisMic(!isMic)}>
-          <MicIcon />
-        </IconButton>
+        Фраза {index}/{phrases.length}: {phrases[index - 1]}
       </div>
-      <div className="my-3">или</div>
-      <Button
-        component="label"
-        variant="contained"
-        startIcon={<CloudUploadIcon />}
-      >
-        Upload file
-        <VisuallyHiddenInput
-          type="file"
-          onChange={onFileChange}
-          accept=".wav"
-        />
-      </Button>
-    </div>
+      {isMic ? (
+        <>
+          <RecordVoice
+            speechId={speechId}
+            handleIndex={handleIndex}
+            real_val={phrases[index]}
+          />
+        </>
+      ) : (
+        <div className="flex flex-col items-center justify-center">
+          <div>
+            <IconButton onClick={() => setisMic(!isMic)}>
+              <MicIcon />
+            </IconButton>
+          </div>
+          <div className="my-3">или</div>
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload file
+            <VisuallyHiddenInput
+              type="file"
+              onChange={onFileChange}
+              accept=".wav"
+            />
+          </Button>
+        </div>
+      )}
+    </>
   );
 };
 
-const RecordVoice = (session) => {
+const RecordVoice = ({ speechId, handleIndex, real_val }) => {
   const [recordState, setRecordState] = useState(RecordState.NONE);
 
   const start = () => {
@@ -53,6 +86,7 @@ const RecordVoice = (session) => {
 
   const stop = () => {
     setRecordState(RecordState.STOP);
+    handleIndex();
   };
 
   const onStop = async (audioData) => {
@@ -62,14 +96,16 @@ const RecordVoice = (session) => {
       const base64Data = reader.result;
 
       const data = {
-        speech_type: "слог",
-        base64_value:
-          "UklGRiwAAABXQVZFZm10IBAAAAABAAIAgLsAAADuAgAEABAAZGF0YQAAAAA=",
+        speech_type:
+          speechId.session_type === "фраз"
+            ? speechId.session_type + "а"
+            : speechId.session_type,
+        base64_value: base64Data,
         base64_value_segment: "",
-        real_value: "кась",
+        real_value: real_val,
       };
 
-      await doctor.updateSessionSpeech(session.session.session, data);
+      await doctor.updateSessionSpeech(speechId, data);
     };
 
     reader.readAsDataURL(audioData.blob);
@@ -77,13 +113,15 @@ const RecordVoice = (session) => {
 
   return (
     <div>
-      <AudioReactRecorder
-        state={recordState}
-        onStop={onStop}
-        canvasHeight={150}
-        backgroundColor="white"
-      />
-
+      <div className="flex justify-center">
+        <AudioReactRecorder
+          state={recordState}
+          onStop={onStop}
+          canvasHeight={150}
+          canvasWidth="400%"
+          backgroundColor="white"
+        />
+      </div>
       <div className="flex justify-center">
         {recordState === RecordState.START ? (
           <IconButton onClick={stop}>

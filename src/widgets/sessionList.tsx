@@ -1,4 +1,5 @@
 import {
+  IconButton,
   Table,
   TableBody,
   TableCell,
@@ -9,6 +10,7 @@ import {
 import Paper from "@mui/material/Paper";
 import { useNavigate, useParams } from "react-router-dom";
 import { DOCTORROOT } from "../utils/const";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 
 export const SessionList = ({ speechList }: any) => {
   const { patientID } = useParams();
@@ -17,6 +19,8 @@ export const SessionList = ({ speechList }: any) => {
   const handleClick = (sessionID: any) => {
     navigate(DOCTORROOT + "/card/" + patientID + "/" + sessionID);
   };
+
+  const handleCompare = () => {};
 
   return (
     <>
@@ -41,6 +45,11 @@ export const SessionList = ({ speechList }: any) => {
                   {row.is_reference_session ? "Эталонная" : "Неэталлоная"}
                 </TableCell>
                 <TableCell>{row.session_type}</TableCell>
+                <TableCell>
+                  <IconButton onClick={handleCompare}>
+                    <CompareArrowsIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

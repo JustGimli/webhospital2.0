@@ -80,27 +80,48 @@ export default class  Doctor {
 
 
 
-    async updateSessionSpeech (session: any,  data: any) {
+    async updateSessionSpeech (speechId: any,  data: any) {
+        console.log(speechId)
         try {
-            const response = await $api_doctor.post(`patients/${session.sessionPatient}/speech/${session.session_id}`, data)
+            const response = await $api_doctor.post(`patients/${speechId.sessionPatient}/speech/${speechId.session_id}`, data)
         return response.data
         }catch(err) {
             return {}
         }
     }
 
-    async getSpeech (session: any, speechId: any)  {
+    async getExampleSpeech (patientID: any, speechId: any) {
+        try {
+            const response = await $api_doctor.get(`patients/${patientID}/session/${speechId}/speech`)
+            
+        return response.data
+        }catch(err) {
+            return {}
+        }
+    }
+
+    async getSpeech (session: any, speechId: any, phrase: any)  {
          try {
             // const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech`)
-            const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech/${1}`)
+            const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech/${phrase}`)
             
-        // return response.data
+        return response.data
         }catch(err) {
             return {}
         }
     }
 
 
+    async estimateSpeech (patientID: any, session: any) {
+  try {
+            // const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech`)
+            const response = await $api_doctor.patch(`patients/${patientID}/session/${session}`, {card_number: patientID, session_id: Number(session)})
+            
+        return response.data
+        }catch(err) {
+            return {}
+        }
+    }
    
 }
 

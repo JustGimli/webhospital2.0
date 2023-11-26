@@ -32,10 +32,6 @@ export const PatientCardPage = () => {
         setPatient(res.get_patient_info);
         setSpeechList(res.sessions);
       }
-      // const response = sessions.map(async (s: any)=>{
-      //   return await doctor.getPatientSessionInfo(patient.card_number,s.session_id);
-      // })
-      // setSessionsInfo(response);
     })();
   }, []);
 
@@ -53,13 +49,18 @@ export const PatientCardPage = () => {
         />
       )}
       <div className="px-5">
-        <span style={{ fontSize: "24px" }} className="my-5">
+        <span style={{ fontSize: "24px" }} className="my-10 font-bold">
           Профиль пациента
         </span>
         <ProfileCard patient={patient} />
         <div className="flex justify-between w-full my-5">
           <span>Сеансы оценки качества речи</span>
-          <Button variant="contained" onClick={handleClose}>
+          <Button
+            variant="contained"
+            onClick={handleClose}
+            size="large"
+            sx={{ px: 3, py: 1, borderRadius: "10px" }}
+          >
             Добавить сеанс
           </Button>
         </div>
@@ -95,11 +96,20 @@ const ProfileCard = ({ patient }: any) => {
   );
 };
 
+const data = [
+  { full_name: "Имя" },
+  { date_of_birth: "Возраст" },
+  { gender: "Персональный номер карты" },
+  { card_number: "Пол" },
+  { doctor_info: "Дополнительная информация" },
+  { patient_info: "Информация о пациенте" },
+];
+
 const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
 
   const [is_reference_session, setIsRef] = useState(1);
-  const [session_type, setSessionType] = useState("фразы");
+  const [session_type, setSessionType] = useState("фраз");
   const [speech, setSpeech] = useState<any>(null);
 
   const handleButtonNext = async () => {
@@ -107,7 +117,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
       const sp = await doctor.createScenario(
         card,
         is_reference_session,
-        session_type
+        session_type === "фраз" ? session_type + "ы" : session_type + "и"
       );
       setSpeech({ ...sp, session_type: session_type, sessionPatient: card });
     }
@@ -144,7 +154,10 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
             </>
           ) : step === 1 ? (
             <>
-              <RecorderVoiceItem session={speech} />
+              <RecorderVoiceItem
+                speechId={speech}
+                handleButtonNext={handleButtonNext}
+              />
             </>
           ) : (
             <>Вы записали все речи</>
@@ -197,8 +210,8 @@ const IputType = ({
           }}
           label="Тип сигнала"
         >
-          <MenuItem value="фразы">Фразы</MenuItem>
-          <MenuItem value="слоги">Слоги</MenuItem>
+          <MenuItem value="фраз">Фраза</MenuItem>
+          <MenuItem value="слог">Слог</MenuItem>
         </Select>
       </FormControl>
     </>

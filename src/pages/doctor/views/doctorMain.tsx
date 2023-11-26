@@ -10,7 +10,6 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-// import SearchBar from "material-ui-search-bar";
 import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router";
@@ -64,19 +63,6 @@ const DockerTable = () => {
     <div className="flex justify-center w-full">Пациенты отсутсвуют</div>
   ) : (
     <>
-      {/* <Paper /> */}
-      {/* <SearchBar
-        value={searched}
-        onChange={(searchVal) => requestSearch(searchVal)}
-        onCancelSearch={() => cancelSearch()}
-        style={{
-          maxWidth: "400px",
-          border: "1px solid grey",
-          borderRadius: "5px",
-          backgroundColor: "#f5f5f5",
-          margin: "5px",
-        }}
-      /> */}
       <TableItem data={rows} />
     </>
   );
