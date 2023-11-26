@@ -17,7 +17,7 @@ import {
 } from "./const";
 
 import { PatientRoot } from "../pages/client";
-import { SessionCard } from "../pages/doctor/views/sesionCard";
+import { SessionCard } from "../pages/doctor/views/sessionCard";
 
 export const MainURL = [
   {

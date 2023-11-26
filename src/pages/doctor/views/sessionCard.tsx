@@ -78,12 +78,10 @@ const SessionTable = () => {
   const handleDownload = async (phrase: any) => {
     const res = await doctor.getSpeech(patientID, session, phrase);
 
-    const base64Data = res.base64_value.replace(/^data:audio\/wav;base64,/, "");
-
     const blob = new Blob(
       [
         new Uint8Array(
-          atob(base64Data)
+          atob(res.base64_value)
             .split("")
             .map((c) => c.charCodeAt(0))
         ),
@@ -107,7 +105,7 @@ const SessionTable = () => {
   const handlePlay = async (phrase: any) => {
     const res = await doctor.getSpeech(patientID, session, phrase);
 
-    setAudioSrc(res.base64_value);
+    setAudioSrc("data:audio/wav;base64," + res.base64_value);
     setIsPlaying(true);
   };
 

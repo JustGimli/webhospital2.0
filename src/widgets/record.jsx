@@ -95,12 +95,14 @@ const RecordVoice = ({ speechId, handleIndex, real_val }) => {
     reader.onloadend = async () => {
       const base64Data = reader.result;
 
+      const [, base64] = base64Data.split(",");
+
       const data = {
         speech_type:
           speechId.session_type === "фраз"
             ? speechId.session_type + "а"
             : speechId.session_type,
-        base64_value: base64Data,
+        base64_value: base64,
         base64_value_segment: "",
         real_value: real_val,
       };

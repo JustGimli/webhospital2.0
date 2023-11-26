@@ -49,12 +49,12 @@ export const PatientCardPage = () => {
         />
       )}
       <div className="px-5">
-        <span style={{ fontSize: "24px" }} className="my-10 font-bold">
+        <div style={{ fontSize: "36px" }} className="my-5 font-bold">
           Профиль пациента
-        </span>
+        </div>
         <ProfileCard patient={patient} />
         <div className="flex justify-between w-full my-5">
-          <span>Сеансы оценки качества речи</span>
+          <div style={{ fontSize: "24px" }}>Сеансы оценки качества речи</div>
           <Button
             variant="contained"
             onClick={handleClose}
