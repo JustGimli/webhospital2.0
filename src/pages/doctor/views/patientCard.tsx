@@ -79,7 +79,7 @@ const ProfileCard = ({ patient }: any) => {
     <div
       className="p-10"
       style={{
-        maxWidth: "300px",
+        maxWidth: "700px",
         border: "1px solid silver",
         borderRadius: "8px",
       }}
@@ -87,7 +87,7 @@ const ProfileCard = ({ patient }: any) => {
       {patient &&
         Object.entries(patient).map(([key, val]: any) => (
           <div key={key}>
-            <span>{key}: </span>
+            <span>{data[key]}: </span>
             <span>{val}</span>
             <br />
           </div>
@@ -96,14 +96,14 @@ const ProfileCard = ({ patient }: any) => {
   );
 };
 
-const data = [
-  { full_name: "Имя" },
-  { date_of_birth: "Возраст" },
-  { gender: "Персональный номер карты" },
-  { card_number: "Пол" },
-  { doctor_info: "Дополнительная информация" },
-  { patient_info: "Информация о пациенте" },
-];
+const data: any = {
+  full_name: "Имя",
+  date_of_birth: "Возраст",
+  gender: "Персональный номер карты",
+  card_number: "Пол",
+  doctor_info: "Дополнительная информация",
+  patient_info: "Информация о пациенте",
+};
 
 const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
