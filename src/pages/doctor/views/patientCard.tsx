@@ -79,7 +79,7 @@ const ProfileCard = ({ patient }: any) => {
     <div
       className="p-10"
       style={{
-        maxWidth: "700px",
+        maxWidth: "500px",
         border: "1px solid silver",
         borderRadius: "8px",
       }}
@@ -99,8 +99,8 @@ const ProfileCard = ({ patient }: any) => {
 const data: any = {
   full_name: "Имя",
   date_of_birth: "Возраст",
-  gender: "Персональный номер карты",
-  card_number: "Пол",
+  gender: "Пол",
+  card_number: "Персональный номер карты",
   doctor_info: "Дополнительная информация",
   patient_info: "Информация о пациенте",
 };

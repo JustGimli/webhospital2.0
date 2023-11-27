@@ -95,19 +95,6 @@ const ProfileCard = observer(() => {
         </span>
         <span>{doctor.doctor_specialization}</span>
       </div>
-      {/* {(
-        data.map((item: any) => (
-          <>
-            <span>{item.name}: </span>
-            <span>{item.value}</span>
-            <br />
-          </>
-        ))
-      ) : (
-        <div>
-          Произошла серверная ошибка! Невозвожно получить карточку врача!
-        </div>
-      )} */}
     </div>
   );
 });

@@ -116,13 +116,22 @@ export default class  Doctor {
 
 
     async estimateSpeech (patientID: any, session: any) {
-  try {
+    try {
             // const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech`)
-            const response = await $api_doctor.patch(`patients/${patientID}/session/${session}`, {card_number: patientID, session_id: Number(session)})
-            
-        return response.data
+        const response = await $api_doctor.patch(`patients/${patientID}/session/${session}`, {card_number: patientID, session_id: Number(session)})
+        
+    return response.data
         }catch(err) {
             return {}
+        }
+    }
+
+
+    async estimatePhrase (patientID: any, data: any) {
+        try {
+            const response = await $api_doctor.patch(`patients/${patientID}/session`, data)
+        }catch(err) {
+            
         }
     }
    
