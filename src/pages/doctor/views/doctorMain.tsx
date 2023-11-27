@@ -14,6 +14,7 @@ import { AddPatient } from "../../../widgets/patientForm";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router";
 import { doctor } from "../../..";
+import { observer } from "mobx-react-lite";
 
 export const DoctorMainPage = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -41,7 +42,7 @@ export const DoctorMainPage = () => {
   );
 };
 
-const DockerTable = () => {
+const DockerTable = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState([]);
   const [rows, setRows] = useState([]);
@@ -54,7 +55,7 @@ const DockerTable = () => {
       setRows(d1);
       setIsLoading(false);
     })();
-  }, []);
+  }, [doctor.isUpdatePatient]);
   return isLoading ? (
     <div className="flex justify-center w-full">
       <CircularProgress />
@@ -66,7 +67,7 @@ const DockerTable = () => {
       <TableItem data={rows} />
     </>
   );
-};
+});
 
 const TableItem = (tabledata: any) => {
   const handleClick = (number: any) => {
@@ -115,21 +116,3 @@ const TableItem = (tabledata: any) => {
     </TableContainer>
   );
 };
-
-// function createData(
-//   name: string,
-//   calories: number,
-//   fat: number,
-//   carbs: number,
-//   protein: number
-// ) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
-// const rows = [
-//   createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-//   createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-//   createData("Eclair", 262, 16.0, 24, 6.0),
-//   createData("Cupcake", 305, 3.7, 67, 4.3),
-//   createData("Gingerbread", 356, 16.0, 49, 3.9),
-// ];

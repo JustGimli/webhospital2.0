@@ -27,7 +27,11 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
     (async () => {
       const res = await doctor.getExampleSpeech(patientID, speechId);
 
-      if (res.phrases) setPhrases(res.phrases);
+      if (speechId.session_type === "слог") {
+        setPhrases(res.syllables);
+      } else {
+        setPhrases(res.phrases);
+      }
     })();
   }, []);
 
@@ -78,15 +82,24 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
 };
 
 const RecordVoice = ({ speechId, handleIndex, real_val }) => {
-  const [recordState, setRecordState] = useState(RecordState.NONE);
+  const [recordState, setRecordState] = useState(RecordState.STOP);
 
   const start = () => {
-    setRecordState(RecordState.START);
+    try {
+      setRecordState(RecordState.START);
+    } catch (error) {
+      setRecordState(RecordState.START);
+      console.error("Error starting recording:", error);
+    }
   };
 
   const stop = () => {
-    setRecordState(RecordState.STOP);
-    handleIndex();
+    try {
+      setRecordState(RecordState.STOP);
+      handleIndex();
+    } catch (error) {
+      console.error("Error stopping recording:", error);
+    }
   };
 
   const onStop = async (audioData) => {

@@ -6,7 +6,7 @@ import { $api_doctor } from "../utils/api_doctor"
 
 export default class  Doctor {
     name: any = ""
-    
+    isUpdatePatient: boolean = false    
 
 
     constructor() {
@@ -15,8 +15,11 @@ export default class  Doctor {
 
     async createPatient(form: any) {
         try {
-            $api_doctor.post("/patients/", form, {headers: {"Content-Type": "application/json"}})
-        }catch(err) {
+            const res = await $api_doctor.post("/patients/", form, {headers: {"Content-Type": "application/json"}})
+        
+            return res.data
+        }catch(err: any) {
+            return err.response.data
         }
     }
 

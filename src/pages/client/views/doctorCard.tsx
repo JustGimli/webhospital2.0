@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { AudioRecorder } from "react-audio-voice-recorder";
-import {client, doctor} from "../../..";
+import { client, doctor } from "../../..";
 import { RecorderVoiceItem } from "../../../widgets/record";
 import { AppBarComp } from "../../../components/appBar";
 import { observer } from "mobx-react-lite";
@@ -33,7 +33,7 @@ export const DoctorCardPage = observer(() => {
     <>
       <AppBarComp name="Пациент" />
 
-     {isOpen && (
+      {isOpen && (
         <PatientDialog
           card={client.card}
           open={isOpen}
@@ -62,16 +62,15 @@ export const DoctorCardPage = observer(() => {
 });
 
 const ProfileCard = observer(() => {
-
   const [doctor, setDoctor] = useState({
-    doctor_name: '',
-    doctor_specialization: ''
-  })
+    doctor_name: "",
+    doctor_specialization: "",
+  });
   useEffect(() => {
     (async () => {
-     const res:any =  await client.getDoctors();
+      const res: any = await client.getDoctors();
 
-     setDoctor(res[client.doctorId]);
+      setDoctor(res[client.doctorId]);
     })();
   }, []);
 
@@ -85,11 +84,15 @@ const ProfileCard = observer(() => {
       }}
     >
       <div>
-        <span><b>ФИО: </b></span>
+        <span>
+          <b>ФИО: </b>
+        </span>
         <span>{doctor.doctor_name}</span>
       </div>
       <div>
-        <span><b>Специализация: </b></span>
+        <span>
+          <b>Специализация: </b>
+        </span>
         <span>{doctor.doctor_specialization}</span>
       </div>
       {/* {(
@@ -117,9 +120,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
 
   const handleButtonNext = async () => {
     if (step === 0) {
-      const sp = await client.createSession(
-        session_type
-      );
+      const sp = await client.createSession(session_type);
       setSpeech({ ...sp, session_type: session_type, sessionPatient: card });
     }
 
@@ -154,7 +155,10 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
             </>
           ) : speech === 1 ? (
             <>
-              <RecorderVoiceItem session={speech} />
+              <RecorderVoiceItem
+                speechId={speech}
+                handleButtonNext={handleButtonNext}
+              />
             </>
           ) : (
             <>Вы записали все речи</>
@@ -175,11 +179,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
     </>
   );
 };
-const IputType = ({
-  setIsRef,
-  setSessionType,
-  session_type,
-}: any) => {
+const IputType = ({ setIsRef, setSessionType, session_type }: any) => {
   return (
     <>
       <FormControl variant="outlined" fullWidth margin="normal" required>

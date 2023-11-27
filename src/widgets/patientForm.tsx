@@ -19,7 +19,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import dayjs from "dayjs";
 import generatePassword from "omgopass";
 import { doctor } from "..";
-import { ShowInfoToastMessage } from "../utils/toasts";
+import { ShowErrorToastMessage, ShowInfoToastMessage } from "../utils/toasts";
 
 export const AddPatient = ({ open, handleClose }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
@@ -50,9 +50,18 @@ export const AddPatient = ({ open, handleClose }: any) => {
       is_password_changed: false,
       patient_info: "",
     };
-    await doctor.createPatient(data);
-    ShowInfoToastMessage("Пациент успешно добавлен!");
-    handleClose();
+    const cc = await doctor.createPatient(data);
+
+    if (cc?.result_code === 1) {
+      ShowErrorToastMessage(
+        "Пользователь с таким номером карты уже существует"
+      );
+    } else {
+      ShowInfoToastMessage("Пациент успешно добавлен!");
+    }
+
+    await handleClose();
+    doctor.isUpdatePatient = !doctor.isUpdatePatient;
   };
 
   const handleGeneratePassword = () => {
@@ -178,6 +187,8 @@ export const AddPatient = ({ open, handleClose }: any) => {
       </DialogContent>
       <DialogActions>
         <Button
+          size="large"
+          sx={{ px: 3, py: 1, borderRadius: "10px" }}
           variant="contained"
           onClick={handleGeneratePassword}
           disabled={pass != ""}
@@ -186,6 +197,8 @@ export const AddPatient = ({ open, handleClose }: any) => {
           Сгенерировать пароль
         </Button>
         <Button
+          size="large"
+          sx={{ px: 3, py: 1, borderRadius: "10px" }}
           onClick={handleClick}
           variant="contained"
           disabled={numberError}
