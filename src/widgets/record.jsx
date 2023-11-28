@@ -1,37 +1,34 @@
+import { useState, useEffect } from "react";
+import { AudioRecorder } from "react-audio-voice-recorder";
+// import "react-audio-voice-recorder/dist/index.css";
 import { IconButton, Button } from "@mui/material";
-import AudioReactRecorder, { RecordState } from "audio-react-recorder";
 import MicIcon from "@mui/icons-material/Mic";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { styled } from "@mui/material/styles";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import CloseIcon from "@mui/icons-material/Close";
+import { useParams } from "react-router-dom";
 import { doctor } from "..";
 
 export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
   const { patientID } = useParams();
   const [phrases, setPhrases] = useState([]);
   const [index, setIndex] = useState(1);
-
   const [isMic, setisMic] = useState(false);
-
-  const onFileChange = (event) => {
-    const file = event.target.files[0];
-    // setSelectedFile(file);
-  };
+  const [audioData, setAudioData] = useState(null);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       const res = await doctor.getExampleSpeech(patientID, speechId);
+      const speechType =
+        speechId.session_type === "фраз"
+          ? speechId.session_type + "а"
+          : speechId.session_type;
 
-      if (speechId.session_type === "слог") {
-        setPhrases(res.syllables);
-      } else {
-        setPhrases(res.phrases);
-      }
-    })();
-  }, []);
+      setPhrases(speechType === "слог" ? res.syllables : res.phrases);
+    };
+
+    fetchData();
+  }, [patientID, speechId]);
 
   const handleIndex = () => {
     if (index + 1 > phrases.length) {
@@ -47,13 +44,12 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
         Фраза {index}/{phrases.length}: {phrases[index - 1]}
       </div>
       {isMic ? (
-        <>
-          <RecordVoice
-            speechId={speechId}
-            handleIndex={handleIndex}
-            real_val={phrases[index - 1]}
-          />
-        </>
+        <RecordVoice
+          speechId={speechId}
+          handleIndex={handleIndex}
+          real_val={phrases[index - 1]}
+          setAudioData={setAudioData}
+        />
       ) : (
         <div className="flex flex-col items-center justify-center ">
           <div className="mt-4">
@@ -68,10 +64,11 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
             startIcon={<CloudUploadIcon />}
           >
             Upload file
-            <VisuallyHiddenInput
+            <input
               type="file"
-              onChange={onFileChange}
+              onChange={(event) => setAudioData(event.target.files[0])}
               accept=".wav"
+              style={{ display: "none" }}
             />
           </Button>
         </div>
@@ -80,34 +77,14 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
   );
 };
 
-const RecordVoice = ({ speechId, handleIndex, real_val }) => {
-  const [recordState, setRecordState] = useState(RecordState.NONE);
-
-  const start = () => {
-    try {
-      setRecordState(RecordState.START);
-    } catch (error) {
-      setRecordState(RecordState.START);
-      console.error("Error starting recording:", error);
-    }
-  };
-
-  const stop = () => {
-    try {
-      setRecordState(RecordState.STOP);
-      handleIndex();
-    } catch (error) {
-      console.error("Error stopping recording:", error);
-    }
-  };
-
+const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
   const onStop = async (audioData) => {
-    const reader = new FileReader();
+    var reader = new window.FileReader();
+    reader.readAsDataURL(audioData);
+    reader.onloadend = function () {
+      const base64 = reader.result.split(",")[1];
 
-    reader.onloadend = async () => {
-      const base64Data = reader.result;
-
-      const [, base64] = base64Data.split(",");
+      console.log(base64);
 
       const data = {
         speech_type:
@@ -119,46 +96,28 @@ const RecordVoice = ({ speechId, handleIndex, real_val }) => {
         real_value: real_val,
       };
 
-      await doctor.updateSessionSpeech(speechId, data);
+      doctor
+        .updateSessionSpeech(speechId, data)
+        .then(() => handleIndex())
+        .catch((error) =>
+          console.error("Error updating session speech:", error)
+        );
     };
-
-    reader.readAsDataURL(audioData.blob);
   };
-
   return (
     <div>
       <div className="flex justify-center">
-        <AudioReactRecorder
-          state={recordState}
-          onStop={onStop}
-          canvasHeight={150}
-          canvasWidth="400%"
-          backgroundColor="white"
+        <AudioRecorder
+          onRecordingComplete={onStop}
+          audioTrackConstraints={{
+            noiseSuppression: true,
+            echoCancellation: true,
+          }}
+          downloadOnSavePress={true}
+          downloadFileExtension="wav"
+          showVisualizer
         />
-      </div>
-      <div className="flex justify-center">
-        {recordState === RecordState.START ? (
-          <IconButton onClick={stop}>
-            <CloseIcon />
-          </IconButton>
-        ) : (
-          <IconButton onClick={start}>
-            <FiberManualRecordIcon color="inherit" style={{ color: "red" }} />
-          </IconButton>
-        )}
       </div>
     </div>
   );
 };
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
