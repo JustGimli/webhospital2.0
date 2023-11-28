@@ -47,9 +47,14 @@ const DockerTable: React.FC<DockerTableProps> = observer(
 
     useEffect(() => {
       // Filter the rows based on the search term
-      const filtered = rows.filter((row) =>
+      let filtered = rows.filter((row) =>
         row.full_name.toLowerCase().includes(searchTerm.toLowerCase())
       );
+      if (filtered.length == 0) {
+        filtered = rows.filter((row) =>
+          row.card_number.toString().includes(searchTerm.toLowerCase())
+        );
+      }
       setFilteredRows(filtered);
     }, [searchTerm, rows, setFilteredRows]);
 
@@ -118,6 +123,7 @@ export const DoctorMainPage: React.FC = () => {
   const [filteredRows, setFilteredRows] = useState<Patient[]>([]);
 
   const handleClose = () => {
+    doctor.isUpdatePatient = !doctor.isUpdatePatient;
     setIsOpen(!isOpen);
   };
 
@@ -138,7 +144,7 @@ export const DoctorMainPage: React.FC = () => {
 
       <div>
         <TextField
-          label="Поиск по имени"
+          label="Поиск пациента"
           variant="outlined"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

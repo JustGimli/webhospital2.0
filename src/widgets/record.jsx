@@ -40,6 +40,7 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
       handleButtonNext();
     }
     setIndex(index + 1);
+    setisMic(!isMic);
   };
 
   return (

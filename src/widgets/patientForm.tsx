@@ -61,7 +61,6 @@ export const AddPatient = ({ open, handleClose }: any) => {
     }
 
     await handleClose();
-    doctor.isUpdatePatient = !doctor.isUpdatePatient;
   };
 
   const handleGeneratePassword = () => {
