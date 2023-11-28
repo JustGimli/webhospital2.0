@@ -16,8 +16,6 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
 
   const [isMic, setisMic] = useState(false);
 
-  console.log(speechId);
-
   const onFileChange = (event) => {
     const file = event.target.files[0];
     // setSelectedFile(file);
@@ -53,12 +51,12 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
           <RecordVoice
             speechId={speechId}
             handleIndex={handleIndex}
-            real_val={phrases[index]}
+            real_val={phrases[index - 1]}
           />
         </>
       ) : (
-        <div className="flex flex-col items-center justify-center">
-          <div>
+        <div className="flex flex-col items-center justify-center ">
+          <div className="mt-4">
             <IconButton onClick={() => setisMic(!isMic)}>
               <MicIcon />
             </IconButton>
@@ -83,7 +81,7 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
 };
 
 const RecordVoice = ({ speechId, handleIndex, real_val }) => {
-  const [recordState, setRecordState] = useState(RecordState.STOP);
+  const [recordState, setRecordState] = useState(RecordState.NONE);
 
   const start = () => {
     try {
