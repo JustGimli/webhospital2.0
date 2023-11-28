@@ -40,7 +40,10 @@ export const AuthPage = observer(() => {
           const flag = await client.login(username, password);
           if (flag === false) {
             ShowErrorToastMessage();
-          } else navigate(PATIENTROOT);
+          } else {
+            navigate(PATIENTROOT);
+            ShowSuccessToastMessage("Выполнено успешно!");
+          }
         }
       }
     }
