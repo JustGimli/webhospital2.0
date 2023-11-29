@@ -1,8 +1,15 @@
 import {BarChart} from "@mui/x-charts";
+import {doctor} from "../index";
+import {useState} from "react";
 
-export const PhraseChart = ({sessionsData}: any) => {
+export const PhraseChart = ({session_id, card_number}: any) => {
+    const sessionData: any = useState<any>(async ()=>{
+        const res = await doctor.getPatientSessionInfo(card_number,session_id)
+        return res
+    })
     let not_reference_speech: any[] = [];
-    const reference_speech = sessionsData.speech_array.map((s: any)=>{
+    if(sessionData.speech_array){
+        const reference_speech = sessionData.speech_array.map((s: any)=>{
        if(s.is_reference_speech){
            return s.speech_score
        }
@@ -34,4 +41,8 @@ export const PhraseChart = ({sessionsData}: any) => {
               height={300}
 />
     );
+    }else{
+        return(<span></span>)
+    }
+
 }

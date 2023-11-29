@@ -80,6 +80,16 @@ export default class Client {
       return [];
     }
   }
+  async getPatient(){
+    try {
+      const response = await $api_client.get("patient", {
+      });
+      return response.data;
+    } catch (err) {
+      return [];
+    }
+  }
+
   async createSession(session_type: string) {
     try {
       const response = await $api_client.post("session", {

@@ -26,7 +26,7 @@ export const DoctorCardPage = observer(() => {
   useEffect(() => {
     console.log(client.card);
     (async () => {
-      const res = await doctor.getPatient(Number(client.card));
+      const res = await client.getPatient();
       if (res) {
         setSpeechList(res.sessions);
         console.log(speechList);
