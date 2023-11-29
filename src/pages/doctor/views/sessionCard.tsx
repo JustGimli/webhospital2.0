@@ -24,8 +24,20 @@ import { SlogChart } from "../../../widgets/slogChart";
 
 export const SessionCard = () => {
   const { patientID, session, type } = useParams();
+  const [sessionsData, setData] = useState(null);
   const [openChartPhrases, setOpenChartPrases] = useState<boolean>(false);
   const [openChartSlog, setOpenChartSlog] = useState<boolean>(false);
+
+  useEffect(() => {
+    const promise = new Promise<any>((resolve) => {
+      const res = doctor.getPatientSessionInfo(patientID, session);
+      resolve(res);
+    });
+    promise.then((result) => {
+      setData(result);
+    });
+  }, []);
+
   const handlePhrases = () => {
     setOpenChartPrases(true);
   };
@@ -51,33 +63,34 @@ export const SessionCard = () => {
     <div className="mx-10">
       {openChartPhrases && (
         <PhraseChart
-          session_id={session}
-          card_number={patientID}
           handleCloseChart={handleCloseChart}
           open={openChartPhrases}
+          sessionsData={sessionsData}
         />
       )}
       {openChartSlog && (
         <SlogChart
-          session_id={session}
-          card_number={patientID}
           handleCloseChart={handleCloseChart}
           open={openChartSlog}
+          sessionsData={sessionsData}
         />
       )}
       <div style={{ color: "#1976d2" }} className="my-5">
         Индендефикатор сеанса: {session}
       </div>
-      <div className="flex justify-between my-5">
+      <div
+        className="flex justify-between my-5"
+        style={{ alignItems: "center" }}
+      >
         <div style={{ fontSize: "36px" }} className="font-bold">
           Тип биологического сигнала: {type}
         </div>
         <div>
           <Button
             variant="outlined"
-            onClick={handlePhrases}
+            onClick={type == "фразы" ? handlePhrases : handleSlog}
             size="large"
-            sx={{ px: 3, py: 1, borderRadius: "10px" }}
+            sx={{ px: 3, py: 1, borderRadius: "10px", marginRight: "10px" }}
           >
             {type == "фразы" ? "График фраз" : "График слогов"}
           </Button>
