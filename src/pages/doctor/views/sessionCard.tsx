@@ -19,9 +19,23 @@ import {
   ShowErrorToastMessage,
   ShowSuccessToastMessage,
 } from "../../../utils/toasts";
+import { PhraseChart } from "../../../widgets/phraseChart";
+import { SlogChart } from "../../../widgets/slogChart";
 
 export const SessionCard = () => {
-  const { patientID, session } = useParams();
+  const { patientID, session, type } = useParams();
+  const [openChartPhrases, setOpenChartPrases] = useState<boolean>(false);
+  const [openChartSlog, setOpenChartSlog] = useState<boolean>(false);
+  const handlePhrases = () => {
+    setOpenChartPrases(true);
+  };
+  const handleSlog = () => {
+    setOpenChartSlog(true);
+  };
+  const handleCloseChart = () => {
+    setOpenChartPrases(false);
+    setOpenChartSlog(false);
+  };
 
   const handleEstimate = async () => {
     const res = doctor.estimateSpeech(patientID, session);
@@ -35,12 +49,38 @@ export const SessionCard = () => {
 
   return (
     <div className="mx-10">
+      {openChartPhrases && (
+        <PhraseChart
+          session_id={session}
+          card_number={patientID}
+          handleCloseChart={handleCloseChart}
+          open={openChartPhrases}
+        />
+      )}
+      {openChartSlog && (
+        <SlogChart
+          session_id={session}
+          card_number={patientID}
+          handleCloseChart={handleCloseChart}
+          open={openChartSlog}
+        />
+      )}
       <div style={{ color: "#1976d2" }} className="my-5">
         Индендефикатор сеанса: {session}
       </div>
       <div className="flex justify-between my-5">
         <div style={{ fontSize: "36px" }} className="font-bold">
-          Тип биологического сигнала: фразы
+          Тип биологического сигнала: {type}
+        </div>
+        <div>
+          <Button
+            variant="outlined"
+            onClick={handlePhrases}
+            size="large"
+            sx={{ px: 3, py: 1, borderRadius: "10px" }}
+          >
+            {type == "фразы" ? "График фраз" : "График слогов"}
+          </Button>
         </div>
         <div>
           <Button
@@ -114,9 +154,7 @@ const SessionTable = () => {
       <CircularProgress />
     </div>
   ) : Object.keys(data).length === 0 ? (
-    <div className="flex justify-center w-full">
-      Врачи отсутсвуют! Обратитесь в больницу для записи к врачу.
-    </div>
+    <div className="flex justify-center w-full">Сеансы отсутсвуют!</div>
   ) : (
     <>
       <TableContainer component={Paper}>
