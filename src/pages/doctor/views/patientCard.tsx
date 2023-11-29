@@ -18,11 +18,11 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { doctor } from "../../..";
 import { SessionList } from "../../../widgets/sessionList";
-import { RecorderVoiceItem } from "../../../widgets/record";
+import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
-  const [speechList, setSpeechList] = useState<any>();
+  const [speechList, setSpeechList] = useState<any>([]);
   const { patientID } = useParams();
 
   useEffect(() => {
@@ -37,7 +37,9 @@ export const PatientCardPage = () => {
 
   const [isOpen, setIsOpen] = useState<any>(false);
 
-  const handleClose = () => setIsOpen(!isOpen);
+  const handleClose = () => {
+    setIsOpen(!isOpen);
+  };
 
   return (
     <>
@@ -64,10 +66,10 @@ export const PatientCardPage = () => {
             Добавить сеанс
           </Button>
         </div>
-        {speechList ? (
-          <SessionList speechList={speechList} />
+        {speechList.length ? (
+          <SessionList speechList={speechList} name={"doc"} />
         ) : (
-          <span>Сеансы отсутсвуют</span>
+          <span style={{ fontSize: 16 }}>Сеансы отсутсвуют</span>
         )}
       </div>
     </>
@@ -79,16 +81,20 @@ const ProfileCard = ({ patient }: any) => {
     <div
       className="p-10"
       style={{
-        maxWidth: "500px",
+        maxWidth: "450px",
+        minHeight: "30%",
         border: "1px solid silver",
         borderRadius: "8px",
+        padding: "3%",
       }}
     >
       {patient &&
         Object.entries(patient).map(([key, val]: any) => (
-          <div key={key}>
-            <span>{data[key]}: </span>
-            <span>{val}</span>
+          <div key={key} style={{ marginBottom: 10 }}>
+            <span style={{ fontSize: 16 }}>
+              <b>{data[key]}: </b>
+            </span>
+            <span style={{ paddingLeft: 5 }}>{val}</span>
             <br />
           </div>
         ))}
