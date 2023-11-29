@@ -12,18 +12,11 @@ import {
   StepLabel,
   Stepper,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { AudioRecorder } from "react-audio-voice-recorder";
-import { client, doctor } from "../../..";
+import { useEffect, useState } from "react";
+import { client } from "../../..";
 import { RecorderVoiceItem } from "../../../widgets/record";
 import { AppBarComp } from "../../../components/appBar";
 import { observer } from "mobx-react-lite";
-import { useParams } from "react-router-dom";
-
-const data = [
-  { name: "ФИО", value: "" },
-  { name: "Специализация", value: "" },
-];
 
 export const DoctorCardPage = observer(() => {
   const [isOpen, setIsOpen] = useState<any>(false);
@@ -41,12 +34,14 @@ export const DoctorCardPage = observer(() => {
         />
       )}
       <div className="px-5">
-        <span style={{ fontSize: "36px" }} className="my-5">
+        <span style={{ fontSize: "36px", fontWeight: 600 }} className="my-5">
           Информация о враче
         </span>
         <ProfileCard />
         <div className="flex justify-between w-full">
-          <span>Сеансы оценки качества речи</span>
+          <span style={{ paddingTop: 10, fontSize: 20, fontWeight: 400 }}>
+            Сеансы оценки качества речи
+          </span>
           <Button
             variant="contained"
             onClick={handleClose}
@@ -83,7 +78,7 @@ const ProfileCard = observer(() => {
         borderRadius: "8px",
       }}
     >
-      <div>
+      <div style={{ marginBottom: 10 }}>
         <span>
           <b>ФИО: </b>
         </span>
@@ -138,6 +133,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
                 setIsRef={setIsRef}
                 setSessionType={setSessionType}
                 session_type={session_type}
+                is_reference_session={is_reference_session}
               />
             </>
           ) : speech === 1 ? (
@@ -166,11 +162,27 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
     </>
   );
 };
-const IputType = ({ setIsRef, setSessionType, session_type }: any) => {
+const IputType = ({
+  setIsRef,
+  setSessionType,
+  session_type,
+  is_reference_session,
+}: any) => {
   return (
     <>
       <FormControl variant="outlined" fullWidth margin="normal" required>
         <InputLabel>Тип сеанса</InputLabel>
+        <Select
+          value={is_reference_session}
+          onChange={(e: any) => {
+            setIsRef(e.target.value);
+          }}
+          label="Тип сигнала"
+        >
+          <MenuItem value={1}>Эталонный</MenuItem>
+
+          <MenuItem value={0}>Не эталонный</MenuItem>
+        </Select>
       </FormControl>
       <FormControl variant="outlined" fullWidth margin="normal" required>
         <InputLabel>Тип сигнала</InputLabel>

@@ -7,30 +7,53 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { client } from "../../..";
 import { AppBarComp } from "../../../components/appBar";
 import { PATIENTROOT } from "../../../utils/const";
 import { observer } from "mobx-react-lite";
 
+interface Doctor {
+  doctor_name: string;
+  doctor_specialization: string;
+}
+
 export const ClientMain = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   return (
-    <>
+    <div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
       <AppBarComp name="Пациент" />
 
-      <div className="font-bold my-5 mx-2" style={{ fontSize: "24px" }}>
+      <div className="font-bold my-5 mx-2" style={{ fontSize: "28px" }}>
         Ваши врачи
       </div>
-      <DoctorsTable />
-    </>
+      <div style={{ marginRight: "12%", width: "50%" }}>
+        <TextField
+          label="Поиск врача"
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ mb: 2, mx: 2 }}
+        />
+      </div>
+      <DoctorsTable searchTerm={searchTerm} />
+    </div>
   );
 };
 
-const DoctorsTable = () => {
+interface DockerTableProps {
+  searchTerm: string;
+}
+
+const DoctorsTable: FC<DockerTableProps> = ({ searchTerm }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [data, setData] = useState([]);
+  const [filteredRows, setFilteredRows] = useState<Doctor[]>([]);
+  const [data, setData] = useState<Doctor[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -41,6 +64,13 @@ const DoctorsTable = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    let filtered = data.filter((row) =>
+      row.doctor_name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredRows(filtered);
+  }, [searchTerm, data]);
+
   return isLoading ? (
     <div className="flex justify-center w-full">
       <CircularProgress />
@@ -50,7 +80,9 @@ const DoctorsTable = () => {
       Врачи отсутсвуют! Обратитесь в больницу для записи к врачу.
     </div>
   ) : (
-    <TableItem data={data} />
+    <div className="flex justify-center w-full">
+      <TableItem data={filteredRows} />
+    </div>
   );
 };
 
@@ -62,12 +94,20 @@ const TableItem = observer((data: any) => {
 
   const navigate = useNavigate();
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }}>
+    <TableContainer
+      component={Paper}
+      sx={{
+        borderRadius: 0,
+        maxWidth: "60%",
+      }}
+    >
+      <Table>
         <TableHead>
           <TableRow>
-            <TableCell>ФИО</TableCell>
-            <TableCell>Специализация</TableCell>
+            <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>ФИО</TableCell>
+            <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
+              Специализация
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

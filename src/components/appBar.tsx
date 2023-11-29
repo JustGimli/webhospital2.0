@@ -14,9 +14,17 @@ export const AppBarComp = observer(({ name }: any) => {
     <>
       <AppBar position="static">
         <Toolbar>
-          <span style={{ flexGrow: 1 }}>{name}</span>
+          <span style={{ flexGrow: 1, fontSize: 30, fontWeight: 600 }}>
+            {name}
+          </span>
           <div className="flex justify-between items-center">
-            <span>{name === "Доктор" ? doctor.name : client.card}</span>
+            <span style={{ marginRight: 10, fontSize: 20 }}>
+              {name === "Доктор"
+                ? doctor.name
+                : client.card != ""
+                ? "№ " + client.card
+                : client.card}
+            </span>
             <IconButton color="inherit" onClick={handelClick}>
               <LogoutIcon />
             </IconButton>

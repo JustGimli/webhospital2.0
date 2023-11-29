@@ -82,11 +82,21 @@ const TableItem: React.FC<TableItemProps> = ({ data }) => {
       <Table sx={{ minWidth: 650 }}>
         <TableHead>
           <TableRow>
-            <TableCell>Полное имя</TableCell>
-            <TableCell align="right">Возраст</TableCell>
-            <TableCell align="right">Пол</TableCell>
-            <TableCell align="right">Номер личной карты</TableCell>
-            <TableCell align="right">Информация</TableCell>
+            <TableCell sx={{ fontSize: 16, fontWeight: 600 }}>
+              Полное имя
+            </TableCell>
+            <TableCell align="right" sx={{ fontSize: 16, fontWeight: 600 }}>
+              Возраст
+            </TableCell>
+            <TableCell align="right" sx={{ fontSize: 16, fontWeight: 600 }}>
+              Пол
+            </TableCell>
+            <TableCell align="right" sx={{ fontSize: 16, fontWeight: 600 }}>
+              Номер личной карты
+            </TableCell>
+            <TableCell align="right" sx={{ fontSize: 16, fontWeight: 600 }}>
+              Информация
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
