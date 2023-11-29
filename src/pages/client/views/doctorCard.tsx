@@ -13,13 +13,27 @@ import {
   Stepper,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { client } from "../../..";
-import { RecorderVoiceItem } from "../../../widgets/record";
+import { client, doctor } from "../../..";
+import { RecorderVoiceItem } from "../../../widgets/recordClient";
 import { AppBarComp } from "../../../components/appBar";
 import { observer } from "mobx-react-lite";
+import { SessionList } from "../../../widgets/sessionList";
 
 export const DoctorCardPage = observer(() => {
   const [isOpen, setIsOpen] = useState<any>(false);
+  const [speechList, setSpeechList] = useState<any>([]);
+
+  useEffect(() => {
+    console.log(client.card);
+    (async () => {
+      const res = await doctor.getPatient(Number(client.card));
+      if (res) {
+        setSpeechList(res.sessions);
+        console.log(speechList);
+      }
+    })();
+  }, []);
+
   const handleClose = () => setIsOpen(!isOpen);
 
   return (
@@ -50,6 +64,11 @@ export const DoctorCardPage = observer(() => {
           >
             Добавить сеанс
           </Button>
+          {speechList.length ? (
+            <SessionList speechList={speechList} name="cl" />
+          ) : (
+            <span style={{ fontSize: 16 }}>Сеансы отсутсвуют</span>
+          )}
         </div>
       </div>
     </>
@@ -68,7 +87,6 @@ const ProfileCard = observer(() => {
       setDoctor(res[client.doctorId]);
     })();
   }, []);
-
   return (
     <div
       className="p-10"
@@ -95,10 +113,9 @@ const ProfileCard = observer(() => {
 });
 const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
-
   const [is_reference_session, setIsRef] = useState(1);
   const [session_type, setSessionType] = useState("фразы");
-  const [speech, setSpeech] = useState<any>(null);
+  const [speech, setSpeech] = useState<any>();
 
   const handleButtonNext = async () => {
     if (step === 0) {
@@ -136,11 +153,12 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
                 is_reference_session={is_reference_session}
               />
             </>
-          ) : speech === 1 ? (
+          ) : step === 1 ? (
             <>
               <RecorderVoiceItem
                 speechId={speech}
                 handleButtonNext={handleButtonNext}
+                patientID={client.card}
               />
             </>
           ) : (

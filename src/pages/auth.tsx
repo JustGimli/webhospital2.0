@@ -22,24 +22,24 @@ export const AuthPage = observer(() => {
     setDisabled(true);
     if (username.length !== 0 && password.length !== 0) {
       let flag = false;
-
       if (nav === "Врач") {
         flag = await doctor.login(username, password);
         if (flag) {
           ShowSuccessToastMessage("Выполнено успешно!");
           navigate(DOCTORROOT);
+        } else {
+          ShowErrorToastMessage("Неверный логин или пароль!");
         }
       } else {
         client.card = username;
         client.lastPass = password;
         flag = await client.checkStatusPass();
-
         if (flag === false) {
           navigate(PATIENTROOT + PATIENTCHANGEPASS);
         } else if (flag === true) {
           const flag = await client.login(username, password);
           if (flag === false) {
-            ShowErrorToastMessage();
+            ShowErrorToastMessage("Неверный логин или пароль!");
           } else {
             navigate(PATIENTROOT);
             ShowSuccessToastMessage("Выполнено успешно!");

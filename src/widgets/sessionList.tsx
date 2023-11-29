@@ -22,14 +22,17 @@ import { DOCTORROOT } from "../utils/const";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import { useState } from "react";
 import { doctor } from "..";
+import { ShowSuccessToastMessage } from "../utils/toasts";
 
-export const SessionList = ({ speechList }: any) => {
+export const SessionList = ({ speechList, name }: any) => {
   const { patientID } = useParams();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState<any>();
 
   const handleClick = (sessionID: any) => {
-    navigate(DOCTORROOT + "/card/" + patientID + "/" + sessionID);
+    if (name === "doc") {
+      navigate(DOCTORROOT + "/card/" + patientID + "/" + sessionID);
+    }
   };
 
   const handleCompare = (e: any) => {
@@ -98,6 +101,7 @@ const DialogComponent = ({ open, handleClose, speechList, patientID }: any) => {
     };
 
     await doctor.estimatePhrase(patientID, data);
+    ShowSuccessToastMessage("Сеансы упешно отправлены на сравнение!");
   };
 
   return (

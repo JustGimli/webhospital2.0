@@ -109,7 +109,7 @@ const ClientForm = ({ username, setUserName }: any) => {
         variant="outlined"
         fullWidth
         required
-        error={username.length !== 12}
+        error={username.length !== 12 || !/^\d+$/.test(username)}
       >
         <InputLabel>Номер Карты</InputLabel>
         <OutlinedInput

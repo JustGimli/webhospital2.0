@@ -46,7 +46,6 @@ const DockerTable: React.FC<DockerTableProps> = observer(
     }, [doctor.isUpdatePatient]);
 
     useEffect(() => {
-      // Filter the rows based on the search term
       let filtered = rows.filter((row) =>
         row.full_name.toLowerCase().includes(searchTerm.toLowerCase())
       );
@@ -62,9 +61,9 @@ const DockerTable: React.FC<DockerTableProps> = observer(
       <div className="flex justify-center w-full">
         <CircularProgress />
       </div>
-    ) : rows.length === 0 ? (
-      <div className="flex justify-center w-full">Пациенты отсутствуют</div>
-    ) : null;
+    ) : (
+      <></>
+    );
   }
 );
 
