@@ -24,8 +24,11 @@ export const RecorderVoiceItem = ({
           ? speechId.session_type + "а"
           : speechId.session_type;
 
-      setPhrases(speechType === "слог" ? res.syllables : res.phrases);
+      console.log(speechType)
+      setPhrases(speechType === "слоги" ? res.syllables : res.phrases);
     };
+
+    console.log(speechId)
 
     fetchData();
   }, [patientID, speechId]);
@@ -41,7 +44,7 @@ export const RecorderVoiceItem = ({
   return (
     <>
       <div>
-        Фраза {index}/{phrases.length}: {phrases[index - 1]}
+        {speechId.session_type[0].toUpperCase() + speechId.session_type.slice(1, speechId.session_type.length)} {index}/{phrases.length}: {phrases[index - 1]}
       </div>
       {isMic ? (
         <RecordVoice
