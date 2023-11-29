@@ -4,8 +4,6 @@ import { AudioRecorder } from "react-audio-voice-recorder";
 import { IconButton, Button } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import CloseIcon from "@mui/icons-material/Close";
 import { useParams } from "react-router-dom";
 import { doctor } from "..";
 
@@ -102,6 +100,7 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
         );
     };
   };
+
   return (
     <div>
       <div className="flex justify-center">
@@ -119,3 +118,22 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
     </div>
   );
 };
+
+// const base64ToArrayBuffer = (base64) => {
+//   const binaryString = window.atob(base64);
+//   const len = binaryString.length;
+//   const bytes = new Uint8Array(len);
+//   for (let i = 0; i < len; i++) {
+//     bytes[i] = binaryString.charCodeAt(i);
+//   }
+//   return bytes.buffer;
+// };
+
+// const arrayBufferToBase64 = (arrayBuffer) => {
+//   const uint8Array = new Uint8Array(arrayBuffer);
+//   const binaryString = uint8Array.reduce(
+//     (acc, byte) => acc + String.fromCharCode(byte),
+//     ""
+//   );
+//   return window.btoa(binaryString);
+// };

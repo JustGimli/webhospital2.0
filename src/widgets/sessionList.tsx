@@ -73,7 +73,7 @@ export const SessionList = ({ speechList }: any) => {
                   {row.is_reference_session ? "Эталонная" : "Неэталлоная"}
                 </TableCell>
                 <TableCell>{row.session_type}</TableCell>
-                <TableCell>
+                <TableCell align="right">
                   <IconButton onClick={handleCompare}>
                     <CompareArrowsIcon />
                   </IconButton>

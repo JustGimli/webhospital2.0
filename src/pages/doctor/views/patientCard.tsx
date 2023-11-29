@@ -12,13 +12,15 @@ import {
   StepLabel,
   Stepper,
 } from "@mui/material";
-
+import { ConvertTime } from "../../../utils/convertTime";
 import { useEffect, useState } from "react";
 
 import { useParams } from "react-router-dom";
 import { doctor } from "../../..";
 import { SessionList } from "../../../widgets/sessionList";
 import { RecorderVoiceItem } from "../../../widgets/record";
+import { SlogChart } from "../../../widgets/slogChart";
+import { PhraseChart } from "../../../widgets/phraseChart";
 
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
@@ -52,7 +54,13 @@ export const PatientCardPage = () => {
         <div style={{ fontSize: "36px" }} className="my-5 font-bold">
           Профиль пациента
         </div>
-        <ProfileCard patient={patient} />
+        <div className="flex flex-wrap justify-between">
+          <ProfileCard patient={patient} />
+
+          <SlogChart />
+
+          <PhraseChart />
+        </div>
         <div className="flex justify-between w-full my-5">
           <div style={{ fontSize: "24px" }}>Сеансы оценки качества речи</div>
           <Button
@@ -87,8 +95,16 @@ const ProfileCard = ({ patient }: any) => {
       {patient &&
         Object.entries(patient).map(([key, val]: any) => (
           <div key={key}>
-            <span>{data[key]}: </span>
-            <span>{val}</span>
+            <span className="font-bold">{data[key]}: </span>
+            <span>
+              {data[key] === "Возраст"
+                ? ConvertTime(val)
+                : data[key] === "Пол"
+                ? val === "m"
+                  ? "Мужчина"
+                  : "Женщина"
+                : val}
+            </span>
             <br />
           </div>
         ))}
