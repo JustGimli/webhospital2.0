@@ -80,6 +80,16 @@ export default class Client {
       return [];
     }
   }
+  async getPatient(){
+    try {
+      const response = await $api_client.get("patient", {
+      });
+      return response.data;
+    } catch (err) {
+      return [];
+    }
+  }
+
   async createSession(session_type: string) {
     try {
       const response = await $api_client.post("session", {
@@ -89,5 +99,27 @@ export default class Client {
     } catch (err) {
       return [];
     }
+  }
+  async getPhrases(session_id:number) {
+    try {
+      const response = await $api_client.get(`session/${session_id}`);
+      return response.data ? response.data : [];
+    } catch (err) {
+      return [];
+    }
+  }
+  async saveAudio(session_id:any, speech_type:any, base64:any, real_value:any){
+    try {
+      const response = await $api_client.post(`session/${session_id}`,{
+      'speech_type': speech_type,
+      'base64_value': base64,
+      'base64_value_segment': '',
+      'real_value':real_value
+    })
+    return response.data;
+    }catch (err) {
+      return true;
+    }
+
   }
 }

@@ -4,7 +4,7 @@ import { IconButton, Button } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useParams } from "react-router-dom";
-import { doctor } from "..";
+import {client, doctor} from "..";
 
 export const RecorderVoiceItem = ({
   speechId,
@@ -18,14 +18,17 @@ export const RecorderVoiceItem = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await doctor.getExampleSpeech(patientID, speechId);
+      const res = await client.getPhrases(speechId.session_id)
       const speechType =
         speechId.session_type === "фраз"
           ? speechId.session_type + "а"
           : speechId.session_type;
 
-      setPhrases(speechType === "слог" ? res.syllables : res.phrases);
+      console.log(speechType)
+      setPhrases(speechType === "слоги" ? res.syllables : res.phrases);
     };
+
+    console.log(speechId)
 
     fetchData();
   }, [patientID, speechId]);
@@ -41,7 +44,7 @@ export const RecorderVoiceItem = ({
   return (
     <>
       <div>
-        Фраза {index}/{phrases.length}: {phrases[index - 1]}
+        {speechId.session_type[0].toUpperCase() + speechId.session_type.slice(1, speechId.session_type.length)} {index}/{phrases.length}: {phrases[index - 1]}
       </div>
       {isMic ? (
         <RecordVoice
@@ -88,20 +91,18 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
 
       const data = {
         speech_type:
-          speechId.session_type === "фраз"
-            ? speechId.session_type + "а"
-            : speechId.session_type,
+          speechId.session_type === "фразы"
+            ? speechId.session_type = "фраза"
+            : speechId.session_type === "слоги" ? speechId.session_type = "слог" : speechId.session_type,
         base64_value: base64,
         base64_value_segment: "",
         real_value: real_val,
       };
 
-      doctor
-        .updateSessionSpeech(speechId, data)
-        .then(() => handleIndex())
-        .catch((error) =>
-          console.error("Error updating session speech:", error)
-        );
+      client.saveAudio(speechId.sessionId, data.speech_type, data.base64_value, data.real_value).then(() => handleIndex())
+          .catch((error) =>
+              console.error("Error updating session speech:", error)
+          );
     };
   };
   return (

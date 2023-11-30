@@ -29,9 +29,19 @@ export const SessionList = ({ speechList, name }: any) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState<any>();
 
-  const handleClick = (sessionID: any) => {
+  const handleClick = (sessionID: any, sessionType: any, flag: any) => {
     if (name === "doc") {
-      navigate(DOCTORROOT + "/card/" + patientID + "/" + sessionID);
+      navigate(
+        DOCTORROOT +
+          "/card/" +
+          patientID +
+          "/" +
+          sessionType[0] +
+          "/" +
+          Number(flag) +
+          "/" +
+          sessionID
+      );
     }
   };
 
@@ -69,7 +79,13 @@ export const SessionList = ({ speechList, name }: any) => {
               <TableRow
                 key={row.session_id}
                 style={{ cursor: "pointer" }}
-                onClick={() => handleClick(row.session_id)}
+                onClick={() =>
+                  handleClick(
+                    row.session_id,
+                    row.session_type,
+                    row.is_reference_session
+                  )
+                }
               >
                 <TableCell>{row.session_id}</TableCell>
                 <TableCell>

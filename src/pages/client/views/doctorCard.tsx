@@ -26,10 +26,9 @@ export const DoctorCardPage = observer(() => {
   useEffect(() => {
     console.log(client.card);
     (async () => {
-      const res = await doctor.getPatient(Number(client.card));
+      const res = await client.getPatient();
       if (res) {
         setSpeechList(res.sessions);
-        console.log(speechList);
       }
     })();
   }, []);
@@ -52,10 +51,9 @@ export const DoctorCardPage = observer(() => {
           Информация о враче
         </span>
         <ProfileCard />
-        <div className="flex justify-between w-full">
-          <span style={{ paddingTop: 10, fontSize: 20, fontWeight: 400 }}>
-            Сеансы оценки качества речи
-          </span>
+
+        <div className="flex justify-between w-full my-5">
+          <span className="text-2xl">Сеансы оценки качества речи</span>
           <Button
             variant="contained"
             onClick={handleClose}
@@ -64,6 +62,8 @@ export const DoctorCardPage = observer(() => {
           >
             Добавить сеанс
           </Button>
+        </div>
+        <div className="flex justify-between w-full gap-x-5 mt-5">
           {speechList.length ? (
             <SessionList speechList={speechList} name="cl" />
           ) : (
@@ -115,12 +115,16 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
   const [is_reference_session, setIsRef] = useState(1);
   const [session_type, setSessionType] = useState("фразы");
-  const [speech, setSpeech] = useState<any>();
+  const [speech, setSpeech] = useState<any>({});
 
   const handleButtonNext = async () => {
     if (step === 0) {
       const sp = await client.createSession(session_type);
-      setSpeech({ ...sp, session_type: session_type, sessionPatient: card });
+      setSpeech({
+        sessionId: sp,
+        session_type: session_type,
+        sessionPatient: card,
+      });
     }
 
     setStep(step + 1);

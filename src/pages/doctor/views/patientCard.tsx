@@ -37,7 +37,7 @@ export const PatientCardPage = () => {
     })();
   }, []);
 
-  const [isOpen, setIsOpen] = useState<any>(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleClose = () => {
     setIsOpen(!isOpen);

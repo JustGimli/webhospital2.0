@@ -1,7 +1,18 @@
 import {
   Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  Step,
+  StepLabel,
+  Stepper,
   Table,
   TableBody,
   TableCell,
@@ -19,9 +30,40 @@ import {
   ShowErrorToastMessage,
   ShowSuccessToastMessage,
 } from "../../../utils/toasts";
+import { PhraseChart } from "../../../widgets/phraseChart";
+import { SlogChart } from "../../../widgets/slogChart";
+import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 
 export const SessionCard = () => {
-  const { patientID, session } = useParams();
+  const { patientID, session, type, flag } = useParams();
+  const [sessionsData, setData] = useState(null);
+  const [openChartPhrases, setOpenChartPrases] = useState<boolean>(false);
+  const [openChartSlog, setOpenChartSlog] = useState<boolean>(false);
+  const [addPhrase, setAddPhrase] = useState<boolean>(false);
+
+  useEffect(() => {
+    const promise = new Promise<any>((resolve) => {
+      const res = doctor.getPatientSessionInfo(patientID, session);
+      resolve(res);
+    });
+    promise.then((result) => {
+      setData(result);
+    });
+  }, []);
+
+  const handleClose = () => {
+    setAddPhrase(!addPhrase);
+  };
+  const handlePhrases = () => {
+    setOpenChartPrases(true);
+  };
+  const handleSlog = () => {
+    setOpenChartSlog(true);
+  };
+  const handleCloseChart = () => {
+    setOpenChartPrases(false);
+    setOpenChartSlog(false);
+  };
 
   const handleEstimate = async () => {
     const res = doctor.estimateSpeech(patientID, session);
@@ -35,21 +77,73 @@ export const SessionCard = () => {
 
   return (
     <div className="mx-10">
+      {addPhrase && (
+        <PatientDialogExists
+          card={patientID}
+          open={addPhrase}
+          handleClose={handleClose}
+          session={session}
+          sessiontype={type == "ф" ? "фразы" : "слоги"}
+          seans={sessionsData}
+        />
+      )}
+      {openChartPhrases && (
+        <PhraseChart
+          handleCloseChart={handleCloseChart}
+          open={openChartPhrases}
+          sessionsData={sessionsData}
+        />
+      )}
+      {openChartSlog && (
+        <SlogChart
+          handleCloseChart={handleCloseChart}
+          open={openChartSlog}
+          sessionsData={sessionsData}
+        />
+      )}
       <div style={{ color: "#1976d2" }} className="my-5">
         Индендефикатор сеанса: {session}
       </div>
-      <div className="flex justify-between my-5">
-        <div style={{ fontSize: "36px" }} className="font-bold">
-          Тип биологического сигнала: фразы
+      <div
+        className="flex justify-between my-5"
+        style={{ alignItems: "center" }}
+      >
+        <div>
+          <div style={{ fontSize: "36px" }} className="font-bold">
+            Тип биологического сигнала: {type == "ф" ? "фраза" : "слог"}
+          </div>
+          <div style={{ fontSize: 18, padding: "5px 10px" }}>
+            Тип сеанса: {flag === "1" ? "Эталонный" : "Неэталонный"}
+          </div>
+        </div>
+        <div>
+          <Button
+            variant="outlined"
+            onClick={type == "ф" ? handlePhrases : handleSlog}
+            size="large"
+            sx={{ px: 3, py: 1, borderRadius: "10px", marginRight: "10px" }}
+          >
+            {type == "ф" ? "График фраз" : "График слогов"}
+          </Button>
         </div>
         <div>
           <Button
             variant="contained"
             onClick={handleEstimate}
             size="large"
-            sx={{ px: 3, py: 1, borderRadius: "10px" }}
+            sx={{ px: 3, py: 1, borderRadius: "10px", marginRight: "10px" }}
           >
             Оценить
+          </Button>
+        </div>
+        <div>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={handleClose}
+            sx={{ px: 3, py: 1, borderRadius: "10px" }}
+          >
+            Добавить фразы
           </Button>
         </div>
       </div>
@@ -114,9 +208,7 @@ const SessionTable = () => {
       <CircularProgress />
     </div>
   ) : Object.keys(data).length === 0 ? (
-    <div className="flex justify-center w-full">
-      Врачи отсутсвуют! Обратитесь в больницу для записи к врачу.
-    </div>
+    <div className="flex justify-center w-full">Сеансы отсутсвуют!</div>
   ) : (
     <>
       <TableContainer component={Paper}>
@@ -158,3 +250,222 @@ const SessionTable = () => {
     </>
   );
 };
+
+const PatientDialogExists = ({
+  open,
+  handleClose,
+  card,
+  session,
+  sessiontype,
+  seans,
+}: any) => {
+  const [prevSess, setPrevSess] = useState<any>(null);
+  const [step, setStep] = useState<any>(1);
+  const [speech, setSpeech] = useState<any>(null);
+
+  useEffect(() => {
+    const promise = new Promise<any>((resolve) => {
+      const res = doctor.getExampleSpeech(card, session);
+      resolve(res);
+    });
+    promise.then((result) => {
+      setPrevSess(result);
+    });
+  }, []);
+
+  const handleButtonNext = () => {
+    setStep(step + 1);
+    if (step === 2) {
+      setStep(0);
+      handleClose();
+    }
+  };
+  let pharses: any = [];
+  const checkSeans = (): boolean => {
+    if (
+      !prevSess.hasOwnProperty("phrases") ||
+      !prevSess.hasOwnProperty("syllables")
+    ) {
+      return false;
+    }
+    if (seans.session_type == sessiontype) {
+      let key = 1;
+      if (sessiontype == "фразы") key = 0;
+      const values = seans.speech_array.map((el: any) => {
+        return el.real_value;
+      });
+      pharses = prevSess[key].filter((word: any) => !values.includes(word));
+      return true;
+    }
+    return false;
+  };
+
+  return (
+    <>
+      {!prevSess ||
+      !seans ||
+      !seans.hasOwnProperty("speech_array") ||
+      !checkSeans() ? (
+        <PatientDialog open={open} handleClose={handleClose} card={card} />
+      ) : (
+        <></>
+      )}
+      {/* <Dialog open={open} onClose={handleClose} fullWidth>
+        <DialogTitle>
+          <Stepper activeStep={step}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </DialogTitle>
+        <DialogContent>
+          {step === 0 ? (
+            <>
+              <IputType
+                setIsRef={setIsRef}
+                setSessionType={setSessionType}
+                is_reference_session={is_reference_session}
+                session_type={session_type}
+              />
+            </>
+          ) : step === 1 ? (
+            <>
+              <RecorderVoiceItem
+                speechId={speech}
+                handleButtonNext={handleButtonNext}
+              />
+            </>
+          ) : (
+            <>Вы записали все речи</>
+          )}
+        </DialogContent>
+        <DialogActions>
+          {step === 0 ? (
+            <Button onClick={handleButtonNext} variant="contained">
+              Вперед
+            </Button>
+          ) : (
+            <Button onClick={handleButtonNext} variant="contained">
+              Завершить
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog> */}
+    </>
+  );
+};
+
+const PatientDialog = ({ open, handleClose, card }: any) => {
+  const [step, setStep] = useState<any>(0);
+  const [is_reference_session, setIsRef] = useState(1);
+  const [session_type, setSessionType] = useState("фраз");
+  const [speech, setSpeech] = useState<any>(null);
+
+  const handleButtonNext = async () => {
+    if (step === 0) {
+      const sp = await doctor.createScenario(
+        card,
+        is_reference_session,
+        session_type === "фраз" ? session_type + "ы" : session_type + "и"
+      );
+      setSpeech({ ...sp, session_type: session_type, sessionPatient: card });
+    }
+
+    setStep(step + 1);
+
+    if (step === 2) {
+      setStep(0);
+      handleClose();
+    }
+  };
+  return (
+    <>
+      <Dialog open={open} onClose={handleClose} fullWidth>
+        <DialogTitle>
+          <Stepper activeStep={step}>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </DialogTitle>
+        <DialogContent>
+          {step === 0 ? (
+            <>
+              <IputType
+                setIsRef={setIsRef}
+                setSessionType={setSessionType}
+                is_reference_session={is_reference_session}
+                session_type={session_type}
+              />
+            </>
+          ) : step === 1 ? (
+            <>
+              <RecorderVoiceItem
+                speechId={speech}
+                handleButtonNext={handleButtonNext}
+              />
+            </>
+          ) : (
+            <>Вы записали все речи</>
+          )}
+        </DialogContent>
+        <DialogActions>
+          {step === 0 ? (
+            <Button onClick={handleButtonNext} variant="contained">
+              Вперед
+            </Button>
+          ) : (
+            <Button onClick={handleButtonNext} variant="contained">
+              Завершить
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+const IputType = ({
+  setIsRef,
+  setSessionType,
+  is_reference_session,
+  session_type,
+}: any) => {
+  return (
+    <>
+      <FormControl variant="outlined" fullWidth margin="normal" required>
+        <InputLabel>Тип сеанса</InputLabel>
+        <Select
+          value={is_reference_session}
+          onChange={(e: any) => {
+            setIsRef(e.target.value);
+          }}
+          label="Тип сигнала"
+        >
+          <MenuItem value={1}>Эталонный</MenuItem>
+
+          <MenuItem value={0}>Не эталонный</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl variant="outlined" fullWidth margin="normal" required>
+        <InputLabel>Тип сигнала</InputLabel>
+        <Select
+          value={session_type}
+          onChange={(e: any) => {
+            setSessionType(e.target.value);
+          }}
+          label="Тип сигнала"
+        >
+          <MenuItem value="фраз">Фраза</MenuItem>
+          <MenuItem value="слог">Слог</MenuItem>
+        </Select>
+      </FormControl>
+    </>
+  );
+};
+
+const steps = ["Добавление сеанса", "Загрузка аудио", "Завершение"];

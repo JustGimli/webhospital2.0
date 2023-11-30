@@ -31,7 +31,7 @@ export const MainURL = [
   {
     Component: PatientRoot,
     path: PATIENT,
-  }
+  },
 ];
 
 export const DoctorURL = [
@@ -45,9 +45,9 @@ export const DoctorURL = [
   },
 
   {
-     Component: SessionCard,
+    Component: SessionCard,
     path: PATIENTSPEECHLIST,
-  }
+  },
   //   {
   //     Component: PolicyPage,
   //     path: PATIENT,
@@ -63,10 +63,8 @@ export const PatientURL = [
     Component: DoctorCardPage,
     path: PATIENTCARD,
   },
-{
+  {
     Component: ChangePassPage,
-     path: PATIENTCHANGEPASS,
-},
-
-
+    path: PATIENTCHANGEPASS,
+  },
 ];
