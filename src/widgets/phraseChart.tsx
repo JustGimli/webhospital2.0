@@ -1,7 +1,6 @@
 import { BarChart } from "@mui/x-charts";
 
 import { Dialog, DialogContent } from "@mui/material";
-import { useEffect } from "react";
 
 export const PhraseChart = ({
   handleCloseChart,
