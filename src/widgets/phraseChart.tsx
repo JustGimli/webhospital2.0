@@ -67,8 +67,6 @@ export const PhraseChart = ({
     while (reference_speech.length > not_reference_speech.length) {
       reference_speech.pop();
     }
-    console.log(reference_speech);
-    console.log(not_reference_speech);
   }
   return (
     <Dialog open={open} onClose={handleCloseChart} fullWidth>
@@ -85,12 +83,6 @@ export const PhraseChart = ({
           </span>
         ) : (
           <BarChart
-            xAxis={[
-              {
-                id: "barCategories",
-                scaleType: "band",
-              },
-            ]}
             series={[
               {
                 data: reference_speech,
