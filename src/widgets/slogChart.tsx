@@ -1,26 +1,91 @@
 import { BarChart } from "@mui/x-charts";
 import { Dialog, DialogContent } from "@mui/material";
 
-export const SlogChart = ({ handleCloseChart, open, sessionsData }: any) => {
-  let not_reference_speech: any[] = [];
-  let reference_speech: any[] = [];
-  if (
-    sessionsData.speech_array.length &&
-    sessionsData.speech_array.hasOwnProperty("speech_compares_history")
-  ) {
-    reference_speech = sessionsData.speech_array.map((s: any) => {
-      if (s.speech_compares_history[0].hasOwnProperty("speech_score")) {
+export const SlogChart = ({
+  handleCloseChart,
+  open,
+  sessionsData,
+  compareSessions,
+}: any) => {
+  let reference_speech: number[] = [];
+  let not_reference_speech: number[] = [];
+  if (sessionsData.speech_array.length) {
+    sessionsData.speech_array.forEach((s: any) => {
+      if (
+        s.speech_compares_history.length &&
+        s.speech_compares_history[
+          s.speech_compares_history.length - 1
+        ].hasOwnProperty("speech_score")
+      ) {
         if (s.is_reference_signal) {
-          return s.speech_compares_history[0].speech_score;
+          reference_speech.push(
+            Number(
+              s.speech_compares_history[s.speech_compares_history.length - 1]
+                .speech_score
+            )
+          );
         } else {
-          not_reference_speech.push(s.speech_compares_history[0].speech_score);
+          not_reference_speech.push(
+            Number(
+              s.speech_compares_history[s.speech_compares_history.length - 1]
+                .speech_score
+            )
+          );
         }
       }
     });
+    if (!reference_speech.length) {
+      compareSessions.forEach((sess: any) => {
+        if (sess.speech_array.length) {
+          sess.speech_array.forEach((s: any) => {
+            if (
+              s.speech_compares_history.length &&
+              s.speech_compares_history[
+                s.speech_compares_history.length - 1
+              ].hasOwnProperty("speech_score")
+            ) {
+              reference_speech.push(
+                Number(
+                  s.speech_compares_history[
+                    s.speech_compares_history.length - 1
+                  ].speech_score
+                )
+              );
+            }
+          });
+        }
+      });
+    } else {
+      compareSessions.forEach((sess: any) => {
+        if (sess.speech_array.length) {
+          sess.speech_array.forEach((s: any) => {
+            if (
+              s.speech_compares_history.length &&
+              s.speech_compares_history[
+                s.speech_compares_history.length - 1
+              ].hasOwnProperty("speech_score")
+            ) {
+              not_reference_speech.push(
+                Number(
+                  s.speech_compares_history[
+                    s.speech_compares_history.length - 1
+                  ].speech_score
+                )
+              );
+            }
+          });
+        }
+      });
+    }
+    if (reference_speech.length && not_reference_speech.length) {
+      while (reference_speech.length < not_reference_speech.length) {
+        reference_speech.push(100);
+      }
+      while (reference_speech.length > not_reference_speech.length) {
+        not_reference_speech.push(0);
+      }
+    }
   }
-  const groups = not_reference_speech.map(({ e }: any) => {
-    return { data: [e, ...reference_speech] };
-  });
   return (
     <Dialog open={open} onClose={handleCloseChart} fullWidth>
       <DialogContent>
@@ -28,16 +93,25 @@ export const SlogChart = ({ handleCloseChart, open, sessionsData }: any) => {
           <span>Сеансы не оценёны, невозможно построить график!</span>
         ) : !not_reference_speech.length ? (
           <span>
-            Отсутсвуют оценённые неэталонные, невозможно построить график!
+            Отсутсвуют оценённые неэталонные сеансы, невозможно построить
+            график!
           </span>
         ) : !reference_speech.length ? (
           <span>
-            Отсутсвуют оценённые эталонные, невозможно построить график!
+            Отсутсвуют оценённые эталонные сеансы, невозможно построить график!
           </span>
         ) : (
           <BarChart
-            xAxis={[{ scaleType: "band" }]}
-            series={groups}
+            series={[
+              {
+                data: reference_speech,
+                label: "Эталон",
+              },
+              {
+                data: not_reference_speech,
+                label: "Не эталон",
+              },
+            ]}
             width={500}
             height={300}
           />

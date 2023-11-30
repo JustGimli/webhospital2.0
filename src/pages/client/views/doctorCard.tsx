@@ -163,6 +163,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
                 speechId={speech}
                 handleButtonNext={handleButtonNext}
                 patientID={client.card}
+                phrasesold={[]}
               />
             </>
           ) : (

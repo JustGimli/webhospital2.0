@@ -26,15 +26,11 @@ import { client, doctor } from "../../..";
 import { useParams } from "react-router-dom";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import {
-  ShowErrorToastMessage,
-  ShowSuccessToastMessage,
-} from "../../../utils/toasts";
 import { PhraseChart } from "../../../widgets/phraseChart";
 import { SlogChart } from "../../../widgets/slogChart";
-import { RecorderVoiceItem } from "../../../widgets/recordDoc";
+import { RecorderVoiceItem } from "../../../widgets/recordClient";
 
-export const SessionCard = () => {
+export const SessionCardP = () => {
   const { patientID, session, type, flag } = useParams();
   const [sessionsData, setData] = useState(null);
   const [compareSessions, setSessions] = useState<any>([]);
@@ -51,10 +47,13 @@ export const SessionCard = () => {
     });
     promise.then((result) => {
       setData(result);
-      const vals = result.speech_array.map((el: any) => {
-        return el.real_value;
-      });
-      setValues(vals);
+      console.log(result);
+      if (result.speech_array.length) {
+        const vals = result.speech_array.map((el: any) => {
+          return el.real_value;
+        });
+        setValues(vals);
+      }
     });
   }, []);
   useEffect(() => {
@@ -99,15 +98,6 @@ export const SessionCard = () => {
     setOpenChartSlog(false);
   };
 
-  const handleEstimate = async () => {
-    const res = doctor.estimateSpeech(patientID, session);
-
-    if (Object.keys(res).length === 0) {
-      // ShowErrorToastMessage();
-    } else {
-      ShowSuccessToastMessage("Оценка займет некоторое время");
-    }
-  };
   return (
     <div className="mx-10">
       {addPhrase && (
@@ -159,16 +149,6 @@ export const SessionCard = () => {
             sx={{ px: 3, py: 1, borderRadius: "10px", marginRight: "10px" }}
           >
             {type == "ф" ? "График фраз" : "График слогов"}
-          </Button>
-        </div>
-        <div>
-          <Button
-            variant="contained"
-            onClick={handleEstimate}
-            size="large"
-            sx={{ px: 3, py: 1, borderRadius: "10px", marginRight: "10px" }}
-          >
-            Оценить
           </Button>
         </div>
         <div>
@@ -338,6 +318,7 @@ const PatientDialogExists = ({
           {step === 1 ? (
             <>
               <RecorderVoiceItem
+                patientID={card}
                 speechId={{
                   session_id: session,
                   session_type: sessiontype == "фразы" ? "фраз" : "слог",

@@ -13,6 +13,7 @@ export const PhraseChart = ({
   if (sessionsData.speech_array.length) {
     sessionsData.speech_array.forEach((s: any) => {
       if (
+        s.speech_compares_history.length &&
         s.speech_compares_history[
           s.speech_compares_history.length - 1
         ].hasOwnProperty("speech_score")
@@ -38,12 +39,20 @@ export const PhraseChart = ({
       compareSessions.forEach((sess: any) => {
         if (sess.speech_array.length) {
           sess.speech_array.forEach((s: any) => {
-            reference_speech.push(
-              Number(
-                s.speech_compares_history[s.speech_compares_history.length - 1]
-                  .speech_score
-              )
-            );
+            if (
+              s.speech_compares_history.length &&
+              s.speech_compares_history[
+                s.speech_compares_history.length - 1
+              ].hasOwnProperty("speech_score")
+            ) {
+              reference_speech.push(
+                Number(
+                  s.speech_compares_history[
+                    s.speech_compares_history.length - 1
+                  ].speech_score
+                )
+              );
+            }
           });
         }
       });
@@ -51,21 +60,31 @@ export const PhraseChart = ({
       compareSessions.forEach((sess: any) => {
         if (sess.speech_array.length) {
           sess.speech_array.forEach((s: any) => {
-            not_reference_speech.push(
-              Number(
-                s.speech_compares_history[s.speech_compares_history.length - 1]
-                  .speech_score
-              )
-            );
+            if (
+              s.speech_compares_history.length &&
+              s.speech_compares_history[
+                s.speech_compares_history.length - 1
+              ].hasOwnProperty("speech_score")
+            ) {
+              not_reference_speech.push(
+                Number(
+                  s.speech_compares_history[
+                    s.speech_compares_history.length - 1
+                  ].speech_score
+                )
+              );
+            }
           });
         }
       });
     }
-    while (reference_speech.length < not_reference_speech.length) {
-      reference_speech.push(100);
-    }
-    while (reference_speech.length > not_reference_speech.length) {
-      reference_speech.pop();
+    if (reference_speech.length && not_reference_speech.length) {
+      while (reference_speech.length < not_reference_speech.length) {
+        reference_speech.push(100);
+      }
+      while (reference_speech.length > not_reference_speech.length) {
+        not_reference_speech.push(0);
+      }
     }
   }
   return (
@@ -75,11 +94,12 @@ export const PhraseChart = ({
           <span>Сеансы не оценёны, невозможно построить график!</span>
         ) : !not_reference_speech.length ? (
           <span>
-            Отсутсвуют оценённые неэталонные, невозможно построить график!
+            Отсутсвуют оценённые неэталонные сеансы, невозможно построить
+            график!
           </span>
         ) : !reference_speech.length ? (
           <span>
-            Отсутсвуют оценённые эталонные, невозможно построить график!
+            Отсутсвуют оценённые эталонные сеансы, невозможно построить график!
           </span>
         ) : (
           <BarChart

@@ -14,10 +14,12 @@ import {
   PATIENTCARD,
   PATIENTCHANGEPASS,
   PATIENTSPEECHLIST,
+  PATIENTSPEECHLISTP,
 } from "./const";
 
 import { PatientRoot } from "../pages/client";
 import { SessionCard } from "../pages/doctor/views/sessionCard";
+import { SessionCardP } from "../pages/client/views/sessionCardClient";
 
 export const MainURL = [
   {
@@ -68,7 +70,7 @@ export const PatientURL = [
     path: PATIENTCHANGEPASS,
   },
   {
-    Component: SessionCard,
-    path: PATIENTSPEECHLIST,
+    Component: SessionCardP,
+    path: PATIENTSPEECHLISTP,
   },
 ];

@@ -15,4 +15,5 @@ export const PATIENTSPEECHLIST = "/card/:patientID/:type/:flag/:session";
 
 export const PATIENTROOT = "/patient";
 export const DOCTORCARDFORPATIENT = "/card";
+export const PATIENTSPEECHLISTP = "/card/:patientID/:type/:flag/:session";
 export const DOCTORBASE = "";
