@@ -59,9 +59,9 @@ export const PatientCardPage = () => {
         <div className="flex flex-wrap justify-between">
           <ProfileCard patient={patient} />
 
-          <SlogChart />
+          {/* <SlogChart /> */}
 
-          <PhraseChart />
+          {/* <PhraseChart /> */}
         </div>
         <div className="flex justify-between w-full my-5">
           <div style={{ fontSize: "24px" }}>Сеансы оценки качества речи</div>
@@ -74,7 +74,7 @@ export const PatientCardPage = () => {
             Добавить сеанс
           </Button>
         </div>
-        {speechList.length ? (
+        {speechList?.length ? (
           <SessionList speechList={speechList} name={"doc"} />
         ) : (
           <span style={{ fontSize: 16 }}>Сеансы отсутсвуют</span>
@@ -102,7 +102,9 @@ const ProfileCard = ({ patient }: any) => {
             <span style={{ fontSize: 16 }} className="font-bold">
               <b>{data[key]}: </b>
             </span>
-            <span style={{ paddingLeft: 5 }}>{val}</span>
+            <span style={{ paddingLeft: 5 }}>
+              {key === "gender" ? (val === "m" ? "мужчина" : "женщина") : val}
+            </span>
             <br />
           </div>
         ))}

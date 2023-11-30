@@ -202,7 +202,7 @@ const SessionTable = () => {
     setAudioSrc("data:audio/wav;base64," + res.base64_value);
     setIsPlaying(true);
   };
-
+  console.log(data);
   return isLoading ? (
     <div className="flex justify-center w-full">
       <CircularProgress />
@@ -280,38 +280,19 @@ const PatientDialogExists = ({
       handleClose();
     }
   };
-  let pharses: any = [];
-  const checkSeans = (): boolean => {
-    if (
-      !prevSess.hasOwnProperty("phrases") ||
-      !prevSess.hasOwnProperty("syllables")
-    ) {
-      return false;
-    }
-    if (seans.session_type == sessiontype) {
-      let key = 1;
-      if (sessiontype == "фразы") key = 0;
-      const values = seans.speech_array.map((el: any) => {
-        return el.real_value;
-      });
-      pharses = prevSess[key].filter((word: any) => !values.includes(word));
-      return true;
-    }
-    return false;
-  };
-
+  let key = "syllables";
+  if (sessiontype == "фразы") key = "phrases";
+  const values = seans.speech_array.map((el: any) => {
+    return el.real_value;
+  });
+  const pharses = prevSess[key].filter((word: any) => !values.includes(word));
+  console.log(prevSess);
+  console.log(seans);
   return (
     <>
-      {!prevSess ||
-      !seans ||
-      !seans.hasOwnProperty("speech_array") ||
-      !checkSeans() ? (
-        <PatientDialog open={open} handleClose={handleClose} card={card} />
-      ) : (
-        <></>
-      )}
-      {/* <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>
+      <Dialog open={open} onClose={handleClose} fullWidth>
+        aboba
+        {/* <DialogTitle>
           <Stepper activeStep={step}>
             {steps.map((label) => (
               <Step key={label}>
@@ -351,8 +332,8 @@ const PatientDialogExists = ({
               Завершить
             </Button>
           )}
-        </DialogActions>
-      </Dialog> */}
+        </DialogActions> */}
+      </Dialog>
     </>
   );
 };

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { AudioRecorder } from "react-audio-voice-recorder";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 // import "react-audio-voice-recorder/dist/index.css";
 import { IconButton, Button } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
@@ -34,8 +34,9 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
     }
     setIndex(index + 1);
     setisMic(!isMic);
+    console.log(index);
+    console.log(isMic);
   };
-
   return (
     <>
       <div>
@@ -91,10 +92,11 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
         base64_value_segment: "",
         real_value: real_val,
       };
-
       doctor
         .updateSessionSpeech(speechId, data)
-        .then(() => handleIndex())
+        .then(() => {
+          handleIndex();
+        })
         .catch((error) =>
           console.error("Error updating session speech:", error)
         );
@@ -105,7 +107,7 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
     <div>
       <div className="flex justify-center">
         <AudioRecorder
-          onRecordingComplete={onStop}
+          onRecordingComplete={(blob) => onStop(blob)}
           audioTrackConstraints={{
             noiseSuppression: true,
             echoCancellation: true,
