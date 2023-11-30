@@ -29,7 +29,6 @@ export const DoctorCardPage = observer(() => {
       const res = await client.getPatient();
       if (res) {
         setSpeechList(res.sessions);
-        console.log(speechList);
       }
     })();
   }, []);
@@ -54,14 +53,12 @@ export const DoctorCardPage = observer(() => {
         <ProfileCard />
 
         <div className="flex justify-between w-full my-5">
-          <span className="text-2xl">
-            Сеансы оценки качества речи
-          </span>
+          <span className="text-2xl">Сеансы оценки качества речи</span>
           <Button
-              variant="contained"
-              onClick={handleClose}
-              size="large"
-              sx={{ px: 3, py: 1, borderRadius: "10px" }}
+            variant="contained"
+            onClick={handleClose}
+            size="large"
+            sx={{ px: 3, py: 1, borderRadius: "10px" }}
           >
             Добавить сеанс
           </Button>
@@ -123,7 +120,11 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
   const handleButtonNext = async () => {
     if (step === 0) {
       const sp = await client.createSession(session_type);
-      setSpeech({ sessionId: sp, session_type: session_type, sessionPatient: card});
+      setSpeech({
+        sessionId: sp,
+        session_type: session_type,
+        sessionPatient: card,
+      });
     }
 
     setStep(step + 1);
