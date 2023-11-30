@@ -69,7 +69,7 @@ export const PatientCardPage = () => {
           </Button>
         </div>
         {speechList?.length ? (
-          <SessionList speechList={speechList} name={"doc"} />
+          <SessionList speechList={speechList} name="doctor" />
         ) : (
           <span style={{ fontSize: 16 }}>Сеансы отсутсвуют</span>
         )}

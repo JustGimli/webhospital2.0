@@ -22,7 +22,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
-import { doctor } from "../../..";
+import { client, doctor } from "../../..";
 import { useParams } from "react-router-dom";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
@@ -37,6 +37,7 @@ import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 export const SessionCard = () => {
   const { patientID, session, type, flag } = useParams();
   const [sessionsData, setData] = useState(null);
+  const [compareSessions, setSessions] = useState<any>([]);
   const [values, setValues] = useState([]);
   const [reload, setReload] = useState<boolean>(false);
   const [openChartPhrases, setOpenChartPrases] = useState<boolean>(false);
@@ -54,11 +55,35 @@ export const SessionCard = () => {
         return el.real_value;
       });
       setValues(vals);
-      console.log(sessionsData);
-      console.log(values);
     });
   }, []);
-
+  useEffect(() => {
+    (async () => {
+      const res = await doctor.getPatient(Number(patientID));
+      if (res) {
+        const tp = type === "ф" ? "фразы" : "слоги";
+        let buf: any[] = [];
+        res.sessions.forEach((element: any) => {
+          if (
+            element.session_type == tp &&
+            Number(element.is_reference_session) != Number(flag)
+          ) {
+            const promise = new Promise<any>((resolve) => {
+              const res = doctor.getPatientSessionInfo(
+                patientID,
+                element.session_id
+              );
+              resolve(res);
+            });
+            promise.then((result) => {
+              buf.push(result);
+            });
+          }
+        });
+        setSessions(buf);
+      }
+    })();
+  }, []);
   const handleClose = () => {
     setAddPhrase(!addPhrase);
     setReload(true);
@@ -83,7 +108,6 @@ export const SessionCard = () => {
       ShowSuccessToastMessage("Оценка займет некоторое время");
     }
   };
-
   return (
     <div className="mx-10">
       {addPhrase && (
@@ -101,6 +125,7 @@ export const SessionCard = () => {
           handleCloseChart={handleCloseChart}
           open={openChartPhrases}
           sessionsData={sessionsData}
+          compareSessions={compareSessions}
         />
       )}
       {openChartSlog && (

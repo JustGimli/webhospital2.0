@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { useNavigate, useParams } from "react-router-dom";
-import { DOCTORROOT } from "../utils/const";
+import { DOCTORROOT, PATIENTROOT } from "../utils/const";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import { useState } from "react";
 import { doctor } from "..";
@@ -30,19 +30,17 @@ export const SessionList = ({ speechList, name }: any) => {
   const [isOpen, setIsOpen] = useState<any>();
 
   const handleClick = (sessionID: any, sessionType: any, flag: any) => {
-    if (name === "doc") {
-      navigate(
-        DOCTORROOT +
-          "/card/" +
-          patientID +
-          "/" +
-          sessionType[0] +
-          "/" +
-          Number(flag) +
-          "/" +
-          sessionID
-      );
-    }
+    navigate(
+      (name == "doctor" ? DOCTORROOT : PATIENTROOT) +
+        "/card/" +
+        patientID +
+        "/" +
+        sessionType[0] +
+        "/" +
+        Number(flag) +
+        "/" +
+        sessionID
+    );
   };
 
   const handleCompare = (e: any) => {

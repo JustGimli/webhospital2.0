@@ -67,4 +67,8 @@ export const PatientURL = [
     Component: ChangePassPage,
     path: PATIENTCHANGEPASS,
   },
+  {
+    Component: SessionCard,
+    path: PATIENTSPEECHLIST,
+  },
 ];

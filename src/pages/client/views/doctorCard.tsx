@@ -65,7 +65,7 @@ export const DoctorCardPage = observer(() => {
         </div>
         <div className="flex justify-between w-full gap-x-5 mt-5">
           {speechList.length ? (
-            <SessionList speechList={speechList} name="cl" />
+            <SessionList speechList={speechList} name="patient" />
           ) : (
             <span style={{ fontSize: 16 }}>Сеансы отсутсвуют</span>
           )}

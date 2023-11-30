@@ -1,26 +1,89 @@
 import { BarChart } from "@mui/x-charts";
 
 import { Dialog, DialogContent } from "@mui/material";
+import { useEffect } from "react";
 
-export const PhraseChart = ({ handleCloseChart, open, sessionsData }: any) => {
-  let reference_speech: any[] = [];
-  let not_reference_speech: any[] = [];
+export const PhraseChart = ({
+  handleCloseChart,
+  open,
+  sessionsData,
+  compareSessions,
+}: any) => {
+  let reference_speech: number[] = [];
+  let not_reference_speech: number[] = [];
   if (sessionsData.speech_array.length) {
-    reference_speech = sessionsData.speech_array.map((s: any) => {
-      if (s.hasOwnProperty("speech_score")) {
+    sessionsData.speech_array.forEach((s: any) => {
+      if (
+        s.speech_compares_history[
+          s.speech_compares_history.length - 1
+        ].hasOwnProperty("speech_score")
+      ) {
         if (s.is_reference_signal) {
-          return s.speech_score;
+          reference_speech.push(
+            Number(
+              s.speech_compares_history[s.speech_compares_history.length - 1]
+                .speech_score
+            )
+          );
         } else {
-          not_reference_speech.push(s.speech_score);
+          not_reference_speech.push(
+            Number(
+              s.speech_compares_history[s.speech_compares_history.length - 1]
+                .speech_score
+            )
+          );
         }
       }
     });
+    if (!reference_speech.length) {
+      compareSessions.forEach((sess: any) => {
+        if (sess.speech_array.length) {
+          sess.speech_array.forEach((s: any) => {
+            reference_speech.push(
+              Number(
+                s.speech_compares_history[s.speech_compares_history.length - 1]
+                  .speech_score
+              )
+            );
+          });
+        }
+      });
+    } else {
+      compareSessions.forEach((sess: any) => {
+        if (sess.speech_array.length) {
+          sess.speech_array.forEach((s: any) => {
+            not_reference_speech.push(
+              Number(
+                s.speech_compares_history[s.speech_compares_history.length - 1]
+                  .speech_score
+              )
+            );
+          });
+        }
+      });
+    }
+    while (reference_speech.length < not_reference_speech.length) {
+      reference_speech.push(100);
+    }
+    while (reference_speech.length > not_reference_speech.length) {
+      reference_speech.pop();
+    }
+    console.log(reference_speech);
+    console.log(not_reference_speech);
   }
   return (
     <Dialog open={open} onClose={handleCloseChart} fullWidth>
       <DialogContent>
-        {!not_reference_speech.length ? (
-          <span>Сеанс не оценён, невозможно построить график!</span>
+        {!not_reference_speech.length && !reference_speech.length ? (
+          <span>Сеансы не оценёны, невозможно построить график!</span>
+        ) : !not_reference_speech.length ? (
+          <span>
+            Отсутсвуют оценённые неэталонные, невозможно построить график!
+          </span>
+        ) : !reference_speech.length ? (
+          <span>
+            Отсутсвуют оценённые эталонные, невозможно построить график!
+          </span>
         ) : (
           <BarChart
             xAxis={[
