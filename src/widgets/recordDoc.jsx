@@ -7,7 +7,11 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useParams } from "react-router-dom";
 import { doctor } from "..";
 
-export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
+export const RecorderVoiceItem = ({
+  speechId,
+  handleButtonNext,
+  phrasesold,
+}) => {
   const { patientID } = useParams();
   const [phrases, setPhrases] = useState([]);
   const [index, setIndex] = useState(1);
@@ -21,12 +25,15 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
         speechId.session_type === "фраз"
           ? speechId.session_type + "а"
           : speechId.session_type;
-
-      setPhrases(speechType === "слог" ? res.syllables : res.phrases);
+      if (phrasesold && phrasesold.length !== 0) {
+        setPhrases(phrasesold);
+      } else {
+        setPhrases(speechType === "слог" ? res.syllables : res.phrases);
+      }
     };
 
     fetchData();
-  }, [patientID, speechId]);
+  }, [speechId, handleButtonNext]);
 
   const handleIndex = () => {
     if (index + 1 > phrases.length) {
@@ -34,13 +41,11 @@ export const RecorderVoiceItem = ({ speechId, handleButtonNext }) => {
     }
     setIndex(index + 1);
     setisMic(!isMic);
-    console.log(index);
-    console.log(isMic);
   };
   return (
     <>
       <div>
-        Фраза {index}/{phrases.length}: {phrases[index - 1]}
+        Фраза {index}/{phrases?.length}: {phrases[index - 1]}
       </div>
       {isMic ? (
         <RecordVoice

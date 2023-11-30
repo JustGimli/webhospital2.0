@@ -37,6 +37,8 @@ import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 export const SessionCard = () => {
   const { patientID, session, type, flag } = useParams();
   const [sessionsData, setData] = useState(null);
+  const [values, setValues] = useState([]);
+  const [reload, setReload] = useState<boolean>(false);
   const [openChartPhrases, setOpenChartPrases] = useState<boolean>(false);
   const [openChartSlog, setOpenChartSlog] = useState<boolean>(false);
   const [addPhrase, setAddPhrase] = useState<boolean>(false);
@@ -48,11 +50,18 @@ export const SessionCard = () => {
     });
     promise.then((result) => {
       setData(result);
+      const vals = result.speech_array.map((el: any) => {
+        return el.real_value;
+      });
+      setValues(vals);
+      console.log(sessionsData);
+      console.log(values);
     });
   }, []);
 
   const handleClose = () => {
     setAddPhrase(!addPhrase);
+    setReload(true);
   };
   const handlePhrases = () => {
     setOpenChartPrases(true);
@@ -84,7 +93,7 @@ export const SessionCard = () => {
           handleClose={handleClose}
           session={session}
           sessiontype={type == "ф" ? "фразы" : "слоги"}
-          seans={sessionsData}
+          values={values}
         />
       )}
       {openChartPhrases && (
@@ -148,12 +157,12 @@ export const SessionCard = () => {
         </div>
       </div>
 
-      <SessionTable />
+      <SessionTable reload={reload} setReload={setReload} />
     </div>
   );
 };
 
-const SessionTable = () => {
+const SessionTable = ({ reload, setReload }: any) => {
   const [data, setData] = useState({ speech_array: [] });
   const [isLoading, setisLoading] = useState(false);
   const { patientID, session } = useParams();
@@ -167,7 +176,8 @@ const SessionTable = () => {
       setData(d1);
       setisLoading(false);
     })();
-  }, []);
+    setReload(false);
+  }, [reload]);
 
   const handleDownload = async (phrase: any) => {
     const res = await doctor.getSpeech(patientID, session, phrase);
@@ -202,7 +212,6 @@ const SessionTable = () => {
     setAudioSrc("data:audio/wav;base64," + res.base64_value);
     setIsPlaying(true);
   };
-  console.log(data);
   return isLoading ? (
     <div className="flex justify-center w-full">
       <CircularProgress />
@@ -257,19 +266,25 @@ const PatientDialogExists = ({
   card,
   session,
   sessiontype,
-  seans,
+  values,
 }: any) => {
   const [prevSess, setPrevSess] = useState<any>(null);
   const [step, setStep] = useState<any>(1);
-  const [speech, setSpeech] = useState<any>(null);
-
+  let key = "syllables";
+  if (sessiontype == "фразы") {
+    key = "phrases";
+  }
   useEffect(() => {
     const promise = new Promise<any>((resolve) => {
       const res = doctor.getExampleSpeech(card, session);
       resolve(res);
     });
     promise.then((result) => {
-      setPrevSess(result);
+      const phrases = result[key].filter((el: any) => !values.includes(el));
+      setPrevSess(phrases);
+      if (phrases.length == 0) {
+        handleButtonNext();
+      }
     });
   }, []);
 
@@ -280,87 +295,7 @@ const PatientDialogExists = ({
       handleClose();
     }
   };
-  let key = "syllables";
-  if (sessiontype == "фразы") key = "phrases";
-  const values = seans.speech_array.map((el: any) => {
-    return el.real_value;
-  });
-  const pharses = prevSess[key].filter((word: any) => !values.includes(word));
-  console.log(prevSess);
-  console.log(seans);
-  return (
-    <>
-      <Dialog open={open} onClose={handleClose} fullWidth>
-        aboba
-        {/* <DialogTitle>
-          <Stepper activeStep={step}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        </DialogTitle>
-        <DialogContent>
-          {step === 0 ? (
-            <>
-              <IputType
-                setIsRef={setIsRef}
-                setSessionType={setSessionType}
-                is_reference_session={is_reference_session}
-                session_type={session_type}
-              />
-            </>
-          ) : step === 1 ? (
-            <>
-              <RecorderVoiceItem
-                speechId={speech}
-                handleButtonNext={handleButtonNext}
-              />
-            </>
-          ) : (
-            <>Вы записали все речи</>
-          )}
-        </DialogContent>
-        <DialogActions>
-          {step === 0 ? (
-            <Button onClick={handleButtonNext} variant="contained">
-              Вперед
-            </Button>
-          ) : (
-            <Button onClick={handleButtonNext} variant="contained">
-              Завершить
-            </Button>
-          )}
-        </DialogActions> */}
-      </Dialog>
-    </>
-  );
-};
 
-const PatientDialog = ({ open, handleClose, card }: any) => {
-  const [step, setStep] = useState<any>(0);
-  const [is_reference_session, setIsRef] = useState(1);
-  const [session_type, setSessionType] = useState("фраз");
-  const [speech, setSpeech] = useState<any>(null);
-
-  const handleButtonNext = async () => {
-    if (step === 0) {
-      const sp = await doctor.createScenario(
-        card,
-        is_reference_session,
-        session_type === "фраз" ? session_type + "ы" : session_type + "и"
-      );
-      setSpeech({ ...sp, session_type: session_type, sessionPatient: card });
-    }
-
-    setStep(step + 1);
-
-    if (step === 2) {
-      setStep(0);
-      handleClose();
-    }
-  };
   return (
     <>
       <Dialog open={open} onClose={handleClose} fullWidth>
@@ -374,19 +309,15 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
           </Stepper>
         </DialogTitle>
         <DialogContent>
-          {step === 0 ? (
-            <>
-              <IputType
-                setIsRef={setIsRef}
-                setSessionType={setSessionType}
-                is_reference_session={is_reference_session}
-                session_type={session_type}
-              />
-            </>
-          ) : step === 1 ? (
+          {step === 1 ? (
             <>
               <RecorderVoiceItem
-                speechId={speech}
+                speechId={{
+                  session_id: session,
+                  session_type: sessiontype == "фразы" ? "фраз" : "слог",
+                  sessionPatient: card,
+                }}
+                phrasesold={prevSess}
                 handleButtonNext={handleButtonNext}
               />
             </>
@@ -395,56 +326,11 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
           )}
         </DialogContent>
         <DialogActions>
-          {step === 0 ? (
-            <Button onClick={handleButtonNext} variant="contained">
-              Вперед
-            </Button>
-          ) : (
-            <Button onClick={handleButtonNext} variant="contained">
-              Завершить
-            </Button>
-          )}
+          <Button onClick={handleButtonNext} variant="contained">
+            Завершить
+          </Button>
         </DialogActions>
       </Dialog>
-    </>
-  );
-};
-
-const IputType = ({
-  setIsRef,
-  setSessionType,
-  is_reference_session,
-  session_type,
-}: any) => {
-  return (
-    <>
-      <FormControl variant="outlined" fullWidth margin="normal" required>
-        <InputLabel>Тип сеанса</InputLabel>
-        <Select
-          value={is_reference_session}
-          onChange={(e: any) => {
-            setIsRef(e.target.value);
-          }}
-          label="Тип сигнала"
-        >
-          <MenuItem value={1}>Эталонный</MenuItem>
-
-          <MenuItem value={0}>Не эталонный</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl variant="outlined" fullWidth margin="normal" required>
-        <InputLabel>Тип сигнала</InputLabel>
-        <Select
-          value={session_type}
-          onChange={(e: any) => {
-            setSessionType(e.target.value);
-          }}
-          label="Тип сигнала"
-        >
-          <MenuItem value="фраз">Фраза</MenuItem>
-          <MenuItem value="слог">Слог</MenuItem>
-        </Select>
-      </FormControl>
     </>
   );
 };

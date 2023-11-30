@@ -113,7 +113,7 @@ const ProfileCard = observer(() => {
 });
 const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
-  const [is_reference_session, setIsRef] = useState(1);
+  const [is_reference_session, setIsRef] = useState(0);
   const [session_type, setSessionType] = useState("фразы");
   const [speech, setSpeech] = useState<any>({});
 
@@ -200,8 +200,9 @@ const IputType = ({
             setIsRef(e.target.value);
           }}
           label="Тип сигнала"
+          defaultValue={is_reference_session}
         >
-          <MenuItem value={1}>Эталонный</MenuItem>
+          {/* <MenuItem value={1}>Эталонный</MenuItem> */}
 
           <MenuItem value={0}>Не эталонный</MenuItem>
         </Select>

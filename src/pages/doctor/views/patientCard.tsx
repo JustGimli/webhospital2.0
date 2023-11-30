@@ -18,8 +18,6 @@ import { useParams } from "react-router-dom";
 import { doctor } from "../../..";
 import { SessionList } from "../../../widgets/sessionList";
 
-import { SlogChart } from "../../../widgets/slogChart";
-import { PhraseChart } from "../../../widgets/phraseChart";
 import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 
 export const PatientCardPage = () => {
@@ -58,10 +56,6 @@ export const PatientCardPage = () => {
         </div>
         <div className="flex flex-wrap justify-between">
           <ProfileCard patient={patient} />
-
-          {/* <SlogChart /> */}
-
-          {/* <PhraseChart /> */}
         </div>
         <div className="flex justify-between w-full my-5">
           <div style={{ fontSize: "24px" }}>Сеансы оценки качества речи</div>
@@ -172,6 +166,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
             <>
               <RecorderVoiceItem
                 speechId={speech}
+                phrasesold={[]}
                 handleButtonNext={handleButtonNext}
               />
             </>
