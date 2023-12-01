@@ -123,7 +123,7 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
             echoCancellation: true,
           }}
           downloadOnSavePress={true}
-          downloadFileExtension="mp3"
+          downloadFileExtension="webm"
           showVisualizer
         />
       </div>
