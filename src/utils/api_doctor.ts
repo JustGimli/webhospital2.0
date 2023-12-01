@@ -18,14 +18,18 @@ $api_doctor.interceptors.response.use(config => {
     return config
 }, (async(error) => {
     const originalRequest = error.config
-
-    if (originalRequest && !originalRequest._isRetry && error.response.status === 500)
+    console.log('1234')
+    console.log(error)
+    console.log(!originalRequest._isRetry)
+    if (error.message === "Network Error")
     {
-     
         originalRequest._isRetry = true
         try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}/update_tokens`, {refresh: getCookie('tok')})
-            localStorage.setItem('tok', response.data.access)
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}update_tokens`, {refresh: getCookie('tok')})
+            localStorage.setItem('tok', response.data.access_token)
+            document.cookie = `tok=${
+                response.data.refresh_token
+            }; path=/;`;
             return $api_doctor.request(originalRequest)
         }catch(error: any) {
             if (error.response.status === 500) {

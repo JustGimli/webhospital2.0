@@ -36,13 +36,11 @@ export const SessionCardP = () => {
       resolve(res);
     });
     promise.then((result) => {
-      console.log(result);
       if (result.sessions) {
         const sess = result.sessions.find(
           (el: any) => el.session_id === Number(session)
         );
         setSession(sess);
-        console.log(sess);
       }
     });
   }, []);
@@ -127,6 +125,7 @@ const PatientDialogExists = ({
   session,
   sessiontype,
 }: any) => {
+  console.log(session);
   const [step, setStep] = useState<any>(1);
   let key = "syllables";
   if (sessiontype == "фразы") {
