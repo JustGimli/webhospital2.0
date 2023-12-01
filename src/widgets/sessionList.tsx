@@ -33,19 +33,17 @@ export const SessionList = ({ speechList, name }: any) => {
   const [isOpen, setIsOpen] = useState<any>();
 
   const handleClick = (sessionID: any, sessionType: any, flag: any) => {
-    if (name == "doctor") {
-      navigate(
-        DOCTORROOT +
-          "/card/" +
-          patientID +
-          "/" +
-          sessionType[0] +
-          "/" +
-          Number(flag) +
-          "/" +
-          sessionID
-      );
-    }
+    navigate(
+      DOCTORROOT +
+        "/card/" +
+        patientID +
+        "/" +
+        sessionType[0] +
+        "/" +
+        Number(flag) +
+        "/" +
+        sessionID
+    );
   };
 
   const handleCompare = (e: any) => {
@@ -134,37 +132,37 @@ const DialogComponent = ({ open, handleClose, speechList, patientID }: any) => {
         <DialogTitle>Выбрать 1-2 сеансы для сравнения</DialogTitle>
         <DialogContent>
           <FormControl variant="outlined" fullWidth margin="normal" required>
-            <InputLabel>1 сеанс</InputLabel>
+            <InputLabel>Эталонный сеанс</InputLabel>
             <Select
               value={first}
               onChange={(e: any) => {
                 setFirst(e.target.value);
               }}
-              label="1 сеанс"
+              label="Эталонный сеанс"
             >
               {speechList.map(
                 (row: any) =>
-                  row.session_type === "слоги" && (
+                  row.session_type === "слоги" &&
+                  row.is_reference_session && (
                     <MenuItem value={row.session_id}>{row.session_id}</MenuItem>
                   )
               )}
             </Select>
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal" required>
-            <InputLabel>2 сеанс</InputLabel>
+            <InputLabel>Не эталонный сеанс</InputLabel>
             <Select
               value={second}
               onChange={(e: any) => {
                 setSecond(e.target.value);
               }}
-              label="2 сеанс"
+              label="Не эталонный сеанс"
             >
               {speechList.map(
                 (row: any) =>
-                  row.session_type === "слоги" && (
-                    <MenuItem value={row.session_id} defaultValue="">
-                      {row.session_id}
-                    </MenuItem>
+                  row.session_type === "слоги" &&
+                  !row.is_reference_session && (
+                    <MenuItem value={row.session_id}>{row.session_id}</MenuItem>
                   )
               )}
             </Select>
