@@ -22,7 +22,10 @@ import { DOCTORROOT, PATIENTROOT } from "../utils/const";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import { useState } from "react";
 import { doctor } from "..";
-import { ShowSuccessToastMessage } from "../utils/toasts";
+import {
+  ShowSuccessToastMessage,
+  ShowWarningToastMessage,
+} from "../utils/toasts";
 
 export const SessionList = ({ speechList, name }: any) => {
   const { patientID } = useParams();
@@ -91,9 +94,13 @@ export const SessionList = ({ speechList, name }: any) => {
                 </TableCell>
                 <TableCell>{row.session_type}</TableCell>
                 <TableCell align="right">
-                  <IconButton onClick={handleCompare}>
-                    <CompareArrowsIcon />
-                  </IconButton>
+                  {row.session_type === "слоги" ? (
+                    <IconButton onClick={handleCompare}>
+                      <CompareArrowsIcon />
+                    </IconButton>
+                  ) : (
+                    <></>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
@@ -107,7 +114,7 @@ export const SessionList = ({ speechList, name }: any) => {
 const DialogComponent = ({ open, handleClose, speechList, patientID }: any) => {
   const [first, setFirst] = useState<any>();
 
-  const [second, setSecond] = useState<any>();
+  const [second, setSecond] = useState(speechList[0]?.session_id || "");
 
   const handleEstimate = async () => {
     const data = {
@@ -116,6 +123,7 @@ const DialogComponent = ({ open, handleClose, speechList, patientID }: any) => {
 
     await doctor.estimatePhrase(patientID, data);
     ShowSuccessToastMessage("Сеансы упешно отправлены на сравнение!");
+    ShowWarningToastMessage("Проверка может занять некоторое время.");
   };
 
   return (
@@ -132,9 +140,12 @@ const DialogComponent = ({ open, handleClose, speechList, patientID }: any) => {
               }}
               label="1 сеанс"
             >
-              {speechList.map((row: any) => (
-                <MenuItem value={row.session_id}>{row.session_id}</MenuItem>
-              ))}
+              {speechList.map(
+                (row: any) =>
+                  row.session_type === "слоги" && (
+                    <MenuItem value={row.session_id}>{row.session_id}</MenuItem>
+                  )
+              )}
             </Select>
           </FormControl>
           <FormControl variant="outlined" fullWidth margin="normal" required>
@@ -146,9 +157,14 @@ const DialogComponent = ({ open, handleClose, speechList, patientID }: any) => {
               }}
               label="2 сеанс"
             >
-              {speechList.map((row: any) => (
-                <MenuItem value={row.session_id}>{row.session_id}</MenuItem>
-              ))}
+              {speechList.map(
+                (row: any) =>
+                  row.session_type === "слоги" && (
+                    <MenuItem value={row.session_id} defaultValue="">
+                      {row.session_id}
+                    </MenuItem>
+                  )
+              )}
             </Select>
           </FormControl>
         </DialogContent>

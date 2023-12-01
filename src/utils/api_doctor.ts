@@ -21,13 +21,16 @@ $api_doctor.interceptors.response.use(config => {
 
     if (originalRequest && !originalRequest._isRetry && error.response.status === 500)
     {
+     
         originalRequest._isRetry = true
         try {
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}/update_tokens`, {refresh: getCookie('tok')})
             localStorage.setItem('tok', response.data.access)
             return $api_doctor.request(originalRequest)
         }catch(error: any) {
-            if (error.response.status === 500) {}
+            if (error.response.status === 500) {
+
+            }
                 // window.location.href = '/login'
         }
     } else {
@@ -35,6 +38,7 @@ $api_doctor.interceptors.response.use(config => {
         // window.location.href = '/';
     }
     
+
     throw error
     
 }))
