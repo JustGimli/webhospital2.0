@@ -81,7 +81,6 @@ export const SessionCard = () => {
           }
         });
         setSessions(buf);
-        console.log(buf);
       }
     })();
   }, []);

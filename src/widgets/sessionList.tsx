@@ -31,17 +31,15 @@ export const SessionList = ({ speechList, name }: any) => {
 
   const handleClick = (sessionID: any, sessionType: any, flag: any) => {
     navigate(
-      name == "doctor"
-        ? DOCTORROOT
-        : PATIENTROOT +
-            "/card/" +
-            patientID +
-            "/" +
-            sessionType[0] +
-            "/" +
-            Number(flag) +
-            "/" +
-            sessionID
+      DOCTORROOT +
+        "/card/" +
+        patientID +
+        "/" +
+        sessionType[0] +
+        "/" +
+        Number(flag) +
+        "/" +
+        sessionID
     );
   };
 
