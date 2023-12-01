@@ -24,7 +24,6 @@ export const DoctorCardPage = observer(() => {
   const [speechList, setSpeechList] = useState<any>([]);
 
   useEffect(() => {
-    console.log(client.card);
     (async () => {
       const res = await client.getPatient();
       if (res) {
@@ -203,8 +202,6 @@ const IputType = ({
           label="Тип сигнала"
           defaultValue={is_reference_session}
         >
-          {/* <MenuItem value={1}>Эталонный</MenuItem> */}
-
           <MenuItem value={0}>Не эталонный</MenuItem>
         </Select>
       </FormControl>

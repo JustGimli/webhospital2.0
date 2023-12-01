@@ -19,19 +19,34 @@ import { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import { client, doctor } from "../../..";
 import { useParams } from "react-router-dom";
-
 import { RecorderVoiceItem } from "../../../widgets/recordClient";
 
 export const SessionCardP = () => {
   const { patientID, session, type, flag } = useParams();
   const [values, setValues] = useState([]);
-  const [reload, setReload] = useState<boolean>(false);
+  const [sessionData, setSession] = useState(null);
   const [addPhrase, setAddPhrase] = useState<boolean>(false);
 
   const handleClose = () => {
     setAddPhrase(!addPhrase);
-    setReload(true);
   };
+
+  useEffect(() => {
+    const promise = new Promise<any>((resolve) => {
+      const res = client.getPatient();
+      resolve(res);
+    });
+    promise.then((result) => {
+      console.log(result);
+      if (result.sessions) {
+        const sess = result.sessions.find(
+          (el: any) => el.session_id === Number(session)
+        );
+        setSession(sess);
+        console.log(sess);
+      }
+    });
+  }, []);
 
   return (
     <>
@@ -74,30 +89,14 @@ export const SessionCardP = () => {
           </div>
         </div>
 
-        <SessionTable reload={reload} setReload={setReload} />
+        <SessionTable session={sessionData} />
       </div>
     </>
   );
 };
 
-const SessionTable = ({ reload }: any) => {
-  const [data, setData] = useState({ sessions: [] });
-  const [isLoading, setisLoading] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      setisLoading(true);
-      const result = await client.getPatient();
-      setData(result);
-      setisLoading(false);
-    })();
-  }, [reload]);
-
-  return isLoading ? (
-    <div className="flex justify-center w-full">
-      <CircularProgress />
-    </div>
-  ) : Object.keys(data).length === 0 ? (
+const SessionTable = ({ session }: any) => {
+  return !session ? (
     <div className="flex justify-center w-full">Сеансы отсутсвуют!</div>
   ) : (
     <>
@@ -106,21 +105,16 @@ const SessionTable = ({ reload }: any) => {
           <TableHead>
             <TableRow>
               <TableCell>Индендефикатор</TableCell>
-              <TableCell>Реальная значение</TableCell>
               <TableCell>Тип</TableCell>
-              <TableCell></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.sessions.map((row: any) => (
-              <TableRow key={row.signal_id} style={{ cursor: "pointer" }}>
-                <TableCell component="th" scope="row">
-                  {row.session_id}
-                </TableCell>
-                <TableCell>{row.is_reference_session}</TableCell>
-                <TableCell>{row.session_type}</TableCell>
-              </TableRow>
-            ))}
+            <TableRow>
+              <TableCell component="th" scope="row">
+                {session.session_id}
+              </TableCell>
+              <TableCell>{session.session_type}</TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
@@ -148,11 +142,12 @@ const PatientDialogExists = ({
       resolve(res);
     });
     promise.then((result) => {
-      const phrases = result[key].filter((el: any) => !values.includes(el));
-      setPrevSess(phrases);
-      if (phrases.length == 0) {
-        handleButtonNext();
-      }
+      console.log(result);
+      // const phrases = result[key].filter((el: any) => !values.includes(el));
+      // setPrevSess(phrases);
+      // if (phrases.length == 0) {
+      //   handleButtonNext();
+      // }
     });
   }, []);
 

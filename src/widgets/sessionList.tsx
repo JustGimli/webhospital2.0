@@ -33,17 +33,31 @@ export const SessionList = ({ speechList, name }: any) => {
   const [isOpen, setIsOpen] = useState<any>();
 
   const handleClick = (sessionID: any, sessionType: any, flag: any) => {
-    navigate(
-      DOCTORROOT +
-        "/card/" +
-        patientID +
-        "/" +
-        sessionType[0] +
-        "/" +
-        Number(flag) +
-        "/" +
-        sessionID
-    );
+    if (name == "doctor") {
+      navigate(
+        DOCTORROOT +
+          "/card/" +
+          patientID +
+          "/" +
+          sessionType[0] +
+          "/" +
+          Number(flag) +
+          "/" +
+          sessionID
+      );
+    } else {
+      navigate(
+        PATIENTROOT +
+          "/card/" +
+          patientID +
+          "/" +
+          sessionType[0] +
+          "/" +
+          Number(flag) +
+          "/" +
+          sessionID
+      );
+    }
   };
 
   const handleCompare = (e: any) => {
@@ -69,7 +83,7 @@ export const SessionList = ({ speechList, name }: any) => {
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Индондефикатор сессии</TableCell>
+              <TableCell>Индентификатор сессии</TableCell>
               <TableCell>Тип сигнала</TableCell>
               <TableCell>Тип сеанса</TableCell>
               <TableCell></TableCell>
@@ -94,7 +108,7 @@ export const SessionList = ({ speechList, name }: any) => {
                 </TableCell>
                 <TableCell>{row.session_type}</TableCell>
                 <TableCell align="right">
-                  {row.session_type === "слоги" ? (
+                  {row.session_type === "слоги" && name == "doctor" ? (
                     <IconButton onClick={handleCompare}>
                       <CompareArrowsIcon />
                     </IconButton>
