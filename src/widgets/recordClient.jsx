@@ -15,7 +15,7 @@ export const RecorderVoiceItem = ({
   const [index, setIndex] = useState(1);
   const [isMic, setisMic] = useState(false);
   const [audioData, setAudioData] = useState(null);
-
+  console.log(speechId.session_id);
   useEffect(() => {
     const fetchData = async () => {
       const res = await client.getPhrases(speechId.session_id);
@@ -28,7 +28,6 @@ export const RecorderVoiceItem = ({
     };
 
     fetchData();
-    console.log(phrases);
   }, [patientID, speechId]);
 
   const handleIndex = () => {
@@ -36,7 +35,36 @@ export const RecorderVoiceItem = ({
       handleButtonNext();
     }
     setIndex(index + 1);
-    setisMic(!isMic);
+    if (isMic) setisMic(!isMic);
+  };
+
+  const handleFile = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        const base64 = reader.result.split(",")[1];
+        console.log(base64);
+        const data = {
+          speech_type:
+            speechId.session_type === "фраз"
+              ? speechId.session_type + "а"
+              : speechId.session_type,
+          base64_value: base64,
+          base64_value_segment: "",
+          real_value: phrases[index - 1],
+        };
+        doctor
+          .updateSessionSpeech(speechId, data)
+          .then(() => {
+            handleIndex();
+          })
+          .catch((error) =>
+            console.error("Error updating session speech:", error)
+          );
+      };
+    }
   };
 
   return (
@@ -69,8 +97,8 @@ export const RecorderVoiceItem = ({
             Upload file
             <input
               type="file"
-              onChange={(event) => setAudioData(event.target.files[0])}
-              accept=".wav"
+              onChange={(event) => handleFile(event)}
+              accept=".webm"
               style={{ display: "none" }}
             />
           </Button>
@@ -100,10 +128,9 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
         base64_value_segment: "",
         real_value: real_val,
       };
-
       client
         .saveAudio(
-          speechId.sessionId,
+          speechId.session_id,
           data.speech_type,
           data.base64_value,
           data.real_value
@@ -124,7 +151,7 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
             echoCancellation: true,
           }}
           downloadOnSavePress={true}
-          downloadFileExtension="wav"
+          downloadFileExtension="webm"
           showVisualizer
         />
       </div>
