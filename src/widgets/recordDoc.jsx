@@ -42,6 +42,11 @@ export const RecorderVoiceItem = ({
     setIndex(index + 1);
     setisMic(!isMic);
   };
+
+  // const handleFile = (event) => {
+
+  // }
+
   return (
     <>
       <div>
