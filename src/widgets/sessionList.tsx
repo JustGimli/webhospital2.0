@@ -33,7 +33,7 @@ export const SessionList = ({ speechList, name }: any) => {
   const [isOpen, setIsOpen] = useState<any>();
 
   const handleClick = (sessionID: any, sessionType: any, flag: any) => {
-    if (name == "doctor") {
+    if (name === "doctor") {
       navigate(
         DOCTORROOT +
           "/card/" +
