@@ -60,7 +60,7 @@ export const SessionCard = () => {
   useEffect(() => {
     (async () => {
       const res = await doctor.getPatient(Number(patientID));
-      if (res && res.length) {
+      if (res) {
         const tp = type === "ф" ? "фразы" : "слоги";
         let buf: any[] = [];
         res.sessions.forEach((element: any) => {
@@ -81,6 +81,7 @@ export const SessionCard = () => {
           }
         });
         setSessions(buf);
+        console.log(buf);
       }
     })();
   }, []);

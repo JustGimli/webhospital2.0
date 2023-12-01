@@ -8,12 +8,13 @@ export const PhraseChart = ({
   sessionsData,
   compareSessions,
 }: any) => {
+  console.log(sessionsData);
+  console.log(compareSessions);
   let reference_speech: number[] = [];
   let not_reference_speech: number[] = [];
   if (sessionsData.speech_array.length) {
     sessionsData.speech_array.forEach((s: any) => {
       if (
-        s.speech_compares_history.length &&
         s.speech_compares_history[
           s.speech_compares_history.length - 1
         ].hasOwnProperty("speech_score")
@@ -40,7 +41,6 @@ export const PhraseChart = ({
         if (sess.speech_array.length) {
           sess.speech_array.forEach((s: any) => {
             if (
-              s.speech_compares_history.length &&
               s.speech_compares_history[
                 s.speech_compares_history.length - 1
               ].hasOwnProperty("speech_score")
@@ -61,7 +61,6 @@ export const PhraseChart = ({
         if (sess.speech_array.length) {
           sess.speech_array.forEach((s: any) => {
             if (
-              s.speech_compares_history.length &&
               s.speech_compares_history[
                 s.speech_compares_history.length - 1
               ].hasOwnProperty("speech_score")
@@ -86,6 +85,8 @@ export const PhraseChart = ({
         not_reference_speech.push(0);
       }
     }
+    console.log(reference_speech);
+    console.log(not_reference_speech);
   }
   return (
     <Dialog open={open} onClose={handleCloseChart} fullWidth>
