@@ -10,15 +10,15 @@ export const PhraseChart = ({
 }: any) => {
   let reference_speech: number[] = [];
   let not_reference_speech: number[] = [];
-  if (sessionsData.speech_array.length) {
-    sessionsData.speech_array.forEach((s: any) => {
+  if (sessionsData.sessions.length) {
+    sessionsData.sessions.forEach((s: any) => {
       if (
         s.speech_compares_history.length &&
         s.speech_compares_history[
           s.speech_compares_history.length - 1
         ].hasOwnProperty("speech_score")
       ) {
-        if (s.is_reference_signal) {
+        if (s.is_reference_session) {
           reference_speech.push(
             Number(
               s.speech_compares_history[s.speech_compares_history.length - 1]
