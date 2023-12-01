@@ -3,33 +3,28 @@ import { Dialog, DialogContent } from "@mui/material";
 
 export const SlogChart = ({ handleCloseChart, open, sessionsData }: any) => {
   console.log(sessionsData);
-  let evals: any[] = [];
-  let x_nums: any[] = [];
-  sessionsData.forEach((element: any) => {
-    if (
-      element.session_compares_history.length &&
-      element.session_compares_history[0].compared_sessions_id &&
-      element.session_compares_history[0].compared_sessions_id.length === 2
-    ) {
-      x_nums.push(
-        element.session_compares_history[
-          element.session_compares_history.length - 1
-        ].compared_sessions_id[0] +
-          "/" +
-          element.session_compares_history[
-            element.session_compares_history.length - 1
-          ].compared_sessions_id[1]
-      );
-      evals.push({
-        data: element.session_compares_history[
-          element.session_compares_history.length - 1
-        ].session_score,
-        label: x_nums[x_nums.length - 1],
-      });
-    }
-  });
-  console.log(evals);
-  console.log(x_nums);
+  const validSessions = sessionsData.filter(
+    (session: any) =>
+      session.session_compares_history.length > 0 &&
+      session.session_compares_history[
+        session.session_compares_history.length - 1
+      ].compared_sessions_id.length > 1
+  );
+
+  // Extract data for the chart
+  const evals = validSessions.map(
+    (element: any) =>
+      element.session_compares_history[
+        element.session_compares_history.length - 1
+      ].session_score
+  );
+
+  const labels = validSessions.map((element: any) =>
+    element.session_compares_history[
+      element.session_compares_history.length - 1
+    ].compared_sessions_id.join("/")
+  );
+
   return (
     <Dialog open={open} onClose={handleCloseChart} fullWidth>
       <DialogContent>
@@ -37,8 +32,12 @@ export const SlogChart = ({ handleCloseChart, open, sessionsData }: any) => {
           <span>Сеансы не оценёны, невозможно построить график!</span>
         ) : (
           <LineChart
-            xAxis={[{ scaleType: "point", data: x_nums }]}
-            series={evals}
+            xAxis={[{ scaleType: "point", data: labels }]}
+            series={[
+              {
+                data: evals,
+              },
+            ]}
             width={500}
             height={300}
           />
