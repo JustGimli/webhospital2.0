@@ -23,7 +23,6 @@ import { RecorderVoiceItem } from "../../../widgets/recordClient";
 
 export const SessionCardP = () => {
   const { patientID, session, type, flag } = useParams();
-  const [values, setValues] = useState([]);
   const [sessionData, setSession] = useState(null);
   const [addPhrase, setAddPhrase] = useState<boolean>(false);
 
@@ -57,7 +56,6 @@ export const SessionCardP = () => {
           handleClose={handleClose}
           session={session}
           sessiontype={type == "ф" ? "фразы" : "слоги"}
-          values={values}
         />
       )}
       <div className="mx-10">
@@ -128,29 +126,12 @@ const PatientDialogExists = ({
   card,
   session,
   sessiontype,
-  values,
 }: any) => {
-  const [prevSess, setPrevSess] = useState<any>(null);
   const [step, setStep] = useState<any>(1);
   let key = "syllables";
   if (sessiontype == "фразы") {
     key = "phrases";
   }
-  useEffect(() => {
-    const promise = new Promise<any>((resolve) => {
-      const res = doctor.getExampleSpeech(card, session);
-      resolve(res);
-    });
-    promise.then((result) => {
-      console.log(result);
-      // const phrases = result[key].filter((el: any) => !values.includes(el));
-      // setPrevSess(phrases);
-      // if (phrases.length == 0) {
-      //   handleButtonNext();
-      // }
-    });
-  }, []);
-
   const handleButtonNext = () => {
     setStep(step + 1);
     if (step === 2) {
@@ -181,7 +162,6 @@ const PatientDialogExists = ({
                   session_type: sessiontype == "фразы" ? "фраз" : "слог",
                   sessionPatient: card,
                 }}
-                phrasesold={prevSess}
                 handleButtonNext={handleButtonNext}
               />
             </>
