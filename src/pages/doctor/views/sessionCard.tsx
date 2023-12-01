@@ -44,19 +44,19 @@ export const SessionCard = () => {
   const [openChartSlog, setOpenChartSlog] = useState<boolean>(false);
   const [addPhrase, setAddPhrase] = useState<boolean>(false);
 
-  useEffect(() => {
-    const promise = new Promise<any>((resolve) => {
-      const res = doctor.getPatientSessionInfo(patientID, session);
-      resolve(res);
-    });
-    promise.then((result) => {
-      setData(result);
-      const vals = result.speech_array.map((el: any) => {
-        return el.real_value;
-      });
-      setValues(vals);
-    });
-  }, []);
+  // useEffect(() => {
+  //   const promise = new Promise<any>((resolve) => {
+  //     const res = doctor.getPatientSessionInfo(patientID, session);
+  //     resolve(res);
+  //   });
+  //   promise.then((result) => {
+  //     setData(result);
+  //     const vals = result.speech_array.map((el: any) => {
+  //       return el.real_value;
+  //     });
+  //     setValues(vals);
+  //   });
+  // }, []);
   // useEffect(() => {
   //   (async () => {
   //     const res = await doctor.getPatient(Number(patientID));
