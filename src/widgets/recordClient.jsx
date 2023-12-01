@@ -3,8 +3,8 @@ import { AudioRecorder } from "react-audio-voice-recorder";
 import { IconButton, Button } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { useParams } from "react-router-dom";
-import { client, doctor } from "..";
+
+import { client } from "..";
 
 export const RecorderVoiceItem = ({
   speechId,
@@ -124,7 +124,7 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
             echoCancellation: true,
           }}
           downloadOnSavePress={true}
-          downloadFileExtension="wav"
+          downloadFileExtension="webm"
           showVisualizer
         />
       </div>
