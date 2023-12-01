@@ -84,17 +84,10 @@ export const SessionCard = () => {
   //     }
   //   })();
   // }, []);
+
   const handleClose = () => {
     setAddPhrase(!addPhrase);
     setReload(true);
-  };
-
-  const handleSlog = () => {
-    setOpenChartSlog(true);
-  };
-  const handleCloseChart = () => {
-    setOpenChartPrases(false);
-    setOpenChartSlog(false);
   };
 
   const handleEstimate = async () => {
@@ -116,14 +109,6 @@ export const SessionCard = () => {
           session={session}
           sessiontype={type == "ф" ? "фразы" : "слоги"}
           values={values}
-        />
-      )}
-      {openChartSlog && (
-        <SlogChart
-          handleCloseChart={handleCloseChart}
-          open={openChartSlog}
-          sessionsData={sessionsData}
-          compareSessions={compareSessions}
         />
       )}
       <div style={{ color: "#1976d2" }} className="my-5">
