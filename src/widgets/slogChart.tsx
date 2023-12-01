@@ -7,6 +7,8 @@ export const SlogChart = ({
   sessionsData,
   compareSessions,
 }: any) => {
+  console.log(sessionsData);
+  console.log(compareSessions);
   let reference_speech: number[] = [];
   let not_reference_speech: number[] = [];
   if (sessionsData.speech_array.length) {

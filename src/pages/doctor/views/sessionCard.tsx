@@ -57,40 +57,38 @@ export const SessionCard = () => {
       setValues(vals);
     });
   }, []);
-  useEffect(() => {
-    (async () => {
-      const res = await doctor.getPatient(Number(patientID));
-      if (res) {
-        const tp = type === "ф" ? "фразы" : "слоги";
-        let buf: any[] = [];
-        res.sessions.forEach((element: any) => {
-          if (
-            element.session_type == tp &&
-            Number(element.is_reference_session) != Number(flag)
-          ) {
-            const promise = new Promise<any>((resolve) => {
-              const res = doctor.getPatientSessionInfo(
-                patientID,
-                element.session_id
-              );
-              resolve(res);
-            });
-            promise.then((result) => {
-              buf.push(result);
-            });
-          }
-        });
-        setSessions(buf);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await doctor.getPatient(Number(patientID));
+  //     if (res) {
+  //       const tp = type === "ф" ? "фразы" : "слоги";
+  //       let buf: any[] = [];
+  //       res.sessions.forEach((element: any) => {
+  //         if (
+  //           element.session_type == tp &&
+  //           Number(element.is_reference_session) != Number(flag)
+  //         ) {
+  //           const promise = new Promise<any>((resolve) => {
+  //             const res = doctor.getPatientSessionInfo(
+  //               patientID,
+  //               element.session_id
+  //             );
+  //             resolve(res);
+  //           });
+  //           promise.then((result) => {
+  //             buf.push(result);
+  //           });
+  //         }
+  //       });
+  //       setSessions(buf);
+  //     }
+  //   })();
+  // }, []);
   const handleClose = () => {
     setAddPhrase(!addPhrase);
     setReload(true);
   };
-  const handlePhrases = () => {
-    setOpenChartPrases(true);
-  };
+
   const handleSlog = () => {
     setOpenChartSlog(true);
   };
@@ -120,14 +118,6 @@ export const SessionCard = () => {
           values={values}
         />
       )}
-      {openChartPhrases && (
-        <PhraseChart
-          handleCloseChart={handleCloseChart}
-          open={openChartPhrases}
-          sessionsData={sessionsData}
-          compareSessions={compareSessions}
-        />
-      )}
       {openChartSlog && (
         <SlogChart
           handleCloseChart={handleCloseChart}
@@ -150,16 +140,6 @@ export const SessionCard = () => {
           <div style={{ fontSize: 18, padding: "5px 10px" }}>
             Тип сеанса: {flag === "1" ? "Эталонный" : "Неэталонный"}
           </div>
-        </div>
-        <div>
-          <Button
-            variant="outlined"
-            onClick={type == "ф" ? handlePhrases : handleSlog}
-            size="large"
-            sx={{ px: 3, py: 1, borderRadius: "10px", marginRight: "10px" }}
-          >
-            {type == "ф" ? "График фраз" : "График слогов"}
-          </Button>
         </div>
         <div>
           <Button

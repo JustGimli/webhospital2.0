@@ -30,17 +30,19 @@ export const SessionList = ({ speechList, name }: any) => {
   const [isOpen, setIsOpen] = useState<any>();
 
   const handleClick = (sessionID: any, sessionType: any, flag: any) => {
-    navigate(
-      DOCTORROOT +
-        "/card/" +
-        patientID +
-        "/" +
-        sessionType[0] +
-        "/" +
-        Number(flag) +
-        "/" +
-        sessionID
-    );
+    if (name == "doctor") {
+      navigate(
+        DOCTORROOT +
+          "/card/" +
+          patientID +
+          "/" +
+          sessionType[0] +
+          "/" +
+          Number(flag) +
+          "/" +
+          sessionID
+      );
+    }
   };
 
   const handleCompare = (e: any) => {

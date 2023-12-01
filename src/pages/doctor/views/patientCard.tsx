@@ -19,10 +19,12 @@ import { doctor } from "../../..";
 import { SessionList } from "../../../widgets/sessionList";
 
 import { RecorderVoiceItem } from "../../../widgets/recordDoc";
+import { PhraseChart } from "../../../widgets/phraseChart";
 
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
   const [speechList, setSpeechList] = useState<any>([]);
+  const [openChartPhrases, setOpenChartPrases] = useState<boolean>(false);
   const { patientID } = useParams();
 
   useEffect(() => {
@@ -40,9 +42,23 @@ export const PatientCardPage = () => {
   const handleClose = () => {
     setIsOpen(!isOpen);
   };
+  const handlePhrases = () => {
+    setOpenChartPrases(true);
+  };
+  const handleCloseChart = () => {
+    setOpenChartPrases(false);
+    // setOpenChartSlog(false);
+  };
 
   return (
     <>
+      {openChartPhrases && (
+        <PhraseChart
+          handleCloseChart={handleCloseChart}
+          open={openChartPhrases}
+          sessionsData={speechList}
+        />
+      )}
       {isOpen && (
         <PatientDialog
           card={patientID}
@@ -59,6 +75,16 @@ export const PatientCardPage = () => {
         </div>
         <div className="flex justify-between w-full my-5">
           <div style={{ fontSize: "24px" }}>Сеансы оценки качества речи</div>
+          <div>
+            <Button
+              variant="contained"
+              onClick={handlePhrases}
+              size="large"
+              sx={{ px: 3, py: 1, borderRadius: "10px" }}
+            >
+              График фраз
+            </Button>
+          </div>
           <Button
             variant="contained"
             onClick={handleClose}
