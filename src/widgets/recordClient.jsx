@@ -10,7 +10,6 @@ export const RecorderVoiceItem = ({
   speechId,
   handleButtonNext,
   patientID,
-  phrasesold,
 }) => {
   const [phrases, setPhrases] = useState([]);
   const [index, setIndex] = useState(1);

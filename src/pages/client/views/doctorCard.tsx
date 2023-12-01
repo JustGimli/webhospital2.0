@@ -162,7 +162,6 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
                 speechId={speech}
                 handleButtonNext={handleButtonNext}
                 patientID={client.card}
-                phrasesold={[]}
               />
             </>
           ) : (
@@ -184,6 +183,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
     </>
   );
 };
+
 const IputType = ({
   setIsRef,
   setSessionType,
