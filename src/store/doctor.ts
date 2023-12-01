@@ -39,7 +39,7 @@ export default class Doctor {
         response.data.refresh_token
       }; path=/;expires=${date.toUTCString()}`;
 
-      // this.errorMessage = "Ваш аккаунт успешно зарегистрирован, проверьте почту для подверждения регистрации"
+    
       return true;
     } catch (err) {
       return false;

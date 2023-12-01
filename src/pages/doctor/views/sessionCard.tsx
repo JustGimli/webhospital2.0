@@ -26,12 +26,8 @@ import { client, doctor } from "../../..";
 import { useParams } from "react-router-dom";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import {
-  ShowErrorToastMessage,
-  ShowSuccessToastMessage,
-} from "../../../utils/toasts";
-import { PhraseChart } from "../../../widgets/phraseChart";
-import { SlogChart } from "../../../widgets/slogChart";
+import { ShowSuccessToastMessage } from "../../../utils/toasts";
+
 import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 
 export const SessionCard = () => {

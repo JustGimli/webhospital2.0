@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 export const AppBarComp = observer(({ name }: any) => {
   const navigate = useNavigate();
   const handelClick = () => {
+    localStorage.clear();
     navigate("/");
   };
 
