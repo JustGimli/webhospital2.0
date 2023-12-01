@@ -1,119 +1,44 @@
-import { BarChart } from "@mui/x-charts";
+import { BarChart, LineChart } from "@mui/x-charts";
 import { Dialog, DialogContent } from "@mui/material";
 
-export const SlogChart = ({
-  handleCloseChart,
-  open,
-  sessionsData,
-  compareSessions,
-}: any) => {
+export const SlogChart = ({ handleCloseChart, open, sessionsData }: any) => {
   console.log(sessionsData);
-  console.log(compareSessions);
-  let reference_speech: number[] = [];
-  let not_reference_speech: number[] = [];
-  if (sessionsData.speech_array.length) {
-    sessionsData.speech_array.forEach((s: any) => {
-      if (
-        s.speech_compares_history.length &&
-        s.speech_compares_history[
-          s.speech_compares_history.length - 1
-        ].hasOwnProperty("speech_score")
-      ) {
-        if (s.is_reference_signal) {
-          reference_speech.push(
-            Number(
-              s.speech_compares_history[s.speech_compares_history.length - 1]
-                .speech_score
-            )
-          );
-        } else {
-          not_reference_speech.push(
-            Number(
-              s.speech_compares_history[s.speech_compares_history.length - 1]
-                .speech_score
-            )
-          );
-        }
-      }
-    });
-    if (!reference_speech.length) {
-      compareSessions.forEach((sess: any) => {
-        if (sess.speech_array.length) {
-          sess.speech_array.forEach((s: any) => {
-            if (
-              s.speech_compares_history.length &&
-              s.speech_compares_history[
-                s.speech_compares_history.length - 1
-              ].hasOwnProperty("speech_score")
-            ) {
-              reference_speech.push(
-                Number(
-                  s.speech_compares_history[
-                    s.speech_compares_history.length - 1
-                  ].speech_score
-                )
-              );
-            }
-          });
-        }
-      });
-    } else {
-      compareSessions.forEach((sess: any) => {
-        if (sess.speech_array.length) {
-          sess.speech_array.forEach((s: any) => {
-            if (
-              s.speech_compares_history.length &&
-              s.speech_compares_history[
-                s.speech_compares_history.length - 1
-              ].hasOwnProperty("speech_score")
-            ) {
-              not_reference_speech.push(
-                Number(
-                  s.speech_compares_history[
-                    s.speech_compares_history.length - 1
-                  ].speech_score
-                )
-              );
-            }
-          });
-        }
+  let evals: any[] = [];
+  let x_nums: any[] = [];
+  sessionsData.forEach((element: any) => {
+    if (
+      element.session_compares_history.length &&
+      element.session_compares_history[0].compared_sessions_id &&
+      element.session_compares_history[0].compared_sessions_id.length === 2
+    ) {
+      x_nums.push(
+        element.session_compares_history[
+          element.session_compares_history.length - 1
+        ].compared_sessions_id[0] +
+          "/" +
+          element.session_compares_history[
+            element.session_compares_history.length - 1
+          ].compared_sessions_id[1]
+      );
+      evals.push({
+        data: element.session_compares_history[
+          element.session_compares_history.length - 1
+        ].session_score,
+        label: x_nums[x_nums.length - 1],
       });
     }
-    if (reference_speech.length && not_reference_speech.length) {
-      while (reference_speech.length < not_reference_speech.length) {
-        reference_speech.push(100);
-      }
-      while (reference_speech.length > not_reference_speech.length) {
-        not_reference_speech.push(0);
-      }
-    }
-  }
+  });
+  console.log(evals);
+  console.log(x_nums);
   return (
     <Dialog open={open} onClose={handleCloseChart} fullWidth>
       <DialogContent>
-        {!not_reference_speech.length && !reference_speech.length ? (
+        {!evals.length ? (
           <span>Сеансы не оценёны, невозможно построить график!</span>
-        ) : !not_reference_speech.length ? (
-          <span>
-            Отсутсвуют оценённые неэталонные сеансы, невозможно построить
-            график!
-          </span>
-        ) : !reference_speech.length ? (
-          <span>
-            Отсутсвуют оценённые эталонные сеансы, невозможно построить график!
-          </span>
         ) : (
-          <BarChart
-            series={[
-              {
-                data: reference_speech,
-                label: "Эталон",
-              },
-              {
-                data: not_reference_speech,
-                label: "Не эталон",
-              },
-            ]}
+          <LineChart
+            xAxis={[{ scaleType: "point", data: x_nums }]}
+            series={evals}
             width={500}
             height={300}
           />
