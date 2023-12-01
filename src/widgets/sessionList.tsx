@@ -45,18 +45,6 @@ export const SessionList = ({ speechList, name }: any) => {
           "/" +
           sessionID
       );
-    } else {
-      navigate(
-        PATIENTROOT +
-          "/card/" +
-          patientID +
-          "/" +
-          sessionType[0] +
-          "/" +
-          Number(flag) +
-          "/" +
-          sessionID
-      );
     }
   };
 

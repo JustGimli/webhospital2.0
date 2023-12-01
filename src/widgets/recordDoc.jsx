@@ -40,12 +40,37 @@ export const RecorderVoiceItem = ({
       handleButtonNext();
     }
     setIndex(index + 1);
-    setisMic(!isMic);
+    if (isMic) setisMic(!isMic);
   };
 
-  // const handleFile = (event) => {
-
-  // }
+  const handleFile = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        const base64 = reader.result.split(",")[1];
+        console.log(base64);
+        const data = {
+          speech_type:
+            speechId.session_type === "фраз"
+              ? speechId.session_type + "а"
+              : speechId.session_type,
+          base64_value: base64,
+          base64_value_segment: "",
+          real_value: phrases[index - 1],
+        };
+        doctor
+          .updateSessionSpeech(speechId, data)
+          .then(() => {
+            handleIndex();
+          })
+          .catch((error) =>
+            console.error("Error updating session speech:", error)
+          );
+      };
+    }
+  };
 
   return (
     <>
@@ -75,8 +100,8 @@ export const RecorderVoiceItem = ({
             Upload file
             <input
               type="file"
-              onChange={(event) => setAudioData(event.target.files[0])}
-              accept=".wav"
+              onChange={(event) => handleFile(event)}
+              accept=".webm"
               style={{ display: "none" }}
             />
           </Button>
@@ -92,7 +117,6 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
     reader.readAsDataURL(audioData);
     reader.onloadend = function () {
       const base64 = reader.result.split(",")[1];
-
       const data = {
         speech_type:
           speechId.session_type === "фраз"
@@ -123,7 +147,7 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
             echoCancellation: true,
           }}
           downloadOnSavePress={true}
-          downloadFileExtension="mp3"
+          downloadFileExtension="webm"
           showVisualizer
         />
       </div>
