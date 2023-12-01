@@ -1,4 +1,4 @@
-import { BarChart, LineChart } from "@mui/x-charts";
+import { LineChart } from "@mui/x-charts";
 import { Dialog, DialogContent } from "@mui/material";
 
 export const SlogChart = ({ handleCloseChart, open, sessionsData }: any) => {

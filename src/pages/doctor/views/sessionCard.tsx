@@ -5,11 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
   Step,
   StepLabel,
   Stepper,
@@ -22,68 +18,33 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
-import { client, doctor } from "../../..";
+import { doctor } from "../../..";
 import { useParams } from "react-router-dom";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import {
-  ShowErrorToastMessage,
-  ShowSuccessToastMessage,
-} from "../../../utils/toasts";
-import { PhraseChart } from "../../../widgets/phraseChart";
-import { SlogChart } from "../../../widgets/slogChart";
+import { ShowSuccessToastMessage } from "../../../utils/toasts";
 import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 
 export const SessionCard = () => {
   const { patientID, session, type, flag } = useParams();
-  const [sessionsData, setData] = useState(null);
-  const [compareSessions, setSessions] = useState<any>([]);
   const [values, setValues] = useState([]);
   const [reload, setReload] = useState<boolean>(false);
-  const [openChartPhrases, setOpenChartPrases] = useState<boolean>(false);
-  const [openChartSlog, setOpenChartSlog] = useState<boolean>(false);
   const [addPhrase, setAddPhrase] = useState<boolean>(false);
 
-  // useEffect(() => {
-  //   const promise = new Promise<any>((resolve) => {
-  //     const res = doctor.getPatientSessionInfo(patientID, session);
-  //     resolve(res);
-  //   });
-  //   promise.then((result) => {
-  //     setData(result);
-  //     const vals = result.speech_array.map((el: any) => {
-  //       return el.real_value;
-  //     });
-  //     setValues(vals);
-  //   });
-  // }, []);
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await doctor.getPatient(Number(patientID));
-  //     if (res) {
-  //       const tp = type === "ф" ? "фразы" : "слоги";
-  //       let buf: any[] = [];
-  //       res.sessions.forEach((element: any) => {
-  //         if (
-  //           element.session_type == tp &&
-  //           Number(element.is_reference_session) != Number(flag)
-  //         ) {
-  //           const promise = new Promise<any>((resolve) => {
-  //             const res = doctor.getPatientSessionInfo(
-  //               patientID,
-  //               element.session_id
-  //             );
-  //             resolve(res);
-  //           });
-  //           promise.then((result) => {
-  //             buf.push(result);
-  //           });
-  //         }
-  //       });
-  //       setSessions(buf);
-  //     }
-  //   })();
-  // }, []);
+  useEffect(() => {
+    const promise = new Promise<any>((resolve) => {
+      const res = doctor.getPatientSessionInfo(patientID, session);
+      resolve(res);
+    });
+    promise.then((result) => {
+      if (result.speech_array) {
+        const vals = result.speech_array.map((el: any) => {
+          return el.real_value;
+        });
+        setValues(vals);
+      }
+    });
+  }, []);
 
   const handleClose = () => {
     setAddPhrase(!addPhrase);
@@ -138,7 +99,6 @@ export const SessionCard = () => {
             </Button>
           </div>
         )}
-
         <div>
           <Button
             variant="contained"
@@ -274,10 +234,12 @@ const PatientDialogExists = ({
       resolve(res);
     });
     promise.then((result) => {
-      const phrases = result[key].filter((el: any) => !values.includes(el));
-      setPrevSess(phrases);
-      if (phrases.length == 0) {
-        handleButtonNext();
+      if (result[key]) {
+        const phrases = result[key].filter((el: any) => !values.includes(el));
+        setPrevSess(phrases);
+        if (phrases.length == 0) {
+          handleButtonNext();
+        }
       }
     });
   }, []);
