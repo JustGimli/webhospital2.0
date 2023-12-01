@@ -126,16 +126,19 @@ export const SessionCard = () => {
             Тип сеанса: {flag === "1" ? "Эталонный" : "Неэталонный"}
           </div>
         </div>
-        <div>
-          <Button
-            variant="contained"
-            onClick={handleEstimate}
-            size="large"
-            sx={{ px: 3, py: 1, borderRadius: "10px", marginRight: "10px" }}
-          >
-            Оценить
-          </Button>
-        </div>
+        {type === "ф" && (
+          <div>
+            <Button
+              variant="contained"
+              onClick={handleEstimate}
+              size="large"
+              sx={{ px: 3, py: 1, borderRadius: "10px", marginRight: "10px" }}
+            >
+              Оценить
+            </Button>
+          </div>
+        )}
+
         <div>
           <Button
             variant="contained"
