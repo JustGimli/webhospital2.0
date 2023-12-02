@@ -25,6 +25,7 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { ShowSuccessToastMessage } from "../../../utils/toasts";
 import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 
+//function returns patient's seans page for doctor
 export const SessionCard = () => {
   const { patientID, session, type, flag } = useParams();
   const [values, setValues] = useState([]);
@@ -116,6 +117,7 @@ export const SessionCard = () => {
   );
 };
 
+//fucntion returns the table with all session phrases/syllables
 const SessionTable = ({ reload, setReload }: any) => {
   const [data, setData] = useState({ speech_array: [] });
   const [isLoading, setisLoading] = useState(false);
@@ -214,6 +216,7 @@ const SessionTable = ({ reload, setReload }: any) => {
   );
 };
 
+//dialog function to add phrases/syllable to seans
 const PatientDialogExists = ({
   open,
   handleClose,

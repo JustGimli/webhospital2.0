@@ -4,6 +4,7 @@ import { MainURL } from "./utils/path";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+//main function
 function App() {
   const renderRoutes = () => {
     return MainURL.map(({ path, Component }) => (

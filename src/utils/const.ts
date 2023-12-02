@@ -1,8 +1,9 @@
+// common routes
 export const AUTH = "";
 export const DOCTOR = "/doctor/*";
 export const PATIENT = "/patient/*";
 
-//page for doctor
+//routes for doctor
 
 export const DOCTORROOT = "/doctor";
 
@@ -11,7 +12,7 @@ export const PATIENTCHANGEPASS = "change/";
 export const PATIENTCARD = "/card/:patientID";
 export const PATIENTSPEECHLIST = "/card/:patientID/:type/:flag/:session";
 
-// page for patient
+//routes for patient
 
 export const PATIENTROOT = "/patient";
 export const DOCTORCARDFORPATIENT = "/card";

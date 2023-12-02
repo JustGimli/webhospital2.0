@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import { PatientURL } from "../../utils/path";
 
+// function renders patient routes
 export const PatientRoot = () => {
   const renderRoutes = () => {
     return PatientURL.map(({ path, Component }) => (

@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 import { client, doctor } from "..";
 import { useNavigate } from "react-router-dom";
 
+//function returns header component
 export const AppBarComp = observer(({ name }: any) => {
   const navigate = useNavigate();
   const handelClick = () => {

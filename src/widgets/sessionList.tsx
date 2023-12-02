@@ -27,6 +27,7 @@ import {
   ShowWarningToastMessage,
 } from "../utils/toasts";
 
+//fucntion returns seans table
 export const SessionList = ({ speechList, name }: any) => {
   const { patientID } = useParams();
   const navigate = useNavigate();
@@ -113,6 +114,7 @@ export const SessionList = ({ speechList, name }: any) => {
   );
 };
 
+//dialog functions to compare seanses
 const DialogComponent = ({ open, handleClose, speechList, patientID }: any) => {
   const [first, setFirst] = useState<any>();
 

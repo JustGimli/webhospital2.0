@@ -21,6 +21,7 @@ import { client, doctor } from "../../..";
 import { useParams } from "react-router-dom";
 import { RecorderVoiceItem } from "../../../widgets/recordClient";
 
+//function returns patient seans card page for client
 export const SessionCardP = () => {
   const { patientID, session, type, flag } = useParams();
   const [sessionData, setSession] = useState(null);
@@ -91,6 +92,7 @@ export const SessionCardP = () => {
   );
 };
 
+//function returns table with all seans phrases/syllables
 const SessionTable = ({ session }: any) => {
   return !session ? (
     <div className="flex justify-center w-full">Сеансы отсутсвуют!</div>
@@ -118,6 +120,7 @@ const SessionTable = ({ session }: any) => {
   );
 };
 
+//dialog dunction to add phrases/syllables to the seans
 const PatientDialogExists = ({
   open,
   handleClose,

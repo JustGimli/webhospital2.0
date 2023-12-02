@@ -22,6 +22,7 @@ import { RecorderVoiceItem } from "../../../widgets/recordDoc";
 import { PhraseChart } from "../../../widgets/phraseChart";
 import { SlogChart } from "../../../widgets/slogChart";
 
+//function returns page with all patient's seanses for doctor
 export const PatientCardPage = () => {
   const [patient, setPatient] = useState<any>();
   const [speechList, setSpeechList] = useState<any>([]);
@@ -122,6 +123,7 @@ export const PatientCardPage = () => {
   );
 };
 
+//function returns patient's profile card
 const ProfileCard = ({ patient }: any) => {
   return (
     <div
@@ -159,6 +161,7 @@ const data: any = {
   patient_info: "Информация о пациенте",
 };
 
+//dialog function to add new seans with patient
 const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
 
@@ -234,6 +237,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
   );
 };
 
+//function returns the seans type input fields to the dialog
 const IputType = ({
   setIsRef,
   setSessionType,

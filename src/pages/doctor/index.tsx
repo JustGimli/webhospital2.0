@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { DoctorURL } from "../../utils/path";
 import { AppBarComp } from "../../components/appBar";
 
+//function renders all doctor's routes
 export const DoctorRoot = () => {
   const renderRoutes = () => {
     return DoctorURL.map(({ path, Component }) => (

@@ -10,6 +10,7 @@ import {
   ShowSuccessToastMessage,
 } from "../utils/toasts";
 
+//function returns authorization page(both for doctor and patient)
 export const AuthPage = observer(() => {
   const navigate = useNavigate();
 
@@ -35,7 +36,7 @@ export const AuthPage = observer(() => {
         client.lastPass = password;
         flag = await client.checkStatusPass();
         if (flag === false) {
-          navigate(PATIENTROOT + '/' + PATIENTCHANGEPASS);
+          navigate(PATIENTROOT + "/" + PATIENTCHANGEPASS);
         } else if (flag === true) {
           const flag = await client.login(username, password);
           if (flag === false) {

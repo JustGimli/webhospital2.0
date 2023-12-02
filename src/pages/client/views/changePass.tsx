@@ -18,6 +18,7 @@ import {
   ShowSuccessToastMessage,
 } from "../../../utils/toasts";
 
+//function returns change password page
 export const ChangePassPage = observer(() => {
   const isMobile = useMediaQuery("(max-width:767px)");
   const navigate = useNavigate();
