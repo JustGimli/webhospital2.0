@@ -26,6 +26,7 @@ import {
   ShowSuccessToastMessage,
   ShowWarningToastMessage,
 } from "../utils/toasts";
+import { DialogProcess } from "./DialogProcess";
 
 export const SessionList = ({ speechList, name }: any) => {
   const { patientID } = useParams();
@@ -118,18 +119,29 @@ const DialogComponent = ({ open, handleClose, speechList, patientID }: any) => {
 
   const [second, setSecond] = useState(speechList[0]?.session_id || "");
 
+  const [open1, setOpen1] = useState<any>(false);
+  const [isSave, setSave] = useState<any>(true);
+
   const handleEstimate = async () => {
     const data = {
       sessions_id: [first, second],
     };
 
-    await doctor.estimatePhrase(patientID, data);
-    ShowSuccessToastMessage("Сеансы упешно отправлены на сравнение!");
-    ShowWarningToastMessage("Проверка может занять некоторое время.");
+    setOpen1(true);
+    ShowSuccessToastMessage("Проверка  займет некоторое время");
+
+    const res = await doctor.estimatePhrase(patientID, data);
+
+    setSave(false);
   };
 
   return (
     <>
+      <DialogProcess
+        open={open1}
+        handleClose={() => setOpen1(!open)}
+        isSave={isSave}
+      />
       <Dialog open={open} onClose={handleClose} fullWidth>
         <DialogTitle>Выбрать 1-2 сеансы для сравнения</DialogTitle>
         <DialogContent>

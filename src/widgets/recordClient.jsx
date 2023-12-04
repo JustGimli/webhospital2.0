@@ -3,8 +3,8 @@ import { AudioRecorder } from "react-audio-voice-recorder";
 import { IconButton, Button } from "@mui/material";
 import MicIcon from "@mui/icons-material/Mic";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-
-import { client } from "..";
+import { useParams } from "react-router-dom";
+import { client, doctor } from "..";
 
 export const RecorderVoiceItem = ({
   speechId,
@@ -15,7 +15,7 @@ export const RecorderVoiceItem = ({
   const [index, setIndex] = useState(1);
   const [isMic, setisMic] = useState(false);
   const [audioData, setAudioData] = useState(null);
-  console.log(speechId.session_id);
+
   useEffect(() => {
     const fetchData = async () => {
       const res = await client.getPhrases(speechId.session_id);
@@ -28,6 +28,7 @@ export const RecorderVoiceItem = ({
     };
 
     fetchData();
+    console.log(phrases);
   }, [patientID, speechId]);
 
   const handleIndex = () => {
@@ -35,36 +36,7 @@ export const RecorderVoiceItem = ({
       handleButtonNext();
     }
     setIndex(index + 1);
-    if (isMic) setisMic(!isMic);
-  };
-
-  const handleFile = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = function () {
-        const base64 = reader.result.split(",")[1];
-        console.log(base64);
-        const data = {
-          speech_type:
-            speechId.session_type === "фраз"
-              ? speechId.session_type + "а"
-              : speechId.session_type,
-          base64_value: base64,
-          base64_value_segment: "",
-          real_value: phrases[index - 1],
-        };
-        doctor
-          .updateSessionSpeech(speechId, data)
-          .then(() => {
-            handleIndex();
-          })
-          .catch((error) =>
-            console.error("Error updating session speech:", error)
-          );
-      };
-    }
+    setisMic(!isMic);
   };
 
   return (
@@ -97,7 +69,7 @@ export const RecorderVoiceItem = ({
             Upload file
             <input
               type="file"
-              onChange={(event) => handleFile(event)}
+              onChange={(event) => setAudioData(event.target.files[0])}
               accept=".webm"
               style={{ display: "none" }}
             />
@@ -128,9 +100,10 @@ const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
         base64_value_segment: "",
         real_value: real_val,
       };
+
       client
         .saveAudio(
-          speechId.session_id,
+          speechId.sessionId,
           data.speech_type,
           data.base64_value,
           data.real_value

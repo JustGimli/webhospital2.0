@@ -22,14 +22,20 @@ import { doctor } from "../../..";
 import { useParams } from "react-router-dom";
 import PlayCircleOutlineIcon from "@mui/icons-material/PlayCircleOutline";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import { ShowSuccessToastMessage } from "../../../utils/toasts";
+import {
+  ShowErrorToastMessage,
+  ShowSuccessToastMessage,
+} from "../../../utils/toasts";
 import { RecorderVoiceItem } from "../../../widgets/recordDoc";
+import { DialogProcess } from "../../../widgets/DialogProcess";
 
 export const SessionCard = () => {
   const { patientID, session, type, flag } = useParams();
   const [values, setValues] = useState([]);
   const [reload, setReload] = useState<boolean>(false);
   const [addPhrase, setAddPhrase] = useState<boolean>(false);
+  const [open, setOpen] = useState<any>(false);
+  const [isSave, setIsSave] = useState<boolean>(true);
 
   useEffect(() => {
     const promise = new Promise<any>((resolve) => {
@@ -50,18 +56,25 @@ export const SessionCard = () => {
     setAddPhrase(!addPhrase);
     setReload(true);
   };
-
   const handleEstimate = async () => {
-    const res = doctor.estimateSpeech(patientID, session);
+    setOpen(true);
+    ShowSuccessToastMessage("Оценка займет некоторое время");
+    const res = await doctor.estimateSpeech(patientID, session);
 
-    if (Object.keys(res).length === 0) {
-      // ShowErrorToastMessage();
+    if (res && Object.keys(res).length === 0) {
+      ShowErrorToastMessage("Произошла ошибка при обработке");
     } else {
-      ShowSuccessToastMessage("Оценка займет некоторое время");
+      setIsSave(false);
     }
+    setIsSave(false);
   };
   return (
     <div className="mx-10">
+      <DialogProcess
+        open={open}
+        handleClose={() => setOpen(!open)}
+        isSave={isSave}
+      />
       {addPhrase && (
         <PatientDialogExists
           card={patientID}

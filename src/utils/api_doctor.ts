@@ -21,9 +21,10 @@ $api_doctor.interceptors.response.use(config => {
     console.log('1234')
     console.log(error)
     console.log(!originalRequest._isRetry)
+    
     if (error.message === "Network Error")
     {
-        originalRequest._isRetry = true
+       
         try {
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL_DOCTOR}update_tokens`, {refresh: getCookie('tok')})
             localStorage.setItem('tok', response.data.access_token)
