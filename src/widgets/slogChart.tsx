@@ -1,6 +1,7 @@
 import { LineChart } from "@mui/x-charts";
 import { Dialog, DialogContent } from "@mui/material";
 
+//fucntion return's syllables chart
 export const SlogChart = ({ handleCloseChart, open, sessionsData }: any) => {
   console.log(sessionsData);
   const validSessions = sessionsData.filter(
@@ -19,6 +20,7 @@ export const SlogChart = ({ handleCloseChart, open, sessionsData }: any) => {
       ].session_score
   );
 
+  //Labels for chart
   const labels = validSessions.map((element: any) =>
     element.session_compares_history[
       element.session_compares_history.length - 1

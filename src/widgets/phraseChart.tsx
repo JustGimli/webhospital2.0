@@ -1,6 +1,7 @@
 import { LineChart } from "@mui/x-charts";
 import { Dialog, DialogContent } from "@mui/material";
 
+//function returns phrase chart
 export const PhraseChart = ({ handleCloseChart, open, sessionsData }: any) => {
   // Filter sessions with valid data
   const validSessions = sessionsData.filter(

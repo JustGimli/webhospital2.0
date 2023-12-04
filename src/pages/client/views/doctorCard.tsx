@@ -19,6 +19,7 @@ import { AppBarComp } from "../../../components/appBar";
 import { observer } from "mobx-react-lite";
 import { SessionList } from "../../../widgets/sessionList";
 
+//function returns patient's doctor's page with seanses
 export const DoctorCardPage = observer(() => {
   const [isOpen, setIsOpen] = useState<any>(false);
   const [speechList, setSpeechList] = useState<any>([]);
@@ -74,6 +75,7 @@ export const DoctorCardPage = observer(() => {
   );
 });
 
+//function returns doctor's profile card
 const ProfileCard = observer(() => {
   const [doctor, setDoctor] = useState({
     doctor_name: "",
@@ -110,6 +112,8 @@ const ProfileCard = observer(() => {
     </div>
   );
 });
+
+//dialog function to add seans with doctor
 const PatientDialog = ({ open, handleClose, card }: any) => {
   const [step, setStep] = useState<any>(0);
   const [is_reference_session, setIsRef] = useState(0);
@@ -184,6 +188,7 @@ const PatientDialog = ({ open, handleClose, card }: any) => {
   );
 };
 
+//function returns the seans type input fields to the dialog
 const IputType = ({
   setIsRef,
   setSessionType,

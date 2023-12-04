@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
+//fucntion returns common auth fields
 export const AuthFields = ({
   name,
   username,
@@ -68,6 +69,7 @@ export const AuthFields = ({
   );
 };
 
+//fucntion returns doctor's auth fields
 const DoctorForm = ({ username, password, setUserName, setPassword }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
 
@@ -98,6 +100,7 @@ const DoctorForm = ({ username, password, setUserName, setPassword }: any) => {
   );
 };
 
+////fucntion returns patient's auth fields
 const ClientForm = ({ username, setUserName }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
   return (

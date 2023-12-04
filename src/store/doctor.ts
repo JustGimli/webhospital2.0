@@ -2,6 +2,7 @@ import axios from "axios";
 import { makeAutoObservable } from "mobx";
 import { $api_doctor } from "../utils/api_doctor";
 
+//class describe all doctor's functions
 export default class Doctor {
   name: any = "";
   isUpdatePatient: boolean = false;
@@ -9,7 +10,7 @@ export default class Doctor {
   constructor() {
     makeAutoObservable(this);
   }
-
+  //add patient
   async createPatient(form: any) {
     try {
       const res = await $api_doctor.post("/patients/", form, {
@@ -21,7 +22,7 @@ export default class Doctor {
       return err.response.data;
     }
   }
-
+  //login
   async login(username: string, password: string) {
     this.name = username;
     try {
@@ -39,13 +40,12 @@ export default class Doctor {
         response.data.refresh_token
       }; path=/;expires=${date.toUTCString()}`;
 
-    
       return true;
     } catch (err) {
       return false;
     }
   }
-
+  //get doctor's patients
   async getPatients() {
     try {
       const response = await $api_doctor.get(`patients`, {
@@ -57,7 +57,7 @@ export default class Doctor {
       return [];
     }
   }
-
+  //get patient's info
   async getPatient(number: number) {
     try {
       const response = await $api_doctor.get(`patients/${number}`);
@@ -67,6 +67,8 @@ export default class Doctor {
       return {};
     }
   }
+
+  //get seans info
   async getPatientSessionInfo(patientID: any, session: any) {
     try {
       const response = await $api_doctor.get(
@@ -79,7 +81,7 @@ export default class Doctor {
       return {};
     }
   }
-
+  //create new seans
   async createScenario(
     card: any,
     is_reference_session: any,
@@ -96,7 +98,7 @@ export default class Doctor {
       return {};
     }
   }
-
+  //add speech to seans
   async updateSessionSpeech(speechId: any, data: any) {
     console.log(speechId);
     try {
@@ -109,7 +111,7 @@ export default class Doctor {
       return {};
     }
   }
-
+  //get all phrases
   async getExampleSpeech(patientID: any, speechId: any) {
     try {
       const response = await $api_doctor.get(
@@ -122,6 +124,7 @@ export default class Doctor {
     }
   }
 
+  //get definite phase/syllable
   async getSpeech(session: any, speechId: any, phrase: any) {
     try {
       // const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech`)
@@ -135,6 +138,7 @@ export default class Doctor {
     }
   }
 
+  //add audio to seans
   async estimateSpeech(patientID: any, session: any) {
     try {
       // const response = await $api_doctor.get(`patients/${session}/session/${speechId}/speech`)
@@ -149,6 +153,7 @@ export default class Doctor {
     }
   }
 
+  //update phrase
   async estimatePhrase(patientID: any, data: any) {
     try {
       const response = await $api_doctor.patch(

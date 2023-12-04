@@ -29,6 +29,7 @@ interface DockerTableProps {
   setFilteredRows: React.Dispatch<React.SetStateAction<Patient[]>>;
 }
 
+//function returns table with all doctor's patients
 const DockerTable: React.FC<DockerTableProps> = observer(
   ({ searchTerm, setFilteredRows }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -71,6 +72,7 @@ interface TableItemProps {
   data: Patient[];
 }
 
+// fucntion returns table rows with patient's info
 const TableItem: React.FC<TableItemProps> = ({ data }) => {
   const navigate = useNavigate();
 
@@ -126,6 +128,7 @@ const TableItem: React.FC<TableItemProps> = ({ data }) => {
   );
 };
 
+//function returns doctor's main page
 export const DoctorMainPage: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");

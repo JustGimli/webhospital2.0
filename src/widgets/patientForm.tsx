@@ -21,6 +21,7 @@ import generatePassword from "omgopass";
 import { doctor } from "..";
 import { ShowErrorToastMessage, ShowInfoToastMessage } from "../utils/toasts";
 
+//dialog function to add new patient
 export const AddPatient = ({ open, handleClose }: any) => {
   const isMobile = useMediaQuery("(max-width:767px)");
 

@@ -21,6 +21,7 @@ import { PatientRoot } from "../pages/client";
 import { SessionCard } from "../pages/doctor/views/sessionCard";
 import { SessionCardP } from "../pages/client/views/sessionCardClient";
 
+//common paths & components
 export const MainURL = [
   {
     Component: AuthPage,
@@ -36,6 +37,7 @@ export const MainURL = [
   },
 ];
 
+//doctor's paths & components
 export const DoctorURL = [
   {
     Component: DoctorMainPage,
@@ -50,12 +52,9 @@ export const DoctorURL = [
     Component: SessionCard,
     path: PATIENTSPEECHLIST,
   },
-  //   {
-  //     Component: PolicyPage,
-  //     path: PATIENT,
-  //   },
 ];
 
+//patient's paths & components
 export const PatientURL = [
   {
     Component: ClientMain,

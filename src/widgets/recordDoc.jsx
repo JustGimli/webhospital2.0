@@ -7,6 +7,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { useParams } from "react-router-dom";
 import { doctor } from "..";
 
+//dialog fucntion to record or load audio phrase for doctor
 export const RecorderVoiceItem = ({
   speechId,
   handleButtonNext,
@@ -111,6 +112,7 @@ export const RecorderVoiceItem = ({
   );
 };
 
+//fucntion that records audio
 const RecordVoice = ({ speechId, handleIndex, real_val, setAudioData }) => {
   const onStop = async (audioData) => {
     var reader = new window.FileReader();

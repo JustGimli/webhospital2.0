@@ -21,6 +21,7 @@ interface Doctor {
   doctor_specialization: string;
 }
 
+//function returns patient main page
 export const ClientMain = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   return (
@@ -50,6 +51,7 @@ interface DockerTableProps {
   searchTerm: string;
 }
 
+//functions returns table with all patient's doctors
 const DoctorsTable: FC<DockerTableProps> = ({ searchTerm }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [filteredRows, setFilteredRows] = useState<Doctor[]>([]);
@@ -86,6 +88,7 @@ const DoctorsTable: FC<DockerTableProps> = ({ searchTerm }) => {
   );
 };
 
+//function returns a table row with doctor's info
 const TableItem = observer((data: any) => {
   const handleClick = (row: any, index: any) => {
     navigate(PATIENTROOT + "/card/" + index);

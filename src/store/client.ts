@@ -2,6 +2,7 @@ import axios from "axios";
 import { makeAutoObservable } from "mobx";
 import { $api_client } from "../utils/api_patient";
 
+//class describes all patient's functions
 export default class Client {
   card: any = "";
   lastPass: any = "";
@@ -12,12 +13,13 @@ export default class Client {
     makeAutoObservable(this);
   }
 
+  //create new patient
   async createPatient(form: FormData) {
     try {
       $api_client.post("/patient", form);
     } catch (err) {}
   }
-
+  // patient login
   async login(username: string, password: string) {
     try {
       const response = await axios.post(
@@ -35,7 +37,7 @@ export default class Client {
       return false;
     }
   }
-
+  //check if passowr is temporary
   async checkStatusPass() {
     try {
       const response = await axios.get(
@@ -48,7 +50,7 @@ export default class Client {
       return null;
     }
   }
-
+  //change temporaty password
   async changeTempPass(newPass: any) {
     try {
       const response = await axios.patch(
@@ -71,7 +73,7 @@ export default class Client {
       return false;
     }
   }
-
+  //get patient's doctors
   async getDoctors() {
     try {
       const response = await $api_client.get("info");
@@ -80,16 +82,16 @@ export default class Client {
       return [];
     }
   }
-  async getPatient(){
+  //get patient info
+  async getPatient() {
     try {
-      const response = await $api_client.get("patient", {
-      });
+      const response = await $api_client.get("patient", {});
       return response.data;
     } catch (err) {
       return [];
     }
   }
-
+  //create new seans
   async createSession(session_type: string) {
     try {
       const response = await $api_client.post("session", {
@@ -100,7 +102,8 @@ export default class Client {
       return [];
     }
   }
-  async getPhrases(session_id:number) {
+  //get phrases for seans
+  async getPhrases(session_id: number) {
     try {
       const response = await $api_client.get(`session/${session_id}`);
       return response.data ? response.data : [];
@@ -108,18 +111,23 @@ export default class Client {
       return [];
     }
   }
-  async saveAudio(session_id:any, speech_type:any, base64:any, real_value:any){
+  //save seans audio (phrase/syllable)
+  async saveAudio(
+    session_id: any,
+    speech_type: any,
+    base64: any,
+    real_value: any
+  ) {
     try {
-      const response = await $api_client.post(`session/${session_id}`,{
-      'speech_type': speech_type,
-      'base64_value': base64,
-      'base64_value_segment': '',
-      'real_value':real_value
-    })
-    return response.data;
-    }catch (err) {
+      const response = await $api_client.post(`session/${session_id}`, {
+        speech_type: speech_type,
+        base64_value: base64,
+        base64_value_segment: "",
+        real_value: real_value,
+      });
+      return response.data;
+    } catch (err) {
       return true;
     }
-
   }
 }
