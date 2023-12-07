@@ -31,16 +31,21 @@ export default class Doctor {
         { username, password },
         { withCredentials: true }
       );
-      localStorage.setItem("tok", response.data.access_token);
-
-      let date = new Date();
+      if(response.data.access_token){
+        localStorage.setItem("tok", response.data.access_token);
+        let date = new Date();
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
 
       document.cookie = `tok=${
         response.data.refresh_token
       }; path=/;expires=${date.toUTCString()}`;
-
       return true;
+      }else {
+        return false;
+      }
+
+
+
     } catch (err) {
       return false;
     }
